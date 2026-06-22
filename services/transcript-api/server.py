@@ -120,52 +120,158 @@ def timestamp_label(seconds):
     total = int(seconds or 0)
     return f"{total // 60:02d}:{total % 60:02d}"
 
-def markdown_document(job):
+def format_duration(seconds):
+    total = int(seconds or 0)
+    hours = total // 3600
+    minutes = (total % 3600) // 60
+    secs = total % 60
+    if hours > 0:
+        return f"{hours}h {minutes:02d}min {secs:02d}s"
+    return f"{minutes}min {secs:02d}s"
+
+def word_count(segments):
+    return sum(len(seg["text"].split()) for seg in segments)
+
+def markdown_document(job, with_timestamps=True):
     lines = [
         f"# {job['title']}", "",
-        f"- Idioma: {job['language']}",
-        f"- Duração: {timestamp_label(job['duration'])}", "",
-        "## Transcrição", ""
+        "## Informações", "",
+        f"| Campo | Valor |",
+        f"|-------|-------|",
+        f"| **Idioma** | {job['language']} |",
+        f"| **Duração** | {format_duration(job['duration'])} |",
+        f"| **Segmentos** | {len(job['segments'])} |",
+        f"| **Palavras** | {word_count(job['segments'])} |",
+        "", "## Transcrição", ""
     ]
-    lines.extend(
-        f"**[{timestamp_label(segment['start'])}]** {segment['text']}"
-        for segment in job["segments"]
-    )
+    if with_timestamps:
+        lines.extend(
+            f"**[{timestamp_label(segment['start'])}]** {segment['text']}"
+            for segment in job["segments"]
+        )
+    else:
+        lines.extend(segment['text'] for segment in job["segments"])
     return "\n\n".join(lines) + "\n"
 
-def pdf_document(job):
+def plain_text_document(job, with_timestamps=True):
+    lines = [
+        f"{job['title']}",
+        f"{'=' * len(job['title'])}", "",
+        f"Idioma: {job['language']}",
+        f"Duração: {format_duration(job['duration'])}",
+        f"Segmentos: {len(job['segments'])}",
+        f"Palavras: {word_count(job['segments'])}",
+        "", "TRANSCRIÇÃO", "-" * 40, ""
+    ]
+    if with_timestamps:
+        lines.extend(
+            f"[{timestamp_label(segment['start'])}] {segment['text']}"
+            for segment in job["segments"]
+        )
+    else:
+        lines.extend(segment['text'] for segment in job["segments"])
+    return "\n".join(lines) + "\n"
+
+def pdf_document(job, with_timestamps=True):
     output = BytesIO()
     document = SimpleDocTemplate(
-        output, pagesize=A4, rightMargin=18 * mm, leftMargin=18 * mm,
-        topMargin=18 * mm, bottomMargin=18 * mm,
+        output, pagesize=A4, rightMargin=20 * mm, leftMargin=20 * mm,
+        topMargin=25 * mm, bottomMargin=25 * mm,
         title=job["title"], author="Hub Master"
     )
     styles = getSampleStyleSheet()
+
     title_style = ParagraphStyle(
         "TranscriptTitle", parent=styles["Title"], alignment=TA_CENTER,
-        fontName="Helvetica-Bold", fontSize=16, leading=20, spaceAfter=12
+        fontName="Helvetica-Bold", fontSize=22, leading=28,
+        spaceAfter=8, textColor="#1a1a2e"
     )
-    meta_style = ParagraphStyle(
-        "TranscriptMeta", parent=styles["Normal"], fontSize=9,
-        leading=12, textColor="#555555", spaceAfter=12
+    subtitle_style = ParagraphStyle(
+        "TranscriptSubtitle", parent=styles["Normal"], alignment=TA_CENTER,
+        fontSize=11, leading=14, textColor="#6b7280", spaceAfter=24
     )
-    line_style = ParagraphStyle(
-        "TranscriptLine", parent=styles["BodyText"], fontSize=10,
-        leading=14, spaceAfter=7
+    section_style = ParagraphStyle(
+        "SectionTitle", parent=styles["Heading2"],
+        fontName="Helvetica-Bold", fontSize=14, leading=18,
+        spaceAfter=12, spaceBefore=16, textColor="#1a1a2e",
+        borderPadding=(0, 0, 4, 0)
     )
-    story = [
-        Paragraph(escape(job["title"]), title_style),
-        Paragraph(
-            f"Idioma: {escape(job['language'])} &nbsp;&nbsp; "
-            f"Duração: {timestamp_label(job['duration'])}", meta_style
-        ),
-        Spacer(1, 3 * mm)
+    meta_label_style = ParagraphStyle(
+        "MetaLabel", parent=styles["Normal"], fontSize=9,
+        leading=12, textColor="#6b7280"
+    )
+    meta_value_style = ParagraphStyle(
+        "MetaValue", parent=styles["Normal"], fontSize=9,
+        leading=12, fontName="Helvetica-Bold", textColor="#1a1a2e"
+    )
+    timestamp_style = ParagraphStyle(
+        "Timestamp", parent=styles["Normal"], fontSize=8,
+        leading=10, textColor="#e11d48", fontName="Helvetica-Bold"
+    )
+    body_style = ParagraphStyle(
+        "TranscriptBody", parent=styles["BodyText"], fontSize=10.5,
+        leading=16, spaceAfter=10, textColor="#374151"
+    )
+    footer_style = ParagraphStyle(
+        "Footer", parent=styles["Normal"], fontSize=8,
+        leading=10, textColor="#9ca3af", alignment=TA_CENTER
+    )
+
+    story = []
+
+    story.append(Paragraph(escape(job["title"]), title_style))
+    story.append(Paragraph("Transcrição Automática", subtitle_style))
+
+    story.append(Spacer(1, 4 * mm))
+
+    meta_items = [
+        ("Idioma", job["language"].upper()),
+        ("Duração", format_duration(job["duration"])),
+        ("Segmentos", str(len(job["segments"]))),
+        ("Palavras", str(word_count(job["segments"]))),
+        ("Gerado em", time.strftime("%d/%m/%Y às %H:%M", time.localtime()))
     ]
-    for segment in job["segments"]:
-        story.append(Paragraph(
-            f"<b>[{timestamp_label(segment['start'])}]</b> {escape(segment['text'])}",
-            line_style
-        ))
+
+    meta_html = '<table width="100%" cellpadding="4" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;">'
+    meta_html += '<tr>'
+    for i, (label, value) in enumerate(meta_items):
+        bg = "transparent"
+        meta_html += f'<td style="padding:8px 12px;text-align:center;background:{bg};">'
+        meta_html += f'<font size="8" color="#6b7280"><b>{label.upper()}</b></font><br/>'
+        meta_html += f'<font size="10" color="#1a1a2e"><b>{escape(value)}</b></font>'
+        meta_html += '</td>'
+        if i < len(meta_items) - 1:
+            meta_html += '<td style="width:1px;background:#e5e7eb;"></td>'
+    meta_html += '</tr></table>'
+
+    story.append(Paragraph(meta_html, body_style))
+    story.append(Spacer(1, 8 * mm))
+
+    story.append(Paragraph("TRANSCRIÇÃO", section_style))
+
+    for i, segment in enumerate(job["segments"]):
+        seg_text = escape(segment['text'])
+        if with_timestamps:
+            ts = timestamp_label(segment['start'])
+            segment_html = (
+                f'<font color="#e11d48"><b>[{ts}]</b></font> '
+                f'<font color="#374151">{seg_text}</font>'
+            )
+        else:
+            segment_html = f'<font color="#374151">{seg_text}</font>'
+
+        story.append(Paragraph(segment_html, body_style))
+
+        if i < len(job["segments"]) - 1:
+            story.append(Spacer(1, 2 * mm))
+
+    story.append(Spacer(1, 12 * mm))
+
+    story.append(Paragraph(
+        "Gerado por Hub Master Transcriber",
+        footer_style
+    ))
+
     document.build(story)
     output.seek(0)
     return output
@@ -405,23 +511,33 @@ def delete_transcript(job_id):
 @app.route("/api/transcript/<job_id>/download")
 def download_transcript(job_id):
     file_format = request.args.get("format", "md").lower()
-    if file_format not in ("md", "pdf"):
-        return jsonify({"error": "Formato de download inválido."}), 400
+    with_timestamps = request.args.get("timestamps", "true").lower() == "true"
+
+    if file_format not in ("md", "pdf", "txt"):
+        return jsonify({"error": "Formato de download inválido. Use: md, pdf ou txt."}), 400
 
     job = load_transcript(job_id)
     if not job:
         return jsonify({"error": "Transcrição não encontrada."}), 404
 
     base_name = secure_filename(os.path.splitext(job["filename"])[0]) or "transcricao"
+    suffix = "" if with_timestamps else "-sem-timestamps"
+
     if file_format == "md":
-        content = BytesIO(markdown_document(job).encode("utf-8"))
+        content = BytesIO(markdown_document(job, with_timestamps).encode("utf-8"))
         return send_file(
             content, mimetype="text/markdown", as_attachment=True,
-            download_name=f"{base_name}.md"
+            download_name=f"{base_name}{suffix}.md"
+        )
+    elif file_format == "txt":
+        content = BytesIO(plain_text_document(job, with_timestamps).encode("utf-8"))
+        return send_file(
+            content, mimetype="text/plain", as_attachment=True,
+            download_name=f"{base_name}{suffix}.txt"
         )
     return send_file(
-        pdf_document(job), mimetype="application/pdf", as_attachment=True,
-        download_name=f"{base_name}.pdf"
+        pdf_document(job, with_timestamps), mimetype="application/pdf", as_attachment=True,
+        download_name=f"{base_name}{suffix}.pdf"
     )
 
 @app.route("/api/transcript/queue", methods=["GET"])

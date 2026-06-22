@@ -9,3 +9,5 @@ apps/*/*/dist/
 apps/*-dist
 apps/*/dist
 apps/*/*/dist
+__pycache__/
+*.py[cod]

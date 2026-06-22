@@ -1,5 +1,5 @@
 // Configuração da API do Gemini
-const GEMINI_API_KEY = 'AIzaSyBolH0TO1T4HLZ38hiwMyM7tsQHjTBy8l8';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
 // Estado do jogo

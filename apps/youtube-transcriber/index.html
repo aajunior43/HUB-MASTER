@@ -12,30 +12,52 @@
 :root {
   --primary: #e11d48;
   --primary-hover: #be123c;
+  --primary-glow: rgba(225,29,72,0.15);
   --green: #10b981;
+  --green-glow: rgba(16,185,129,0.15);
   --blue: #3b82f6;
+  --blue-glow: rgba(59,130,246,0.15);
+  --amber: #f59e0b;
+  --amber-glow: rgba(245,158,11,0.15);
   --bg: #0a0a0f;
+  --bg-elevated: #12121a;
   --surface: rgba(255,255,255,0.04);
   --surface-hover: rgba(255,255,255,0.08);
+  --surface-active: rgba(255,255,255,0.12);
   --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.15);
   --text: #f1f1f6;
   --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
   --radius: 20px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
   --font: 'Inter', system-ui, -apple-system, sans-serif;
   --mono: 'JetBrains Mono', monospace;
   --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="light"] {
   --bg: #f8f9fc;
+  --bg-elevated: #ffffff;
   --surface: rgba(0,0,0,0.03);
   --surface-hover: rgba(0,0,0,0.06);
+  --surface-active: rgba(0,0,0,0.1);
   --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.15);
   --text: #1a1a2e;
   --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
   --primary: #be123c;
   --primary-hover: #e11d48;
+  --primary-glow: rgba(190,18,60,0.1);
+  --green-glow: rgba(16,185,129,0.1);
+  --blue-glow: rgba(59,130,246,0.1);
+  --amber-glow: rgba(245,158,11,0.1);
   --shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -45,303 +67,618 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  transition: background .3s, color .3s;
+  transition: background var(--transition), color var(--transition);
   line-height: 1.6;
 }
 
-.theme-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 100;
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  backdrop-filter: blur(20px);
-  color: var(--text);
-  font-size: 1.2rem;
+/* Layout */
+.app-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.sidebar-list::-webkit-scrollbar { width: 4px; }
+.sidebar-list::-webkit-scrollbar-track { background: transparent; }
+.sidebar-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: all var(--transition);
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+}
+
+.history-item:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+}
+
+.history-item.active {
+  background: var(--primary-glow);
+  border-color: var(--primary);
+}
+
+.history-item .icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--surface);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all .2s;
-}
-.theme-toggle:hover { background: var(--surface-hover); }
-
-.container {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px 20px 80px;
+  font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
-.header {
+.history-item .info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-item .title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-item .meta {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.history-item .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.history-item .status-dot.done { background: var(--green); }
+.history-item .status-dot.error { background: var(--primary); }
+.history-item .status-dot.processing { background: var(--amber); animation: pulse 1.5s infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.sidebar-empty {
   text-align: center;
-  margin-bottom: 32px;
+  padding: 40px 20px;
+  color: var(--text-secondary);
 }
-.header h1 {
-  font-size: 1.75rem;
+
+.sidebar-empty .icon { font-size: 2rem; margin-bottom: 8px; }
+.sidebar-empty p { font-size: 0.85rem; }
+
+.sidebar-footer {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-header {
+  padding: 20px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-elevated);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.main-header h1 {
+  font-size: 1.25rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
   background: linear-gradient(135deg, var(--primary), var(--blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.header p {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-top: 4px;
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.input-card {
+.main-scroll {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+/* Upload Zone */
+.upload-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
-  backdrop-filter: blur(20px);
-  margin-bottom: 20px;
-}
-.input-group {
-  display: flex;
-  gap: 10px;
-}
-.input-group input {
-  flex: 1;
-  padding: 14px 18px;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 0.95rem;
-  transition: border-color .2s;
-}
-.input-group input:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-.input-group input::placeholder {
-  color: var(--text-secondary);
-  opacity: .6;
+  padding: 32px;
+  margin-bottom: 24px;
+  transition: all var(--transition);
 }
 
 .upload-zone {
-  border: 1.5px dashed var(--border);
-  border-radius: 16px;
-  padding: 28px 20px;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius);
+  padding: 48px 32px;
   text-align: center;
   cursor: pointer;
-  transition: border-color .2s, background .2s;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
 }
+
+.upload-zone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
 .upload-zone:hover, .upload-zone.dragging {
   border-color: var(--primary);
-  background: rgba(225,29,72,.06);
+  transform: translateY(-2px);
 }
-.upload-zone .upload-icon { font-size: 2rem; margin-bottom: 6px; }
-.upload-zone strong { display:block; font-size:.95rem; }
-.upload-zone span { color:var(--text-secondary); font-size:.8rem; }
+
+.upload-zone:hover::before, .upload-zone.dragging::before {
+  opacity: 1;
+}
+
+.upload-zone .upload-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.upload-zone strong {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.upload-zone span {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 1;
+}
+
 .selected-file {
-  margin-top:12px; padding:10px 12px; border-radius:10px;
-  background:var(--bg); font-size:.82rem; overflow:hidden;
-  text-overflow:ellipsis; white-space:nowrap; display:none;
-}
-.upload-actions { display:flex; align-items:center; gap:12px; margin-top:14px; }
-.upload-actions .btn { flex-shrink:0; }
-.upload-progress { flex:1; height:7px; background:var(--border); border-radius:5px; overflow:hidden; display:none; }
-.upload-progress div { height:100%; width:0; background:linear-gradient(90deg,var(--primary),var(--blue)); transition:width .15s; }
-.media-icon {
-  width:100px; min-width:100px; aspect-ratio:1; display:flex; align-items:center;
-  justify-content:center; border-radius:14px; background:var(--bg); font-size:2.5rem;
-}
-
-.btn {
-  padding: 14px 24px;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  font-family: var(--font);
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: all .2s;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.btn:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-.btn-primary {
-  background: var(--primary);
-  color: #fff;
-}
-.btn-primary:hover:not(:disabled) {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-}
-.btn-secondary {
-  background: var(--surface);
-  color: var(--text);
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
   border: 1px solid var(--border);
-}
-.btn-secondary:hover:not(:disabled) {
-  background: var(--surface-hover);
-  border-color: var(--primary);
-}
-.btn-sm {
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  border-radius: 10px;
+  display: none;
+  align-items: center;
+  gap: 12px;
 }
 
-.card {
+.selected-file .file-icon { font-size: 1.5rem; }
+.selected-file .file-info { flex: 1; min-width: 0; }
+.selected-file .file-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.selected-file .file-size {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.selected-file .remove-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+.selected-file .remove-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.upload-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.upload-progress {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  display: none;
+}
+
+.upload-progress .bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--primary), var(--blue));
+  transition: width 0.15s;
+  border-radius: 3px;
+}
+
+/* Queue Section */
+.queue-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  backdrop-filter: blur(20px);
-  overflow: hidden;
-  margin-bottom: 20px;
-  display: none;
+  padding: 24px;
+  margin-bottom: 24px;
 }
-.card.active { display: block; }
 
-.video-header {
+.queue-header {
   display: flex;
-  gap: 16px;
-  padding: 20px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
-.video-thumb {
-  width: 160px;
-  min-width: 160px;
-  border-radius: 12px;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  background: var(--bg);
-}
-.video-meta { min-width: 0; }
-.video-meta h2 {
+
+.queue-header h3 {
   font-size: 1rem;
   font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 4px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.queue-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  transition: all var(--transition);
+  position: relative;
   overflow: hidden;
 }
-.video-meta .channel {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+
+.queue-item:hover {
+  border-color: var(--border-strong);
 }
-.video-meta .views {
+
+.queue-item.processing {
+  border-color: var(--primary);
+  background: var(--primary-glow);
+}
+
+.queue-item.done {
+  border-color: var(--green);
+  background: var(--green-glow);
+}
+
+.queue-item.error {
+  border-color: var(--primary);
+  background: rgba(225,29,72,0.05);
+}
+
+.queue-item .item-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.queue-item .item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.queue-item .item-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queue-item .item-status {
   font-size: 0.8rem;
   color: var(--text-secondary);
   margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
+.queue-item .item-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--border);
+}
+
+.queue-item .item-progress .bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--blue));
+  transition: width 0.5s ease;
+}
+
+.queue-item .item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Result Card */
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.result-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.result-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.result-meta h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.result-meta .meta-row {
+  display: flex;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.result-meta .meta-row span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Tabs */
 .tabs {
   display: flex;
   border-bottom: 1px solid var(--border);
+  padding: 0 24px;
   gap: 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
 .tab {
-  flex: 1;
-  padding: 14px 16px;
+  padding: 16px 20px;
   text-align: center;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
   border-bottom: 2px solid transparent;
-  transition: all .2s;
+  transition: all var(--transition);
   white-space: nowrap;
   background: none;
   font-family: var(--font);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+
 .tab:hover { color: var(--text); }
+
 .tab.active {
   color: var(--primary);
   border-bottom-color: var(--primary);
 }
 
-.tab-content { display: none; padding: 20px; }
+.tab .badge {
+  background: var(--primary);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  padding: 24px;
+}
+
 .tab-content.active { display: block; }
 
-.lang-bar {
+/* Transcript */
+.transcript-toolbar {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.toolbar-left, .toolbar-right {
+  display: flex;
+  align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 16px;
 }
-.lang-bar label {
-  font-size: 0.85rem;
+
+.toolbar-label {
+  font-size: 0.8rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
-.lang-bar select {
-  padding: 8px 14px;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: border-color .2s;
-}
-.lang-bar select:focus { outline: none; border-color: var(--primary); }
 
-.action-bar {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
+.toolbar-right .divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+}
+
+.toggle-btn {
+  position: relative;
+  border-radius: 6px !important;
+}
+
+.toggle-btn.active {
+  background: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
+}
+
+.toggle-btn.active:hover {
+  background: var(--primary-hover) !important;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
 }
 
 .transcript-list {
-  max-height: 520px;
+  max-height: 600px;
   overflow-y: auto;
   scroll-behavior: smooth;
 }
-.transcript-list::-webkit-scrollbar {
-  width: 6px;
-}
-.transcript-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-.transcript-list::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
+
+.transcript-list::-webkit-scrollbar { width: 6px; }
+.transcript-list::-webkit-scrollbar-track { background: transparent; }
+.transcript-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 .line {
-  padding: 8px 12px;
-  border-radius: 10px;
-  margin-bottom: 3px;
+  padding: 10px 14px;
+  border-radius: var(--radius-xs);
+  margin-bottom: 4px;
   cursor: pointer;
-  transition: background .15s;
+  transition: all var(--transition);
   font-size: 0.95rem;
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: baseline;
+  border: 1px solid transparent;
 }
-.line:hover { background: var(--surface-hover); }
+
+.line:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+}
+
 .line .time {
   font-family: var(--mono);
   font-size: 0.8rem;
   color: var(--primary);
   font-weight: 600;
   white-space: nowrap;
-  min-width: 58px;
+  min-width: 60px;
   text-align: right;
+  padding: 4px 8px;
+  background: var(--primary-glow);
+  border-radius: 6px;
 }
+
 .line .text { flex: 1; }
 
 .line mark {
@@ -351,307 +688,552 @@ body {
   padding: 0 2px;
 }
 
+/* Search */
 .search-box {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
 }
+
 .search-box input {
   flex: 1;
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: var(--bg);
   border: 1.5px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   color: var(--text);
   font-family: var(--font);
-  font-size: 0.9rem;
-  transition: border-color .2s;
+  font-size: 0.95rem;
+  transition: border-color var(--transition);
 }
-.search-box input:focus { outline: none; border-color: var(--primary); }
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
 .search-count {
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin-bottom: 12px;
 }
 
+/* Info Grid */
 .info-grid {
   display: grid;
   gap: 12px;
 }
+
 .info-item {
   display: flex;
   justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--bg);
-  border-radius: 12px;
-  font-size: 0.9rem;
-}
-.info-item .label { color: var(--text-secondary); font-weight: 500; }
-.info-item .value { font-weight: 600; text-align: right; max-width: 60%; word-break: break-all; }
-.info-item .value a { color: var(--blue); text-decoration: none; }
-.info-item .value a:hover { text-decoration: underline; }
-
-.spinner {
-  display: inline-block;
-  width: 22px;
-  height: 22px;
-  border: 2.5px solid var(--border);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loading-state {
-  text-align: center;
-  padding: 48px 20px;
-  color: var(--text-secondary);
-}
-.loading-state .spinner { width: 36px; height: 36px; border-width: 3px; margin-bottom: 12px; }
-.loading-state p { font-size: 0.95rem; }
-
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-secondary);
-}
-
-/* Queue */
-.queue-section { margin-top: 16px; }
-.empty-queue { text-align:center;padding:24px;font-size:0.85rem;color:var(--text-secondary); }
-.queue-item {
-  display:flex;align-items:center;gap:12px;
-  padding:12px 14px;border-radius:14px;
-  border:1px solid var(--border);background:var(--surface);
-  margin-bottom:8px;position:relative;overflow:hidden;
-  transition:all .2s;
-}
-.queue-item.done { border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.05); }
-.queue-item.error { border-color:rgba(225,29,72,0.3);background:rgba(225,29,72,0.05); }
-.queue-item.downloading { border-color:rgba(59,130,246,0.3); }
-.queue-item.transcribing { border-color:rgba(225,29,72,0.3); }
-.qi-info { flex:1;min-width:0; }
-.qi-title { font-size:0.85rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
-.qi-status { font-size:0.75rem;color:var(--text-secondary);margin-top:2px; }
-.qi-meta { font-size:0.7rem;color:var(--text-secondary);margin-top:2px;font-family:var(--mono); }
-.qi-btn.done-btn { border-color:rgba(16,185,129,0.4);color:var(--green); }
-.qi-btn.done-btn:hover { background:rgba(16,185,129,0.1); }
-.qi-btn {
-  padding:6px 14px;border-radius:10px;border:1px solid var(--border);
-  background:transparent;color:var(--text);cursor:pointer;
-  font-family:var(--font);font-size:0.75rem;font-weight:600;transition:all .2s;flex-shrink:0;
-}
-.qi-btn:hover { border-color:var(--primary);color:var(--primary); }
-.qi-btn.err { border-color:var(--primary);color:var(--primary); }
-.qi-actions { display:flex;gap:6px;flex-shrink:0; }
-.qi-btn.delete-btn { border-color:rgba(225,29,72,.4);color:var(--primary); }
-.qi-btn.delete-btn:hover { background:rgba(225,29,72,.1); }
-.qi-progress {
-  position:absolute;bottom:0;left:0;right:0;height:3px;
-  background:var(--border);border-radius:0 0 14px 14px;overflow:hidden;
-}
-.qi-bar { height:100%;background:linear-gradient(90deg,var(--primary),var(--blue));transition:width .5s ease;border-radius:0 0 0 14px; }
-.empty-state .icon { font-size: 2.5rem; margin-bottom: 8px; }
-.empty-state h3 { font-size: 1rem; margin-bottom: 4px; color: var(--text); }
-.empty-state p { font-size: 0.9rem; }
-
-.error-box {
-  background: rgba(225,29,72,0.1);
-  border: 1px solid rgba(225,29,72,0.3);
-  border-radius: 14px;
+  align-items: center;
   padding: 14px 18px;
-  color: var(--primary);
-  font-size: 0.9rem;
-  margin-bottom: 16px;
-  display: none;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
-.error-box.active { display: block; }
 
+.info-item .label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.info-item .value {
+  font-weight: 600;
+  text-align: right;
+  max-width: 60%;
+  word-break: break-all;
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(225,29,72,0.3);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  border-radius: var(--radius-xs);
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+}
+
+/* Toast */
 .toast-container {
   position: fixed;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 24px;
   z-index: 999;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: center;
-  pointer-events: none;
 }
+
 .toast {
-  background: var(--surface);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   backdrop-filter: blur(24px);
-  border-radius: 14px;
-  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text);
-  box-shadow: var(--shadow);
-  animation: toastIn .3s ease;
-  pointer-events: auto;
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-.toast.out { animation: toastOut .25s ease forwards; }
-@keyframes toastIn {
-  from { opacity:0; transform:translateY(12px) scale(.95); }
-  to { opacity:1; transform:translateY(0) scale(1); }
-}
-@keyframes toastOut {
-  from { opacity:1; transform:translateY(0) scale(1); }
-  to { opacity:0; transform:translateY(12px) scale(.95); }
+  gap: 10px;
+  max-width: 360px;
 }
 
-.footer {
-  text-align: center;
-  padding: 32px 20px;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
+.toast.out { animation: toastOut 0.25s ease forwards; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px) scale(0.95); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
 }
-.footer strong { color: var(--text); }
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to { opacity: 0; transform: translateX(20px) scale(0.95); }
+}
+
+/* Error Box */
+.error-box {
+  background: rgba(225,29,72,0.1);
+  border: 1px solid rgba(225,29,72,0.3);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  color: var(--primary);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  display: none;
+  align-items: center;
+  gap: 12px;
+}
+
+.error-box.active { display: flex; }
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-secondary);
+}
+
+.empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+.empty-state h3 { font-size: 1.1rem; margin-bottom: 6px; color: var(--text); }
+.empty-state p { font-size: 0.95rem; max-width: 400px; margin: 0 auto; }
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Back to Top */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 16px rgba(225,29,72,0.4);
+  transition: all var(--transition);
+  z-index: 100;
+}
+
+.back-to-top.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.back-to-top:hover {
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow: 0 6px 20px rgba(225,29,72,0.5);
+}
+
+/* Keyboard Shortcuts Hint */
+.shortcuts-hint {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 16px;
+  z-index: 50;
+}
+
+.shortcuts-hint kbd {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-scroll {
+    padding: 20px;
+  }
+
+  .main-header {
+    padding: 16px 20px;
+  }
+
+  .upload-zone {
+    padding: 32px 20px;
+  }
+
+  .shortcuts-hint {
+    display: none;
+  }
+
+  .back-to-top {
+    bottom: 16px;
+    left: auto;
+    right: 16px;
+    transform: translateY(100px);
+  }
+
+  .back-to-top.visible {
+    transform: translateY(0);
+  }
+}
 
 @media (max-width: 560px) {
-  .container { padding: 20px 16px 60px; }
-  .header h1 { font-size: 1.35rem; }
-  .input-group { flex-direction: column; }
-  .input-group .btn { justify-content: center; }
-  .video-header { flex-direction: column; }
-  .video-thumb { width: 100%; min-width: auto; aspect-ratio: 16/9; }
-  .tabs { gap: 0; }
-  .tab { font-size: 0.8rem; padding: 12px 10px; }
-  .tab-content { padding: 16px; }
-  .action-bar .btn { flex: 1; justify-content: center; }
-  .line { font-size: 0.88rem; padding: 7px 10px; }
-  .line .time { min-width: 50px; font-size: 0.75rem; }
-  .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; }
+  .header-actions .btn span {
+    display: none;
+  }
+
+  .tabs {
+    padding: 0 16px;
+  }
+
+  .tab {
+    padding: 14px 12px;
+    font-size: 0.85rem;
+  }
+
+  .tab-content {
+    padding: 16px;
+  }
+
+  .result-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .result-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
 }
 </style>
 </head>
 <body>
 
-<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
-
-<div class="container">
-  <div class="header">
-    <h1>Transcritor de Áudio e Vídeo</h1>
-    <p>Envie um arquivo e receba a transcrição automaticamente</p>
-  </div>
-
-  <div class="input-card">
-    <input type="file" id="fileInput" hidden accept="audio/*,video/*,.mkv,.flac,.opus" />
-    <div class="upload-zone" id="uploadZone" onclick="$('fileInput').click()">
-      <div class="upload-icon">⬆</div>
-      <strong>Selecione ou arraste um arquivo</strong>
-      <span>Áudio ou vídeo, até 500 MB e 20 minutos</span>
-    </div>
-    <div class="selected-file" id="selectedFile"></div>
-    <div class="upload-actions">
-      <button class="btn btn-primary" id="btnUpload" onclick="uploadFile()" disabled>Enviar e transcrever</button>
-      <div class="upload-progress" id="uploadProgress"><div id="uploadBar"></div></div>
-    </div>
-  </div>
-
-  <div class="error-box" id="errorBox"></div>
-
-  <!-- Queue status bar -->
-  <div class="card" id="queueSection" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-      <span style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);display:flex;align-items:center;gap:6px">
-        <span id="queueStatusIcon">⏳</span>
-        <span id="queueStatusText">Processando…</span>
-      </span>
-      <span style="font-size:0.7rem;color:var(--text-muted);font-family:var(--mono)" id="queueCount">0 arquivos</span>
-    </div>
-    <div id="queueListMain">
-      <div class="empty-queue">Nenhum arquivo na fila</div>
-    </div>
-  </div>
-
-  <div class="card" id="videoCard">
-    <div class="video-header">
-      <div class="media-icon" id="mediaIcon">🎧</div>
-      <div class="video-meta">
-        <h2 id="videoTitle"></h2>
-        <div class="channel" id="videoChannel"></div>
-        <div class="views" id="videoViews"></div>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>📋 Histórico</h2>
+      <div class="sidebar-actions">
+        <button class="btn btn-ghost btn-icon" onclick="clearHistory()" title="Limpar histórico">🗑️</button>
       </div>
     </div>
-  </div>
-
-  <div class="card" id="resultCard">
-    <div class="tabs" id="tabs">
-      <button class="tab active" id="tabTranscriptBtn" data-tab="transcript">📄 Transcrição</button>
-      <button class="tab" data-tab="queue" onclick="renderQueue()">📋 Fila</button>
-      <button class="tab" data-tab="search">🔍 Buscar</button>
-      <button class="tab" data-tab="info">ℹ️ Info</button>
-    </div>
-
-    <div class="tab-content active" id="tabTranscript">
-      <div id="transcriptActions" style="display:none" class="action-bar">
-        <button class="btn btn-secondary btn-sm" onclick="doCopyAll()">📋 Copiar</button>
-        <button class="btn btn-secondary btn-sm" onclick="doDownloadTxt()">⬇ TXT</button>
-        <button class="btn btn-secondary btn-sm" onclick="downloadStored('md')">⬇ MD</button>
-        <button class="btn btn-secondary btn-sm" onclick="downloadStored('pdf')">⬇ PDF</button>
+    <div class="sidebar-list" id="sidebarList">
+      <div class="sidebar-empty">
+        <div class="icon">📁</div>
+        <p>Nenhuma transcrição ainda</p>
       </div>
-      <div class="transcript-list" id="transcriptList"></div>
     </div>
+    <div class="sidebar-footer">
+      <button class="btn btn-secondary" style="width:100%" onclick="loadAllTranscripts()">
+        🔄 Atualizar lista
+      </button>
+    </div>
+  </aside>
 
-    <div class="tab-content" id="tabQueue">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div style="font-size:0.85rem;color:var(--text-secondary)" id="queueInfo"></div>
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="main-header">
+      <h1>🎙️ Transcritor</h1>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="resetToUpload()">
+          ➕ <span>Novo áudio</span>
+        </button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
       </div>
-      <div id="queueListTab"></div>
-    </div>
+    </header>
 
-    <div class="tab-content" id="tabSearch">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Buscar na transcrição…" autocomplete="off" />
-        <button class="btn btn-secondary btn-sm" onclick="doSearch()">Buscar</button>
+    <div class="main-scroll" id="mainScroll">
+      <div class="error-box" id="errorBox"></div>
+
+      <!-- Upload Card -->
+      <div class="upload-card" id="uploadCard">
+        <input type="file" id="fileInput" hidden accept="audio/*,video/*,.mkv,.flac,.opus" />
+        <div class="upload-zone" id="uploadZone" onclick="$('fileInput').click()">
+          <div class="upload-icon">⬆️</div>
+          <strong>Selecione ou arraste um arquivo</strong>
+          <span>Áudio ou vídeo, até 500 MB e 20 minutos</span>
+        </div>
+        <div class="selected-file" id="selectedFile">
+          <span class="file-icon">📄</span>
+          <div class="file-info">
+            <div class="file-name" id="selectedFileName"></div>
+            <div class="file-size" id="selectedFileSize"></div>
+          </div>
+          <button class="remove-btn" onclick="removeSelectedFile()">✕</button>
+        </div>
+        <div class="upload-actions">
+          <button class="btn btn-primary" id="btnUpload" onclick="uploadFile()" disabled>
+            🚀 Enviar e transcrever
+          </button>
+          <div class="upload-progress" id="uploadProgress">
+            <div class="bar" id="uploadBar"></div>
+          </div>
+        </div>
       </div>
-      <div class="search-count" id="searchCount"></div>
-      <div class="transcript-list" id="searchResults"></div>
-    </div>
 
-    <div class="tab-content" id="tabInfo">
-      <div class="info-grid" id="infoGrid"></div>
+      <!-- Queue Section -->
+      <div class="queue-card" id="queueSection" style="display:none">
+        <div class="queue-header">
+          <h3>
+            <span id="queueStatusIcon">⏳</span>
+            <span id="queueStatusText">Processando…</span>
+          </h3>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:0.8rem;color:var(--text-secondary)" id="queueCount">0 arquivos</span>
+            <button class="btn btn-ghost btn-sm" onclick="clearCompleted()">Limpar concluídos</button>
+          </div>
+        </div>
+        <div class="queue-list" id="queueList">
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <p>Nenhum arquivo na fila</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="result-card" id="resultCard" style="display:none">
+        <div class="result-header">
+          <div class="result-icon" id="resultIcon">🎧</div>
+          <div class="result-meta">
+            <h2 id="resultTitle"></h2>
+            <div class="meta-row">
+              <span id="resultDuration">⏱️ 0:00</span>
+              <span id="resultSegments">📝 0 segmentos</span>
+              <span id="resultLanguage">🌐 Desconhecido</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs" id="tabs">
+          <button class="tab active" id="tabTranscriptBtn" data-tab="transcript">
+            📄 Transcrição
+          </button>
+          <button class="tab" data-tab="search">
+            🔍 Buscar
+          </button>
+          <button class="tab" data-tab="info">
+            ℹ️ Info
+          </button>
+        </div>
+
+        <div class="tab-content active" id="tabTranscript">
+          <div class="transcript-toolbar">
+            <div class="toolbar-left">
+              <button class="btn btn-secondary btn-sm" onclick="doCopyAll()">📋 Copiar tudo</button>
+              <div class="divider"></div>
+              <span class="toolbar-label">Timestamps:</span>
+              <button class="btn btn-secondary btn-sm toggle-btn active" id="tsToggleOn" onclick="setTimestamps(true)">Com</button>
+              <button class="btn btn-secondary btn-sm toggle-btn" id="tsToggleOff" onclick="setTimestamps(false)">Sem</button>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-secondary btn-sm" onclick="downloadStored('txt')">⬇️ TXT</button>
+              <button class="btn btn-secondary btn-sm" onclick="downloadStored('md')">⬇️ MD</button>
+              <button class="btn btn-secondary btn-sm" onclick="downloadStored('pdf')">⬇️ PDF</button>
+            </div>
+          </div>
+          <div class="transcript-list" id="transcriptList"></div>
+        </div>
+
+        <div class="tab-content" id="tabSearch">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar na transcrição…" autocomplete="off" />
+            <button class="btn btn-secondary btn-sm" onclick="doSearch()">🔍</button>
+          </div>
+          <div class="search-count" id="searchCount"></div>
+          <div class="transcript-list" id="searchResults"></div>
+        </div>
+
+        <div class="tab-content" id="tabInfo">
+          <div class="info-grid" id="infoGrid"></div>
+        </div>
+      </div>
     </div>
-  </div>
+  </main>
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
 
-<div class="footer">
-  Dev <strong>Aleksandro Alves</strong>
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+<div class="shortcuts-hint">
+  <span><kbd>Ctrl</kbd>+<kbd>U</kbd> Upload</span>
+  <span><kbd>Ctrl</kbd>+<kbd>F</kbd> Buscar</span>
+  <span><kbd>Esc</kbd> Limpar</span>
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
 const API = '/api/transcript';
 let pollTimer = null;
-let state = { id:'', videoId:'', title:'', source:'upload', segments:[] };
+let state = { id:'', videoId:'', title:'', source:'upload', segments:[], withTimestamps: true };
 let selectedUpload = null;
+
+function setTimestamps(value) {
+  state.withTimestamps = value;
+  $('tsToggleOn').classList.toggle('active', value);
+  $('tsToggleOff').classList.toggle('active', !value);
+}
 
 function toast(msg, icon = '') {
   const el = document.createElement('div');
   el.className = 'toast';
   el.innerHTML = icon ? `<span>${icon}</span> ${esc(msg)}` : esc(msg);
   $('toastContainer').appendChild(el);
-  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 260); }, 2200);
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 260); }, 2500);
 }
-function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
-function extractVideoId(url) {
-  const p = [/youtube\.com\/watch\?v=([\w-]{11})/, /youtu\.be\/([\w-]{11})/, /youtube\.com\/embed\/([\w-]{11})/, /youtube\.com\/shorts\/([\w-]{11})/];
-  for (const r of p) { const m = url.match(r); if (m) return m[1]; }
-  return null;
+function esc(t) {
+  const d = document.createElement('div');
+  d.textContent = t;
+  return d.innerHTML;
 }
+
 function fmtTime(sec) {
-  sec = Math.floor(sec); const m = Math.floor(sec / 60); const s = sec % 60;
-  return `${m}:${String(s).padStart(2,'0')}`;
+  sec = Math.floor(sec);
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
 }
+
 function formatEta(sec) {
   if (typeof sec !== 'number' || !isFinite(sec) || sec < 0) return '';
   sec = Math.floor(sec);
@@ -661,22 +1243,65 @@ function formatEta(sec) {
   return s ? `~${m}min ${s}s restantes` : `~${m}min restantes`;
 }
 
-const STATUS_ICON = { queued:'⏳', preparing:'⚙', transcribing:'🎤', saving:'💾', done:'✅', error:'❌' };
+function getFileIcon(filename) {
+  if (/\.(mp4|mov|mkv|avi|webm|mpeg|mpg)$/i.test(filename)) return '🎬';
+  if (/\.(mp3|wav|m4a|aac|ogg|oga|opus|flac)$/i.test(filename)) return '🎧';
+  return '📄';
+}
 
-/* Queue system */
+const STATUS_CONFIG = {
+  queued: { icon: '⏳', text: 'Na fila', class: '' },
+  preparing: { icon: '⚙️', text: 'Preparando…', class: 'processing' },
+  transcribing: { icon: '🎤', text: 'Transcrevendo…', class: 'processing' },
+  saving: { icon: '💾', text: 'Salvando…', class: 'processing' },
+  done: { icon: '✅', text: 'Concluído', class: 'done' },
+  error: { icon: '❌', text: 'Erro', class: 'error' }
+};
+
+// Sidebar History
+function renderSidebar(jobs) {
+  const list = $('sidebarList');
+  if (!jobs || jobs.length === 0) {
+    list.innerHTML = '<div class="sidebar-empty"><div class="icon">📁</div><p>Nenhuma transcrição ainda</p></div>';
+    return;
+  }
+
+  list.innerHTML = jobs.map(j => {
+    const icon = getFileIcon(j.filename || j.title || '');
+    const created = j.createdAt ? new Date(j.createdAt * 1000).toLocaleDateString('pt-BR') : '';
+    const statusClass = STATUS_CONFIG[j.status]?.class || '';
+    const isActive = state.id === j.id;
+
+    return `<div class="history-item ${isActive ? 'active' : ''}" onclick="showResult('${j.id}')">
+      <div class="icon">${icon}</div>
+      <div class="info">
+        <div class="title">${esc(j.title || j.filename || 'Sem título')}</div>
+        <div class="meta">${created}</div>
+      </div>
+      <div class="status-dot ${statusClass}"></div>
+    </div>`;
+  }).join('');
+}
+
+// Queue
 function renderQueue() {
   fetch(`${API}/status`).then(r => r.json()).then(data => {
-    const lists = [$('queueListMain'), $('queueListTab')];
     const jobs = (data.jobs || []).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    const running = jobs.find(j => ['queued','preparing','transcribing','saving'].includes(j.status));
+    const activeJobs = jobs.filter(j => ['queued', 'preparing', 'transcribing', 'saving'].includes(j.status));
+    const hasActive = activeJobs.length > 0;
 
-    // Update queue status bar
+    // Update sidebar
+    renderSidebar(jobs);
+
+    // Update queue section
     if (jobs.length > 0) {
       $('queueSection').style.display = 'block';
-      const active = jobs.find(j => ['queued','preparing','transcribing','saving'].includes(j.status));
+      const active = activeJobs[0];
+
       if (active) {
-        $('queueStatusIcon').textContent = active.status === 'saving' ? '💾' : active.status === 'transcribing' ? '🎤' : active.status === 'preparing' ? '⚙' : '⏳';
-        let statusText = active.status === 'saving' ? 'Salvando no banco…' : active.status === 'transcribing' ? 'Transcrevendo…' : active.status === 'preparing' ? 'Preparando mídia…' : 'Na fila…';
+        const status = STATUS_CONFIG[active.status] || STATUS_CONFIG.queued;
+        $('queueStatusIcon').textContent = status.icon;
+        let statusText = status.text;
         const pct = active.progress != null ? ` ${active.progress}%` : '';
         const eta = formatEta(active.etaSeconds);
         const etaText = eta ? ` · ${eta}` : '';
@@ -685,43 +1310,36 @@ function renderQueue() {
         $('queueStatusIcon').textContent = '✅';
         $('queueStatusText').textContent = 'Todos concluídos';
       }
+
       $('queueCount').textContent = `${jobs.length} arquivo${jobs.length !== 1 ? 's' : ''}`;
+
+      const queueHtml = jobs.map(j => {
+        const status = STATUS_CONFIG[j.status] || STATUS_CONFIG.queued;
+        const created = j.createdAt ? new Date(j.createdAt * 1000).toLocaleString('pt-BR') : '';
+        const icon = getFileIcon(j.filename || j.title || '');
+        const isActive = ['queued', 'preparing', 'transcribing', 'saving'].includes(j.status);
+
+        return `<div class="queue-item ${status.class}">
+          <div class="item-icon">${icon}</div>
+          <div class="item-info">
+            <div class="item-title">${esc(j.title || j.filename || 'Sem título')}</div>
+            <div class="item-status">${status.icon} ${status.text}${created ? ` · ${created}` : ''}</div>
+          </div>
+          <div class="item-actions">
+            ${j.status === 'done' ? `<button class="btn btn-ghost btn-sm" onclick="showResult('${j.id}')">👁️ Ver</button>` : ''}
+            ${j.status === 'error' ? `<button class="btn btn-ghost btn-sm" onclick="showResult('${j.id}')">⚠️ Erro</button>` : ''}
+            ${['done', 'error'].includes(j.status) ? `<button class="btn btn-ghost btn-sm" onclick="deleteTranscript('${j.id}')">🗑️</button>` : ''}
+          </div>
+          ${isActive ? `<div class="item-progress"><div class="bar" style="width:${j.progress || 0}%"></div></div>` : ''}
+        </div>`;
+      }).join('');
+
+      $('queueList').innerHTML = queueHtml;
+
+      if (hasActive) startPolling();
     } else {
       $('queueSection').style.display = 'none';
     }
-
-    if (jobs.length === 0) {
-      lists.forEach(el => el.innerHTML = '<div class="empty-queue">Nenhuma transcrição salva</div>');
-      return;
-    }
-
-    const queueHtml = jobs.map(j => {
-      const statusIcon = STATUS_ICON[j.status] || '⏳';
-      const created = j.createdAt ? new Date(j.createdAt * 1000).toLocaleString('pt-BR') : '';
-      let statusText = j.status === 'queued' ? 'Na fila' :
-                       j.status === 'preparing' ? 'Preparando mídia…' :
-                       j.status === 'transcribing' ? 'Transcrevendo…' :
-                       j.status === 'saving' ? 'Salvando no banco…' :
-                       j.status === 'done' ? '✅ Concluído' : '❌ Erro';
-      const eta = formatEta(j.etaSeconds);
-      const progressText = [`${j.progress || 0}%`, eta].filter(Boolean).join(' · ');
-      return `<div class="queue-item ${j.status}">
-        <div class="qi-info">
-          <div class="qi-title">${esc(j.title || j.videoId)}</div>
-          <div class="qi-status">${statusIcon} ${statusText}${created ? ` · ${created}` : ''}</div>
-          ${progressText ? `<div class="qi-meta">${progressText}</div>` : ''}
-        </div>
-        <div class="qi-actions">
-          ${j.status === 'done' ? `<button class="qi-btn done-btn" onclick="showResult('${j.id}')">Ver</button>` : ''}
-          ${j.status === 'error' ? `<button class="qi-btn err" onclick="showResult('${j.id}')">Erro</button>` : ''}
-          ${['done','error'].includes(j.status) ? `<button class="qi-btn delete-btn" onclick="deleteTranscript('${j.id}')">Excluir</button>` : ''}
-        </div>
-        ${['queued','preparing','transcribing','saving'].includes(j.status) ?
-          `<div class="qi-progress"><div class="qi-bar" style="width:${j.progress}%"></div></div>` : ''}
-      </div>`;
-    }).join('');
-    lists.forEach(el => el.innerHTML = queueHtml);
-    if (running) startPolling();
   }).catch(() => {});
 }
 
@@ -730,157 +1348,310 @@ function startPolling() {
   pollTimer = setTimeout(renderQueue, 2000);
 }
 
+// File Selection
 function chooseFile(file) {
   hideError();
   if (!file) return;
-  if (file.size > 500 * 1024 * 1024) { showError('Arquivo muito grande. Máximo: 500 MB.'); return; }
+  if (file.size > 500 * 1024 * 1024) {
+    showError('Arquivo muito grande. Máximo: 500 MB.');
+    return;
+  }
   selectedUpload = file;
-  $('selectedFile').textContent = `${file.name} · ${(file.size / 1024 / 1024).toFixed(1)} MB`;
-  $('selectedFile').style.display = 'block';
+  $('selectedFileName').textContent = file.name;
+  $('selectedFileSize').textContent = `${(file.size / 1024 / 1024).toFixed(1)} MB`;
+  $('selectedFile').style.display = 'flex';
   $('btnUpload').disabled = false;
 }
 
+function removeSelectedFile() {
+  selectedUpload = null;
+  $('fileInput').value = '';
+  $('selectedFile').style.display = 'none';
+  $('btnUpload').disabled = true;
+}
+
+// Upload
 function uploadFile() {
-  if (!selectedUpload) { showError('Selecione um arquivo de áudio ou vídeo.'); return; }
+  if (!selectedUpload) {
+    showError('Selecione um arquivo de áudio ou vídeo.');
+    return;
+  }
   hideError();
+
   const form = new FormData();
   form.append('file', selectedUpload);
+
   const xhr = new XMLHttpRequest();
   $('btnUpload').disabled = true;
-  $('btnUpload').textContent = 'Enviando…';
+  $('btnUpload').innerHTML = '<span class="spinner"></span> Enviando…';
   $('uploadProgress').style.display = 'block';
+
   xhr.upload.onprogress = e => {
-    if (e.lengthComputable) $('uploadBar').style.width = `${Math.round(e.loaded / e.total * 100)}%`;
+    if (e.lengthComputable) {
+      $('uploadBar').style.width = `${Math.round(e.loaded / e.total * 100)}%`;
+    }
   };
+
   xhr.onload = () => {
     let data = {};
     try { data = JSON.parse(xhr.responseText); } catch (_) {}
+
     if (xhr.status < 200 || xhr.status >= 300) {
       showError(data.error || 'Falha ao enviar o arquivo.');
-      resetUploadButton(false);
+      resetUploadButton();
       return;
     }
+
     toast(`Arquivo adicionado à fila! Posição: ${data.position}`, '📋');
-    selectedUpload = null;
-    $('fileInput').value = '';
-    $('selectedFile').style.display = 'none';
-    resetUploadButton(true);
+    removeSelectedFile();
+    resetUploadButton();
     $('queueSection').style.display = 'block';
     renderQueue();
   };
-  xhr.onerror = () => { showError('Erro de conexão durante o envio.'); resetUploadButton(false); };
+
+  xhr.onerror = () => {
+    showError('Erro de conexão durante o envio.');
+    resetUploadButton();
+  };
+
   xhr.open('POST', `${API}/upload`);
   xhr.send(form);
 }
 
-function resetUploadButton(clearSelection) {
-  $('btnUpload').textContent = 'Enviar e transcrever';
-  $('btnUpload').disabled = clearSelection || !selectedUpload;
+function resetUploadButton() {
+  $('btnUpload').innerHTML = '🚀 Enviar e transcrever';
+  $('btnUpload').disabled = !selectedUpload;
   $('uploadProgress').style.display = 'none';
   $('uploadBar').style.width = '0';
 }
 
+// Show Result
 async function showResult(jobId) {
   const res = await fetch(`${API}/status?jobId=${jobId}`);
   const job = await res.json();
+
   if (!job || job.status === 'error') {
-    $('tabTranscriptBtn').click();
+    $('resultCard').style.display = 'block';
+    $('resultTitle').textContent = 'Erro';
+    $('resultIcon').textContent = '❌';
+    $('resultDuration').textContent = '';
+    $('resultSegments').textContent = '';
+    $('resultLanguage').textContent = '';
     $('transcriptList').innerHTML = `<div class="empty-state"><div class="icon">❌</div><h3>Erro</h3><p>${esc(job?.error || 'Falha desconhecida')}</p></div>`;
-    $('transcriptActions').style.display = 'none';
+    document.querySelector('.transcript-toolbar').style.display = 'none';
     return;
   }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+
   if (job.segments && job.segments.length > 0) {
-    $('videoCard').classList.add('active');
-    $('resultCard').classList.add('active');
-    $('videoTitle').textContent = job.title || job.videoId;
-    $('mediaIcon').textContent = /\.(mp4|mov|mkv|avi|webm|mpeg|mpg)$/i.test(job.filename || '') ? '🎬' : '🎧';
-    $('videoChannel').textContent = '';
+    $('resultCard').style.display = 'block';
+    $('resultTitle').textContent = job.title || job.filename || job.videoId;
+    $('resultIcon').textContent = getFileIcon(job.filename || '');
+    $('resultDuration').textContent = `⏱️ ${fmtTime(job.duration || 0)}`;
+    $('resultSegments').textContent = `📝 ${job.segments.length} segmentos`;
+    $('resultLanguage').textContent = `🌐 ${job.language || 'Desconhecido'}`;
 
-    state = { id:job.id, videoId:job.videoId, title:job.title || '', source:job.source || 'upload', channel:'', segments:job.segments };
+    state = {
+      id: job.id,
+      videoId: job.videoId,
+      title: job.title || '',
+      source: job.source || 'upload',
+      filename: job.filename || '',
+      segments: job.segments,
+      duration: job.duration || 0,
+      language: job.language || ''
+    };
 
+    // Activate transcript tab
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     $('tabTranscriptBtn').classList.add('active');
     $('tabTranscript').classList.add('active');
+
+    document.querySelector('.transcript-toolbar').style.display = 'flex';
     renderTranscript();
-    toast('Transcrição concluída!', '✅');
+    renderSidebar();
+    toast('Transcrição carregada!', '✅');
   }
 }
 
+// Render Transcript
 function renderTranscript() {
   const list = $('transcriptList');
   list.innerHTML = state.segments.map(s => {
-    const click = state.source === 'youtube' ? `onclick="jumpTo('${state.videoId}',${s.start})"` : '';
-    return `<div class="line" ${click}>
+    return `<div class="line" onclick="copyTimestamp(${s.start})">
       <span class="time">${fmtTime(s.start)}</span>
       <span class="text">${esc(s.text)}</span>
     </div>`;
   }).join('');
-  $('transcriptActions').style.display = 'flex';
 }
 
-function jumpTo(vid, sec) { window.open(`https://www.youtube.com/watch?v=${vid}&t=${Math.floor(sec)}`, '_blank'); }
+function copyTimestamp(sec) {
+  navigator.clipboard.writeText(fmtTime(sec)).then(() => {
+    toast(`Timestamp ${fmtTime(sec)} copiado!`, '📋');
+  });
+}
 
+// Actions
 function doCopyAll() {
-  const text = state.segments.map(s => `[${fmtTime(s.start)}] ${s.text}`).join('\n');
-  navigator.clipboard.writeText(text).then(() => toast('Copiado!', '📋')).catch(() => toast('Erro', '✗'));
+  const timestamps = state.withTimestamps;
+  const text = state.segments.map(s => {
+    const ts = timestamps ? `[${fmtTime(s.start)}] ` : '';
+    return `${ts}${s.text}`;
+  }).join('\n');
+  navigator.clipboard.writeText(text).then(() => toast('Copiado!', '📋')).catch(() => toast('Erro ao copiar', '❌'));
 }
 
 function doDownloadTxt() {
-  const text = state.segments.map(s => `[${fmtTime(s.start)}] ${s.text}`).join('\n');
+  const timestamps = state.withTimestamps;
+  const text = state.segments.map(s => {
+    const ts = timestamps ? `[${fmtTime(s.start)}] ` : '';
+    return `${ts}${s.text}`;
+  }).join('\n');
   const blob = new Blob([text], { type: 'text/plain' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `transcript-${state.videoId}.txt`;
+  const suffix = timestamps ? '' : '-sem-timestamps';
+  a.download = `transcript-${state.filename || state.videoId || 'audio'}${suffix}.txt`;
   a.click();
   URL.revokeObjectURL(a.href);
-  toast('Download!', '⬇');
+  toast(`Download TXT${timestamps ? '' : ' (sem timestamps)'}!`, '⬇️');
 }
 
 function downloadStored(format) {
-  if (!state.id) { showError('Abra uma transcrição salva antes de baixar.'); return; }
+  if (!state.id) {
+    showError('Abra uma transcrição salva antes de baixar.');
+    return;
+  }
+  const timestamps = state.withTimestamps ? 'true' : 'false';
+  const suffix = state.withTimestamps ? '' : ' (sem timestamps)';
   const a = document.createElement('a');
-  a.href = `${API}/${encodeURIComponent(state.id)}/download?format=${format}`;
+  a.href = `${API}/${encodeURIComponent(state.id)}/download?format=${format}&timestamps=${timestamps}`;
   a.click();
-  toast(`Download ${format.toUpperCase()} iniciado!`, '⬇');
+  toast(`Download ${format.toUpperCase()}${suffix}!`, '⬇️');
 }
 
 async function deleteTranscript(jobId) {
   if (!confirm('Excluir esta transcrição permanentemente?')) return;
-  const response = await fetch(`${API}/${encodeURIComponent(jobId)}`, { method:'DELETE' });
+  const response = await fetch(`${API}/${encodeURIComponent(jobId)}`, { method: 'DELETE' });
   const data = await response.json();
-  if (!response.ok) { showError(data.error || 'Não foi possível excluir.'); return; }
-  if (state.id === jobId) {
-    state = { id:'', videoId:'', title:'', source:'upload', segments:[] };
-    $('videoCard').classList.remove('active');
-    $('resultCard').classList.remove('active');
-    $('transcriptActions').style.display = 'none';
+
+  if (!response.ok) {
+    showError(data.error || 'Não foi possível excluir.');
+    return;
   }
-  toast('Transcrição excluída.', '✓');
+
+  if (state.id === jobId) {
+    state = { id: '', videoId: '', title: '', source: 'upload', segments: [] };
+    $('resultCard').style.display = 'none';
+  }
+
+  toast('Transcrição excluída.', '✅');
   renderQueue();
 }
 
+// Search
 function doSearch() {
   const q = $('searchInput').value.trim().toLowerCase();
   const list = $('searchResults');
   const count = $('searchCount');
-  if (!q || !state.segments.length) { list.innerHTML = ''; count.textContent = ''; return; }
+
+  if (!q || !state.segments.length) {
+    list.innerHTML = '';
+    count.textContent = '';
+    return;
+  }
+
   const matches = state.segments.filter(s => s.text.toLowerCase().includes(q));
-  count.textContent = `${matches.length} resultado${matches.length !== 1 ? 's' : ''}`;
+  count.textContent = `${matches.length} resultado${matches.length !== 1 ? 's' : ''} para "${esc(q)}"`;
+
   list.innerHTML = matches.length === 0
-    ? '<div class="empty-state"><div class="icon">🔍</div><p>Nenhum resultado</p></div>'
+    ? '<div class="empty-state"><div class="icon">🔍</div><p>Nenhum resultado encontrado</p></div>'
     : matches.map(s => {
         const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-        return `<div class="line">
+        return `<div class="line" onclick="copyTimestamp(${s.start})">
           <span class="time">${fmtTime(s.start)}</span>
-          <span class="text">${esc(s.text).replace(re, '<mark>\$1</mark>')}</span>
+          <span class="text">${esc(s.text).replace(re, '<mark>$1</mark>')}</span>
         </div>`;
       }).join('');
 }
 
-function showError(msg) { const e = $('errorBox'); e.textContent = msg; e.classList.add('active'); }
-function hideError() { $('errorBox').classList.remove('active'); }
+// Info
+function buildInfo() {
+  const duration = state.segments?.length > 0 ? fmtTime(state.segments[state.segments.length - 1].end || 0) : '—';
+  const wordCount = state.segments?.reduce((acc, s) => acc + s.text.split(/\s+/).length, 0) || 0;
+  const readingTime = Math.ceil(wordCount / 200);
+
+  const items = [
+    { l: 'Título', v: state.title || state.filename || '—' },
+    { l: 'Idioma', v: state.language || 'Desconhecido' },
+    { l: 'Duração', v: duration },
+    { l: 'Segmentos', v: String(state.segments?.length || 0) },
+    { l: 'Palavras', v: wordCount.toLocaleString('pt-BR') },
+    { l: 'Tempo de leitura', v: `~${readingTime} min` },
+    { l: 'Formato', v: state.source === 'youtube' ? 'YouTube' : 'Upload' }
+  ];
+
+  $('infoGrid').innerHTML = items.map(i =>
+    `<div class="info-item"><span class="label">${i.l}</span><span class="value">${i.v}</span></div>`
+  ).join('');
+}
+
+// History
+function clearHistory() {
+  if (!confirm('Limpar todo o histórico? Isso excluirá todas as transcrições.')) return;
+
+  fetch(`${API}/status`).then(r => r.json()).then(data => {
+    const jobs = data.jobs || [];
+    const deletePromises = jobs.map(j =>
+      fetch(`${API}/${encodeURIComponent(j.id)}`, { method: 'DELETE' })
+    );
+    Promise.all(deletePromises).then(() => {
+      state = { id: '', videoId: '', title: '', source: 'upload', segments: [] };
+      $('resultCard').style.display = 'none';
+      toast('Histórico limpo!', '✅');
+      renderQueue();
+    });
+  });
+}
+
+function clearCompleted() {
+  fetch(`${API}/status`).then(r => r.json()).then(data => {
+    const completed = (data.jobs || []).filter(j => ['done', 'error'].includes(j.status));
+    const deletePromises = completed.map(j =>
+      fetch(`${API}/${encodeURIComponent(j.id)}`, { method: 'DELETE' })
+    );
+    Promise.all(deletePromises).then(() => {
+      toast('Concluídos limpos!', '✅');
+      renderQueue();
+    });
+  });
+}
+
+function loadAllTranscripts() {
+  renderQueue();
+  toast('Lista atualizada!', '🔄');
+}
+
+// Reset
+function resetToUpload() {
+  state = { id: '', videoId: '', title: '', source: 'upload', segments: [] };
+  $('resultCard').style.display = 'none';
+  $('queueSection').style.display = 'none';
+  $('uploadCard').scrollIntoView({ behavior: 'smooth' });
+  removeSelectedFile();
+  hideError();
+}
+
+// Error
+function showError(msg) {
+  const e = $('errorBox');
+  e.textContent = msg;
+  e.classList.add('active');
+}
+
+function hideError() {
+  $('errorBox').classList.remove('active');
+}
 
 // Tabs
 document.querySelectorAll('.tab').forEach(tab => {
@@ -896,38 +1667,74 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-function buildInfo() {
-  const d = state.segments?.length > 0 ? fmtTime(state.segments[state.segments.length-1].end || 0) : '—';
-  const items = [
-    {l:'Título', v:state.title || '—'},
-    {l:'Segmentos', v:String(state.segments?.length || 0)},
-    {l:'Duração', v:d}
-  ];
-  $('infoGrid').innerHTML = items.map(i => `<div class="info-item"><span class="label">${i.l}</span><span class="value">${i.v}</span></div>`).join('');
-}
-
 // Theme
 function setTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
-  localStorage.setItem('yt-transcriber-theme', t);
+  localStorage.setItem('transcriber-theme', t);
   $('themeToggle').textContent = t === 'dark' ? '🌙' : '☀️';
 }
-const saved = localStorage.getItem('yt-transcriber-theme');
-if (saved) setTheme(saved);
-$('themeToggle').addEventListener('click', () => setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
 
+const savedTheme = localStorage.getItem('transcriber-theme');
+if (savedTheme) setTheme(savedTheme);
+
+$('themeToggle').addEventListener('click', () => {
+  setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+// File Input
 $('fileInput').addEventListener('change', e => chooseFile(e.target.files[0]));
+
+// Drag & Drop
 const uploadZone = $('uploadZone');
-['dragenter','dragover'].forEach(name => uploadZone.addEventListener(name, e => { e.preventDefault(); uploadZone.classList.add('dragging'); }));
-['dragleave','drop'].forEach(name => uploadZone.addEventListener(name, e => { e.preventDefault(); uploadZone.classList.remove('dragging'); }));
+['dragenter', 'dragover'].forEach(name => {
+  uploadZone.addEventListener(name, e => { e.preventDefault(); uploadZone.classList.add('dragging'); });
+});
+['dragleave', 'drop'].forEach(name => {
+  uploadZone.addEventListener(name, e => { e.preventDefault(); uploadZone.classList.remove('dragging'); });
+});
 uploadZone.addEventListener('drop', e => chooseFile(e.dataTransfer.files[0]));
 
+// Search Input
 let searchTimer;
-$('searchInput').addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(doSearch, 300); });
+$('searchInput').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(doSearch, 300);
+});
+
+// Back to Top
+const mainScroll = $('mainScroll');
+mainScroll.addEventListener('scroll', () => {
+  const btn = $('backToTop');
+  if (mainScroll.scrollTop > 300) {
+    btn.classList.add('visible');
+  } else {
+    btn.classList.remove('visible');
+  }
+});
+
+function scrollToTop() {
+  mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Keyboard Shortcuts
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'u') {
+    e.preventDefault();
+    $('fileInput').click();
+  }
+  if (e.ctrlKey && e.key === 'f') {
+    e.preventDefault();
+    const searchTab = document.querySelector('[data-tab="search"]');
+    if (searchTab) searchTab.click();
+  }
+  if (e.key === 'Escape') {
+    removeSelectedFile();
+    hideError();
+  }
+});
 
 // Init
-$('tabTranscriptBtn').addEventListener('click', () => {});
-$('transcriptList').innerHTML = '<div class="empty-state"><div class="icon">🎬</div><h3>Transcritor de mídia</h3><p>Envie um áudio ou vídeo para começar.</p></div>';
+$('transcriptList').innerHTML = '<div class="empty-state"><div class="icon">🎙️</div><h3>Transcritor de mídia</h3><p>Envie um áudio ou vídeo para começar a transcrever.</p></div>';
 renderQueue();
 </script>
 </body>
