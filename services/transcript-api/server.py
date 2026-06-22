@@ -40,6 +40,16 @@ MAX_COMPLETED = 20
 queue_lock = threading.Lock()
 worker_active = False
 
+def set_progress(job, value):
+    job["progress"] = value
+    started = job.get("startedAt")
+    if started is not None and 0 < value < 100:
+        elapsed = max(0.1, time.time() - started)
+        eta = int(elapsed * (100 - value) / max(value, 1))
+        job["etaSeconds"] = max(0, eta)
+    else:
+        job.pop("etaSeconds", None)
+
 def get_db():
     return psycopg2.connect(
         host=DB_HOST, port=DB_PORT, dbname=DB_NAME,
@@ -211,11 +221,12 @@ def worker():
         source_path = job["sourcePath"]
         normalized_path = None
         try:
+            job.setdefault("startedAt", time.time())
             job["status"] = "preparing"
-            job["progress"] = 10
+            set_progress(job, 10)
             normalized_path = normalize_media(source_path)
             job["status"] = "transcribing"
-            job["progress"] = 15
+            set_progress(job, 15)
             wh_model = get_model()
             segments_gen, info = wh_model.transcribe(
                 normalized_path,
@@ -229,26 +240,32 @@ def worker():
             for seg in segments_gen:
                 segments.append({"start": round(seg.start, 1), "end": round(seg.end, 1), "text": seg.text.strip()})
                 total += 1
-                if total % 10 == 0:
-                    job["progress"] = min(95, 15 + int((seg.end / max(info.duration, 1)) * 80))
+                progress = min(95, 15 + int((seg.end / max(info.duration, 1)) * 80))
+                set_progress(job, progress)
 
             job["segments"] = segments
             job["duration"] = round(info.duration, 1) if info.duration else 0
             job["language"] = info.language if info.language else "unknown"
             job["status"] = "saving"
-            job["progress"] = 98
+            set_progress(job, 98)
             job["completedAt"] = time.time()
             save_transcript(job)
+            set_progress(job, 100)
             job["status"] = "done"
-            job["progress"] = 100
+            job.pop("etaSeconds", None)
+            job.pop("startedAt", None)
 
         except subprocess.TimeoutExpired:
             job["status"] = "error"
             job["error"] = "Processamento excedeu o tempo limite"
+            job.pop("etaSeconds", None)
+            job.pop("startedAt", None)
         except Exception as e:
             print(f"transcript job {job['id']} failed: {e}", flush=True)
             job["status"] = "error"
             job["error"] = str(e)[:200]
+            job.pop("etaSeconds", None)
+            job.pop("startedAt", None)
         finally:
             cleanup([source_path, normalized_path])
             job["completedAt"] = time.time()
@@ -334,6 +351,7 @@ def get_status():
                 return jsonify({
                     "id": j["id"], "videoId": j["videoId"], "title": j["title"],
                     "status": j["status"], "progress": j["progress"],
+                    "etaSeconds": j.get("etaSeconds"),
                     "segments": j.get("segments", []),
                     "duration": j.get("duration", 0),
                     "language": j.get("language", ""),
@@ -356,7 +374,8 @@ def get_status():
         "completedSize": len(stored_jobs),
         "jobs": [{
             "id": j["id"], "videoId": j["videoId"], "title": j["title"],
-            "status": j["status"], "progress": j["progress"],
+            "status": j["status"], "progress": j.get("progress", 0),
+            "etaSeconds": j.get("etaSeconds"),
             "source": j.get("source", "upload"), "error": j.get("error", ""),
             "createdAt": j.get("createdAt", 0)
         } for j in jobs]
