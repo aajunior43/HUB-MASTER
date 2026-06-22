@@ -653,7 +653,7 @@ function fmtTime(sec) {
   return `${m}:${String(s).padStart(2,'0')}`;
 }
 function formatEta(sec) {
-  if (!Number.isFinite(sec) || sec < 0) return '';
+  if (typeof sec !== 'number' || !isFinite(sec) || sec < 0) return '';
   sec = Math.floor(sec);
   if (sec < 60) return `~${sec}s restantes`;
   const m = Math.floor(sec / 60);
