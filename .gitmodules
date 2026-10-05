@@ -1,0 +1,132 @@
+[submodule "apps/AGENDAIA"]
+	path = apps/AGENDAIA
+	url = https://github.com/aajunior43/AGENDAIA.git
+[submodule "apps/AI-Image-Prompt-Generator"]
+	path = apps/AI-Image-Prompt-Generator
+	url = https://github.com/aajunior43/AI-Image-Prompt-Generator.git
+[submodule "apps/Analisador-de-Nota-Fiscal-com-IA"]
+	path = apps/Analisador-de-Nota-Fiscal-com-IA
+	url = https://github.com/aajunior43/Analisador-de-Nota-Fiscal-com-IA.git
+[submodule "apps/Corretor-Ortogr-fico-com-IA"]
+	path = apps/Corretor-Ortogr-fico-com-IA
+	url = https://github.com/aajunior43/Corretor-Ortogr-fico-com-IA.git
+[submodule "apps/Expert-Study-Plan-Generator"]
+	path = apps/Expert-Study-Plan-Generator
+	url = https://github.com/aajunior43/Expert-Study-Plan-Generator.git
+[submodule "apps/GERADOR-DE-STATUS"]
+	path = apps/GERADOR-DE-STATUS
+	url = https://github.com/aajunior43/GERADOR-DE-STATUS.git
+[submodule "apps/Gerador-de-Google-Dorks-com-IA"]
+	path = apps/Gerador-de-Google-Dorks-com-IA
+	url = https://github.com/aajunior43/Gerador-de-Google-Dorks-com-IA.git
+[submodule "apps/Gerador-de-Memes-IA"]
+	path = apps/Gerador-de-Memes-IA
+	url = https://github.com/aajunior43/Gerador-de-Memes-IA.git
+[submodule "apps/Html-visualizer"]
+	path = apps/Html-visualizer
+	url = https://github.com/aajunior43/Html-visualizer.git
+[submodule "apps/MELHORADOR-DE-PROMPT"]
+	path = apps/MELHORADOR-DE-PROMPT
+	url = https://github.com/aajunior43/MELHORADOR-DE-PROMPT.git
+[submodule "apps/PDFMaster-Pro"]
+	path = apps/PDFMaster-Pro
+	url = https://github.com/aajunior43/PDFMaster-Pro.git
+[submodule "apps/Sherlock-"]
+	path = apps/Sherlock-
+	url = https://github.com/aajunior43/Sherlock-.git
+[submodule "apps/Social-Media-Design-Assistant"]
+	path = apps/Social-Media-Design-Assistant
+	url = https://github.com/aajunior43/Social-Media-Design-Assistant.git
+[submodule "apps/afazeres"]
+	path = apps/afazeres
+	url = https://github.com/aajunior43/afazeres.git
+[submodule "apps/area-de-trabalho"]
+	path = apps/area-de-trabalho
+	url = https://github.com/aajunior43/area-de-trabalho.git
+[submodule "apps/art-narrator"]
+	path = apps/art-narrator
+	url = https://github.com/aajunior43/art-narrator.git
+[submodule "apps/bottelegramvideo"]
+	path = apps/bottelegramvideo
+	url = https://github.com/aajunior43/bottelegramvideo.git
+[submodule "apps/brave-manatee-roam"]
+	path = apps/brave-manatee-roam
+	url = https://github.com/aajunior43/brave-manatee-roam.git
+[submodule "apps/buscador-grupos"]
+	path = apps/buscador-grupos
+	url = https://github.com/aajunior43/buscador-grupos.git
+[submodule "apps/buscador-processos"]
+	path = apps/buscador-processos
+	url = https://github.com/aajunior43/buscador-processos.git
+[submodule "apps/calculadora-percent"]
+	path = apps/calculadora-percent
+	url = https://github.com/aajunior43/calculadora-percent.git
+[submodule "apps/calculadoradediferenca"]
+	path = apps/calculadoradediferenca
+	url = https://github.com/aajunior43/calculadoradediferenca.git
+[submodule "apps/color-gemini-canvas"]
+	path = apps/color-gemini-canvas
+	url = https://github.com/aajunior43/color-gemini-canvas.git
+[submodule "apps/countdown-sub-sync"]
+	path = apps/countdown-sub-sync
+	url = https://github.com/aajunior43/countdown-sub-sync.git
+[submodule "apps/cyberclock-background"]
+	path = apps/cyberclock-background
+	url = https://github.com/aajunior43/cyberclock-background.git
+[submodule "apps/diagramas-ia"]
+	path = apps/diagramas-ia
+	url = https://github.com/aajunior43/diagramas-ia.git
+[submodule "apps/diaria-clock-cruncher"]
+	path = apps/diaria-clock-cruncher
+	url = https://github.com/aajunior43/diaria-clock-cruncher.git
+[submodule "apps/dicionario-ia"]
+	path = apps/dicionario-ia
+	url = https://github.com/aajunior43/dicionario-ia.git
+[submodule "apps/dorks"]
+	path = apps/dorks
+	url = https://github.com/aajunior43/dorks.git
+[submodule "apps/extensao-extrator-designer"]
+	path = apps/extensao-extrator-designer
+	url = https://github.com/aajunior43/extensao-extrator-designer.git
+[submodule "apps/extensao-navegador-bloco-de-nota-ia"]
+	path = apps/extensao-navegador-bloco-de-nota-ia
+	url = https://github.com/aajunior43/extensao-navegador-bloco-de-nota-ia.git
+[submodule "apps/fluxograma-com-ia"]
+	path = apps/fluxograma-com-ia
+	url = https://github.com/aajunior43/fluxograma-com-ia.git
+[submodule "apps/friendly-lobster-run"]
+	path = apps/friendly-lobster-run
+	url = https://github.com/aajunior43/friendly-lobster-run.git
+[submodule "apps/gemini-pdf-rename-magic"]
+	path = apps/gemini-pdf-rename-magic
+	url = https://github.com/aajunior43/gemini-pdf-rename-magic.git
+[submodule "apps/gerador-status"]
+	path = apps/gerador-status
+	url = https://github.com/aajunior43/gerador-status.git
+[submodule "apps/hub-design-studio"]
+	path = apps/hub-design-studio
+	url = https://github.com/aajunior43/hub-design-studio.git
+[submodule "apps/inaja-fornecimento-digital"]
+	path = apps/inaja-fornecimento-digital
+	url = https://github.com/aajunior43/inaja-fornecimento-digital.git
+[submodule "apps/link-stash-backup-buddy"]
+	path = apps/link-stash-backup-buddy
+	url = https://github.com/aajunior43/link-stash-backup-buddy.git
+[submodule "apps/meu-site"]
+	path = apps/meu-site
+	url = https://github.com/aajunior43/meu-site.git
+[submodule "apps/organizador"]
+	path = apps/organizador
+	url = https://github.com/aajunior43/organizador.git
+[submodule "apps/pixel-agents"]
+	path = apps/pixel-agents
+	url = https://github.com/aajunior43/pixel-agents.git
+[submodule "apps/prompt-spark-keeper"]
+	path = apps/prompt-spark-keeper
+	url = https://github.com/aajunior43/prompt-spark-keeper.git
+[submodule "apps/promptfoto"]
+	path = apps/promptfoto
+	url = https://github.com/aajunior43/promptfoto.git
+[submodule "apps/tidy-tasks-bloom"]
+	path = apps/tidy-tasks-bloom
+	url = https://github.com/aajunior43/tidy-tasks-bloom.git
