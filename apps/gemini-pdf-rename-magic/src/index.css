@@ -1,0 +1,315 @@
+@import './styles/animations.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Neo-Brutalism palette */
+    --background: 0 0% 98%;          /* #FAFAFA */
+    --foreground: 0 0% 4%;           /* #0A0A0A */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
+
+    --primary: 12 100% 50%;          /* #FF2D00 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 100% 50%;       /* #00B4FF */
+    --secondary-foreground: 0 0% 4%;
+
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 20%;
+
+    --accent: 200 100% 50%;
+    --accent-foreground: 0 0% 4%;
+
+    --destructive: 12 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 130 70% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 45 100% 50%;
+    --warning-foreground: 0 0% 4%;
+
+    --border: 0 0% 0%;               /* pure black */
+    --input: 0 0% 0%;
+    --ring: 12 100% 50%;
+
+    --radius: 0rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 4%;
+    --sidebar-primary: 12 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 94%;
+    --sidebar-accent-foreground: 0 0% 4%;
+    --sidebar-border: 0 0% 0%;
+    --sidebar-ring: 12 100% 50%;
+
+    --text-high-contrast: 0 0% 4%;
+    --text-medium-contrast: 0 0% 20%;
+    --text-low-contrast: 0 0% 40%;
+
+    --hover-subtle: 0 0% 94%;
+    --active-subtle: 0 0% 88%;
+    --focus-ring: 12 100% 50% / 0.5;
+
+    --surface-elevated: 0 0% 100%;
+    --surface-sunken: 0 0% 94%;
+
+    /* Brutalist typography */
+    --font-display: 'Archivo Black', 'Arial Black', system-ui, sans-serif;
+    --font-body: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+
+    /* Legacy tokens (kept for compatibility, mapped to brutalist) */
+    --ink-gold: 12 100% 50%;
+    --ink-gold-soft: 200 100% 50%;
+    --shadow-editorial: 4px 4px 0 0 hsl(0 0% 0%);
+    --shadow-editorial-lg: 8px 8px 0 0 hsl(0 0% 0%);
+  }
+
+  .dark {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 12 100% 55%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 200 100% 55%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 75%;
+    --accent: 200 100% 55%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 12 100% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 130 70% 50%;
+    --success-foreground: 0 0% 4%;
+    --warning: 45 100% 55%;
+    --warning-foreground: 0 0% 4%;
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 12 100% 55%;
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 12 100% 55%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 16%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 100%;
+    --sidebar-ring: 12 100% 55%;
+    --text-high-contrast: 0 0% 98%;
+    --text-medium-contrast: 0 0% 80%;
+    --text-low-contrast: 0 0% 60%;
+    --hover-subtle: 0 0% 16%;
+    --active-subtle: 0 0% 22%;
+    --focus-ring: 12 100% 55% / 0.5;
+    --surface-elevated: 0 0% 12%;
+    --surface-sunken: 0 0% 6%;
+    --shadow-editorial: 4px 4px 0 0 hsl(0 0% 100%);
+    --shadow-editorial-lg: 8px 8px 0 0 hsl(0 0% 100%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+
+  .font-display {
+    font-family: var(--font-display), sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: none;
+  }
+
+  .editorial-rule {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: hsl(var(--foreground));
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+  .editorial-rule::before,
+  .editorial-rule::after {
+    content: "";
+    flex: 1;
+    height: 3px;
+    background: hsl(var(--foreground));
+  }
+
+  .ink-gold { color: hsl(var(--primary)); font-weight: 900; }
+
+  .shadow-editorial { box-shadow: var(--shadow-editorial); }
+  .shadow-editorial-lg { box-shadow: var(--shadow-editorial-lg); }
+
+  ::-webkit-scrollbar { @apply w-2; }
+  ::-webkit-scrollbar-track { background: hsl(var(--background)); border-left: 2px solid hsl(var(--border)); }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--foreground)); }
+  ::selection { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+
+  .focus-visible, :focus-visible {
+    outline: 3px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .brutal-border {
+    @apply border-[3px] border-foreground;
+  }
+  .brutal-border-thick {
+    @apply border-[5px] border-foreground;
+  }
+  .brutal-shadow {
+    box-shadow: 5px 5px 0 0 hsl(var(--foreground));
+  }
+  .brutal-shadow-lg {
+    box-shadow: 8px 8px 0 0 hsl(var(--foreground));
+  }
+  .brutal-shadow-sm {
+    box-shadow: 3px 3px 0 0 hsl(var(--foreground));
+  }
+  .brutal-card {
+    @apply bg-card brutal-border brutal-shadow rounded-none;
+  }
+  .brutal-btn {
+    @apply inline-flex items-center justify-center gap-2 bg-card text-foreground brutal-border brutal-shadow-sm
+           px-5 py-3 font-bold uppercase tracking-wider text-sm rounded-none
+           transition-transform duration-100 ease-out;
+  }
+  .brutal-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 0 hsl(var(--foreground));
+  }
+  .brutal-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 0 hsl(var(--foreground));
+  }
+  .brutal-btn-primary {
+    @apply brutal-btn;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+  .brutal-btn-secondary {
+    @apply brutal-btn;
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+  }
+  .brutal-input {
+    @apply bg-card text-foreground brutal-border rounded-none px-3 py-2 font-medium;
+  }
+  .brutal-input:focus {
+    outline: none;
+    box-shadow: 4px 4px 0 0 hsl(var(--primary));
+  }
+  .brutal-tag {
+    @apply inline-flex items-center gap-1 px-2 py-1 text-[10px] font-black uppercase tracking-widest brutal-border bg-card;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-display { @apply text-4xl font-black tracking-tight; }
+  .text-heading { @apply text-2xl font-black tracking-tight; }
+  .text-body { @apply text-sm font-medium leading-relaxed; }
+  .text-caption { @apply text-xs font-bold text-muted-foreground uppercase tracking-wider; }
+
+  .space-minimal { @apply space-y-3; }
+  .space-comfortable { @apply space-y-6; }
+  .space-generous { @apply space-y-8; }
+
+  .animate-fade-in { animation: fadeIn 0.25s ease-out; }
+  .animate-slide-up { animation: slideUp 0.2s ease-out; }
+  .animate-scale-in { animation: scaleIn 0.15s ease-out; }
+  .animate-slide-in-left { animation: slideInLeft 0.2s ease-out; }
+  .animate-slide-in-right { animation: slideInRight 0.2s ease-out; }
+
+  .transition-minimal { @apply transition-transform duration-100 ease-out; }
+  .transition-colors-minimal { @apply transition-colors duration-100 ease-out; }
+
+  .text-high-contrast { color: hsl(var(--text-high-contrast)); }
+  .text-medium-contrast { color: hsl(var(--text-medium-contrast)); }
+  .text-low-contrast { color: hsl(var(--text-low-contrast)); }
+
+  .bg-surface-elevated { background-color: hsl(var(--surface-elevated)); }
+  .bg-surface-sunken { background-color: hsl(var(--surface-sunken)); }
+  .bg-hover-subtle { background-color: hsl(var(--hover-subtle)); }
+  .bg-active-subtle { background-color: hsl(var(--active-subtle)); }
+}
+
+/* Legacy component classes retargeted to brutalist look */
+.minimal-card, .modern-card, .glass-card, .glass-panel {
+  @apply brutal-card;
+}
+.minimal-button, .compact-button {
+  @apply brutal-btn;
+}
+.minimal-input, .ultra-minimal-input {
+  @apply brutal-input;
+}
+.minimal-header {
+  @apply border-b-[3px] border-foreground bg-background;
+}
+.minimal-sidebar {
+  @apply border-r-[3px] border-foreground bg-sidebar;
+}
+
+.shadow-minimal { box-shadow: 3px 3px 0 0 hsl(var(--foreground)); }
+.shadow-subtle { box-shadow: 3px 3px 0 0 hsl(var(--foreground)); }
+.shadow-elegant { box-shadow: 5px 5px 0 0 hsl(var(--foreground)); }
+.shadow-premium { box-shadow: 8px 8px 0 0 hsl(var(--foreground)); }
+
+.hover-minimal, .hover-lift { @apply transition-transform duration-100 ease-out; }
+.hover-minimal:hover, .hover-lift:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 hsl(var(--foreground));
+}
+
+.gradient-primary { background: hsl(var(--primary)); }
+.gradient-secondary { background: hsl(var(--secondary)); }
+.gradient-text { color: hsl(var(--primary)); background: none; -webkit-text-fill-color: currentColor; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}

@@ -1,0 +1,388 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Temas institucionais ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â Prefeitura Municipal de InajÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ / PR
+   - inaja         ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ claro institucional (padrÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o)
+   - inaja-escuro  ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ escuro (classe .inaja-escuro; Tailwind dark:)
+   Tipografia: Urbanist (tÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­tulos) + Epilogue (corpo)
+   ============================================================ */
+
+@layer base {
+  /* Tema InajÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â claro institucional (padrÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o) */
+  :root,
+  .inaja {
+    /* SuperfÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­cies */
+    --background: 210 25% 97%;
+    --foreground: 202 42% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 202 42% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 202 42% 15%;
+
+    /* Marca */
+    --primary: 174 62% 23%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 174 30% 91%;
+    --secondary-foreground: 174 62% 19%;
+
+    --accent: 41 78% 53%;
+    --accent-foreground: 202 42% 15%;
+
+    /* Neutros */
+    --muted: 210 18% 93%;
+    --muted-foreground: 202 35% 18%;
+
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 204 18% 84%;
+    --input: 204 18% 84%;
+    --ring: 174 62% 23%;
+
+    --radius: 0.75rem;
+
+    /* Tokens estendidos */
+    --gold: 38 79% 32%;
+    --gold-soft: 42 90% 93%;
+    --emerald-deep: 174 62% 23%;
+    --emerald: 171 56% 29%;
+    --emerald-soft: 174 36% 93%;
+    --cream: 210 25% 97%;
+
+    --gradient-gold: linear-gradient(135deg, hsl(42 88% 62%), hsl(35 78% 47%));
+    --gradient-emerald: linear-gradient(155deg, hsl(174 62% 23%), hsl(181 57% 29%));
+    --shadow-card: 0 1px 2px hsl(202 35% 18% / 0.04), 0 10px 28px -16px hsl(202 35% 18% / 0.14);
+    --shadow-elevated: 0 6px 12px hsl(202 35% 18% / 0.06), 0 24px 48px -20px hsl(202 35% 18% / 0.24);
+
+    /* Sidebar (esmeralda profundo) */
+    --sidebar-background: 202 54% 16%;
+    --sidebar-foreground: 210 25% 98%;
+    --sidebar-primary: 41 78% 53%;
+    --sidebar-primary-foreground: 202 54% 16%;
+    --sidebar-accent: 202 43% 25%;
+    --sidebar-accent-foreground: 210 25% 96%;
+    --sidebar-border: 202 30% 27%;
+    --sidebar-ring: 41 78% 53%;
+  }
+
+  /* Tema InajÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ escuro */
+  .dark,
+  .inaja-escuro {
+    --background: 210 27% 9%;
+    --foreground: 210 25% 96%;
+
+    --card: 210 23% 13%;
+    --card-foreground: 210 25% 96%;
+
+    --popover: 210 23% 13%;
+    --popover-foreground: 210 25% 96%;
+
+    --primary: 171 57% 48%;
+    --primary-foreground: 210 27% 9%;
+
+    --secondary: 210 19% 19%;
+    --secondary-foreground: 210 25% 96%;
+
+    --accent: 41 82% 59%;
+    --accent-foreground: 210 27% 9%;
+
+    --muted: 210 17% 18%;
+    --muted-foreground: 210 16% 80%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 16% 26%;
+    --input: 210 16% 26%;
+    --ring: 171 57% 48%;
+
+    --gold-soft: 41 45% 24%;
+    --emerald-soft: 171 29% 18%;
+
+    /* Tokens estendidos ausentes no tema claro ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ajustados p/ contraste no escuro */
+    --gold: 41 82% 64%;
+    --emerald: 171 57% 58%;
+    --emerald-deep: 171 42% 78%;
+    --cream: 210 20% 13%;
+    --gradient-gold: linear-gradient(135deg, hsl(43 85% 67%), hsl(36 76% 54%));
+    --gradient-emerald: linear-gradient(155deg, hsl(171 57% 48%), hsl(184 52% 42%));
+
+    --sidebar-background: 210 32% 10%;
+    --sidebar-foreground: 210 25% 96%;
+    --sidebar-primary: 41 82% 59%;
+    --sidebar-primary-foreground: 210 27% 9%;
+    --sidebar-accent: 210 22% 17%;
+    --sidebar-accent-foreground: 210 25% 96%;
+    --sidebar-border: 210 17% 24%;
+    --sidebar-ring: 171 57% 48%;
+  }
+
+  /* Tema Spotify: superfÃ­cies escuras e verde vibrante para aÃ§Ãµes */
+  .institucional-gov {
+    /* Superfícies */
+    --background: 210 45% 98%;
+    --foreground: 214 64% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 214 64% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 214 64% 14%;
+
+    /* Marca */
+    --primary: 214 80% 39%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 214 40% 91%;
+    --secondary-foreground: 214 80% 29%;
+
+    --accent: 48 100% 51%;
+    --accent-foreground: 214 64% 14%;
+
+    /* Neutros */
+    --muted: 214 25% 94%;
+    --muted-foreground: 214 45% 22%;
+
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 22% 84%;
+    --input: 214 22% 84%;
+    --ring: 214 80% 39%;
+
+    --radius: 0.75rem;
+
+    /* Tokens estendidos */
+    --gold: 48 100% 51%;
+    --gold-soft: 48 100% 92%;
+    --emerald-deep: 214 80% 29%;
+    --emerald: 214 76% 34%;
+    --emerald-soft: 214 40% 92%;
+    --cream: 210 45% 98%;
+
+    --gradient-gold: linear-gradient(135deg, hsl(48 100% 55%), hsl(45 92% 45%));
+    --gradient-emerald: linear-gradient(155deg, hsl(214 80% 39%), hsl(218 74% 46%));
+    --shadow-card: 0 1px 2px hsl(214 64% 14% / 0.04), 0 10px 28px -16px hsl(214 64% 14% / 0.14);
+    --shadow-elevated: 0 6px 12px hsl(214 64% 14% / 0.06), 0 24px 48px -20px hsl(214 64% 14% / 0.24);
+
+    /* Sidebar (azul gov.br profundo) */
+    --sidebar-background: 214 80% 24%;
+    --sidebar-foreground: 210 45% 98%;
+    --sidebar-primary: 48 100% 51%;
+    --sidebar-primary-foreground: 214 80% 24%;
+    --sidebar-accent: 214 72% 30%;
+    --sidebar-accent-foreground: 210 45% 96%;
+    --sidebar-border: 214 65% 34%;
+    --sidebar-ring: 48 100% 51%;
+  }
+
+  /* Tema Tesouro: dourado institucional sobre creme */
+  .tesouro {
+    /* Superfícies */
+    --background: 39 50% 96%;
+    --foreground: 33 45% 16%;
+
+    --card: 40 56% 99%;
+    --card-foreground: 33 45% 16%;
+
+    --popover: 40 56% 99%;
+    --popover-foreground: 33 45% 16%;
+
+    /* Marca */
+    --primary: 43 74% 31%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 41 44% 89%;
+    --secondary-foreground: 43 74% 25%;
+
+    --accent: 40 54% 56%;
+    --accent-foreground: 33 45% 12%;
+
+    /* Neutros */
+    --muted: 40 32% 91%;
+    --muted-foreground: 33 40% 24%;
+
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 38 30% 82%;
+    --input: 38 30% 82%;
+    --ring: 43 74% 31%;
+
+    --radius: 0.75rem;
+
+    /* Tokens estendidos */
+    --gold: 43 74% 31%;
+    --gold-soft: 43 55% 90%;
+    --emerald-deep: 43 74% 25%;
+    --emerald: 43 66% 35%;
+    --emerald-soft: 41 40% 89%;
+    --cream: 39 50% 96%;
+
+    --gradient-gold: linear-gradient(135deg, hsl(41 60% 62%), hsl(38 65% 44%));
+    --gradient-emerald: linear-gradient(155deg, hsl(43 74% 31%), hsl(40 68% 38%));
+    --shadow-card: 0 1px 2px hsl(33 45% 16% / 0.05), 0 10px 28px -16px hsl(33 45% 16% / 0.16);
+    --shadow-elevated: 0 6px 12px hsl(33 45% 16% / 0.07), 0 24px 48px -20px hsl(33 45% 16% / 0.26);
+
+    /* Sidebar (dourado escuro profundo) */
+    --sidebar-background: 38 60% 18%;
+    --sidebar-foreground: 43 55% 92%;
+    --sidebar-primary: 40 54% 56%;
+    --sidebar-primary-foreground: 38 60% 18%;
+    --sidebar-accent: 38 55% 25%;
+    --sidebar-accent-foreground: 43 55% 90%;
+    --sidebar-border: 38 52% 29%;
+    --sidebar-ring: 40 54% 56%;
+  }
+
+  .spotify {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 94%;
+    --card: 0 0% 14%;
+    --card-foreground: 0 0% 94%;
+    --popover: 0 0% 16%;
+    --popover-foreground: 0 0% 94%;
+    --primary: 141 75% 48%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 22%;
+    --secondary-foreground: 0 0% 94%;
+    --accent: 141 75% 48%;
+    --accent-foreground: 0 0% 4%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 78%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 30%;
+    --input: 0 0% 30%;
+    --ring: 141 75% 48%;
+    --gold: 141 75% 48%;
+    --gold-soft: 141 35% 18%;
+    --emerald-deep: 141 75% 48%;
+    --emerald: 141 75% 52%;
+    --emerald-soft: 141 30% 17%;
+    --cream: 0 0% 7%;
+    --gradient-gold: linear-gradient(135deg, hsl(141 80% 55%), hsl(141 75% 42%));
+    --gradient-emerald: linear-gradient(155deg, hsl(141 75% 42%), hsl(141 70% 28%));
+    --shadow-card: 0 8px 24px hsl(0 0% 0% / 0.25);
+    --shadow-elevated: 0 16px 42px hsl(0 0% 0% / 0.4);
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 94%;
+    --sidebar-primary: 141 75% 52%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 17%;
+    --sidebar-accent-foreground: 0 0% 94%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 141 75% 52%;
+  }
+
+  /* Tema Verde e cinza: #162936, #3b5265, #27e9b5 e #051824 */
+  .verde-cinza {
+    --background: 202 75% 8%;
+    --foreground: 0 0% 96%;
+    --card: 207 41% 15%;
+    --card-foreground: 0 0% 96%;
+    --popover: 207 41% 15%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 166 81% 54%;
+    --primary-foreground: 202 75% 8%;
+    --secondary: 208 27% 32%;
+    --secondary-foreground: 0 0% 96%;
+    --accent: 166 81% 54%;
+    --accent-foreground: 202 75% 8%;
+    --muted: 208 27% 24%;
+    --muted-foreground: 208 20% 80%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 208 27% 32%;
+    --input: 208 27% 32%;
+    --ring: 166 81% 54%;
+    --gold: 166 81% 54%;
+    --gold-soft: 166 40% 18%;
+    --emerald-deep: 166 81% 54%;
+    --emerald: 166 81% 58%;
+    --emerald-soft: 207 35% 20%;
+    --cream: 202 75% 8%;
+    --gradient-gold: linear-gradient(135deg, hsl(166 81% 58%), hsl(166 81% 46%));
+    --gradient-emerald: linear-gradient(155deg, hsl(208 27% 32%), hsl(207 41% 15%));
+    --shadow-card: 0 8px 24px hsl(0 0% 0% / 0.25);
+    --shadow-elevated: 0 16px 42px hsl(0 0% 0% / 0.4);
+    --sidebar-background: 207 41% 15%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 166 81% 54%;
+    --sidebar-primary-foreground: 202 75% 8%;
+    --sidebar-accent: 208 27% 32%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 208 27% 32%;
+    --sidebar-ring: 166 81% 54%;
+  }
+}
+
+html.alto-contraste {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 5%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 5%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 5%;
+  --primary: 221 83% 31%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 30% 94%;
+  --secondary-foreground: 0 0% 5%;
+  --muted: 210 25% 96%;
+  --muted-foreground: 0 0% 12%;
+  --accent: 48 100% 55%;
+  --accent-foreground: 0 0% 5%;
+  --destructive: 0 82% 35%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 12%;
+  --input: 0 0% 12%;
+  --ring: 221 83% 31%;
+  --sidebar-background: 0 0% 5%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 48 100% 55%;
+  --sidebar-primary-foreground: 0 0% 5%;
+  --sidebar-accent: 0 0% 14%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 0 0% 35%;
+  --sidebar-ring: 48 100% 55%;
+  --gold: 38 90% 30%;
+  --gold-soft: 48 100% 90%;
+  --emerald: 221 83% 27%;
+  --emerald-deep: 221 83% 24%;
+  --emerald-soft: 210 50% 92%;
+  --cream: 0 0% 100%;
+  --gradient-gold: linear-gradient(135deg, hsl(48 100% 55%), hsl(48 100% 55%));
+  --gradient-emerald: linear-gradient(135deg, hsl(221 83% 31%), hsl(221 83% 31%));
+}
+
+@layer base {
+  :root,
+  .inaja,
+  html.alto-contraste,
+  .institucional-gov,
+  .tesouro {
+    color-scheme: light;
+  }
+
+  .dark,
+  .inaja-escuro,
+  .spotify,
+  .verde-cinza {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary) / 0.25);
+    color: hsl(var(--foreground));
+  }
+}

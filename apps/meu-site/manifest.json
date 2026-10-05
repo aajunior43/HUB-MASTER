@@ -1,0 +1,118 @@
+{
+  "name": "Aleksandro Alves da Rocha Junior - Portfólio Profissional",
+  "short_name": "Aleksandro Portfolio",
+  "description": "Portfólio profissional de Aleksandro Alves da Rocha Junior - Desenvolvedor Full Stack e Especialista em Data Science",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "scope": "/",
+  "categories": ["portfolio", "developer", "technology", "data-science"],
+  "icons": [
+    {
+      "src": "/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sobre Mim",
+      "short_name": "Sobre",
+      "description": "Conheça minha trajetória profissional",
+      "url": "/about.html",
+      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Portfólio",
+      "short_name": "Projetos",
+      "description": "Veja meus projetos e trabalhos",
+      "url": "/portfolio.html",
+      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Contato",
+      "short_name": "Contato",
+      "description": "Entre em contato comigo",
+      "url": "/contact.html",
+      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Certificados",
+      "short_name": "Certificados",
+      "description": "Minhas certificações e cursos",
+      "url": "/certificates.html",
+      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Página inicial do portfólio"
+    },
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Página inicial mobile"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}

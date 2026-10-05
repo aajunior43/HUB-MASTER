@@ -1,0 +1,5 @@
+{
+  "name": "Expert Study Plan Generator",
+  "description": "An AI-powered application that generates detailed, progressive study plans on any subject and provides in-depth lessons for each topic.",
+  "requestFramePermissions": []
+}

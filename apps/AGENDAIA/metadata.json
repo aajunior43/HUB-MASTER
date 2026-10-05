@@ -1,0 +1,5 @@
+{
+  "name": "Meu Gerador de Eventos",
+  "description": "Ferramenta pessoal para criação rápida de eventos no Google Agenda via IA.",
+  "requestFramePermissions": []
+}

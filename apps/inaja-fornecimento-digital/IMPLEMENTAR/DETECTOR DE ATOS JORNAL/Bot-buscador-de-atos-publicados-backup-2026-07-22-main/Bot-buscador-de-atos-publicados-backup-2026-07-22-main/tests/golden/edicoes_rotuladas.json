@@ -1,0 +1,26 @@
+{
+  "descricao": "Rótulos conferidos à mão. atos_oficiais = quantos atos oficiais reais do município de Inajá a edição contém.",
+  "edicoes": {
+    "03-09-2026": {
+      "atos_oficiais": 0,
+      "nota": "Matéria sobre processo de cassação na Câmara de Inajá e matéria da Lei 2.560/2026 de Mandaguaçu; nenhuma é ato oficial de Inajá.",
+      "sem_mistura": [
+        {"pagina": 1, "a": "Processo de Cassação", "b": "Mandaguaçu"},
+        {"pagina": 1, "a": "Valdir Antonio da Silva", "b": "Lei Municipal nº 2.560"}
+      ],
+      "menciona": [{"pagina": 1, "trecho": "Municipal de Inajá aprovou, por 5 votos a"}]
+    },
+    "06-09-2026": {
+      "atos_oficiais": 0,
+      "nota": "A única menção é o anúncio comercial Inajá Panificadora Evangelista."
+    },
+    "30-07-2026": {
+      "atos_oficiais": 0,
+      "nota": "Matéria jornalística sobre a 4ª Caminhada contra o Feminicídio."
+    },
+    "02-08-2026": {
+      "atos_oficiais": 0,
+      "nota": "Sem menções relevantes."
+    }
+  }
+}

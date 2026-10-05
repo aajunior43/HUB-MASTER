@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Atos de Inajá - Monitor{% endblock %}
+{% block content %}
+
+<section class="dash-header dash-header-compact fade-in">
+  <div class="dash-header-text">
+    <h1>Atos de Inajá</h1>
+  </div>
+  <form class="dash-search" method="get" action="/">
+    <div class="search-row">
+      <input id="q" name="q" value="{{ q }}" placeholder="Buscar tipo, órgão, número, data…" aria-label="Buscar atos">
+      <select name="mes" aria-label="Filtrar por mês" class="mes-select">
+        <option value="">Todos os meses</option>
+        {% for m in meses or [] %}
+        <option value="{{ m }}" {% if mes == m %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+      </select>
+      <label class="search-smart" title="Ranking inteligente por relevância">
+        <input type="checkbox" name="modo" value="semantico" {% if modo == 'semantico' %}checked{% endif %}>
+        smart
+      </label>
+      {% if tipo %}<input type="hidden" name="tipo" value="{{ tipo }}">{% endif %}
+      {% if confianca %}<input type="hidden" name="confianca" value="{{ confianca }}">{% endif %}
+      <button type="submit">Buscar</button>
+    </div>
+    <div class="filter-chips" style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">
+      <a class="chip {% if not confianca %}active{% endif %}" href="/?{% if mes %}mes={{ mes }}&{% endif %}{% if tipo %}tipo={{ tipo }}&{% endif %}{% if q %}q={{ q }}&{% endif %}">Todas conf.</a>
+      <a class="chip {% if confianca == 'alta' %}active{% endif %}" href="/?confianca=alta{% if mes %}&mes={{ mes }}{% endif %}{% if tipo %}&tipo={{ tipo }}{% endif %}">Alta</a>
+      <a class="chip {% if confianca == 'media' %}active{% endif %}" href="/?confianca=media{% if mes %}&mes={{ mes }}{% endif %}{% if tipo %}&tipo={{ tipo }}{% endif %}">Média</a>
+      <a class="chip {% if confianca == 'revisar' %}active{% endif %}" href="/?confianca=revisar{% if mes %}&mes={{ mes }}{% endif %}{% if tipo %}&tipo={{ tipo }}{% endif %}">Revisar</a>
+    </div>
+  </form>
+</section>
+
+{% if atividade and atividade.tem_atividade %}
+<p class="ops-banner fade-in">
+  Sistema processando {{ atividade.rodando|length }} etapa(s).
+  <a href="/operacao">Ver operação →</a>
+</p>
+{% elif saude and not saude.bot_vivo %}
+<p class="ops-banner ops-banner-warn state-unavailable fade-in" role="status" aria-live="polite">
+  Rastreador offline — OCR automático pausado.
+  <a href="/operacao">Ver operação →</a>
+</p>
+{% endif %}
+
+<section class="stats-grid stats-grid-compact stats-grid-quiet fade-in">
+  <article>
+    <strong>{{ stats.total_publicacoes or 0 }}</strong>
+    <span>Publicacoes</span>
+  </article>
+  <article>
+    <strong>{{ stats.edicoes_inaja or 0 }}</strong>
+    <span>Edicoes Inaja</span>
+  </article>
+  <article title="Soma deduplicada (orgao+numero), sem materias jornalisticas">
+    <strong>{{ stats.total_valor_licitado or "R$ 0,00" }}</strong>
+    <span>Valores (atos)</span>
+  </article>
+  <article style="grid-column:span 2;display:flex;flex-direction:column;gap:.25rem">
+    <span style="font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em">Pubs por mes</span>
+    <div class="sparkline" style="flex:1;display:flex;align-items:flex-end;gap:2px;height:36px;padding-top:.35rem" title="{% for m in sparkline_meses %}{{ m }}: {{ sparkline_valores[loop.index0] }}{% if not loop.last %} | {% endif %}{% endfor %}">
+      {% for v in sparkline_valores %}
+      <div class="sparkline-bar" style="height:{{ (v / sparkline_max * 100)|int if sparkline_max > 0 else 2 }}%"></div>
+      {% endfor %}
+    </div>
+  </article>
+  <article>
+    <strong>{{ stats.ultima_deteccao or "—" }}</strong>
+    <span>Última detecção</span>
+  </article>
+</section>
+
+{% if tipos %}
+<nav class="tipo-chips fade-in" aria-label="Filtrar por tipo de ato">
+  <a class="tipo-chip {% if not tipo %}active{% endif %}"
+     href="/?{% if q %}q={{ q|urlencode }}&{% endif %}{% if mes %}mes={{ mes|urlencode }}{% endif %}">Todos</a>
+  {% for t in tipos %}
+  <a class="tipo-chip {% if tipo == t %}active{% endif %}"
+     href="/?tipo={{ t|urlencode }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if mes %}&mes={{ mes|urlencode }}{% endif %}">{{ t }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+<section class="panel fade-in">
+  <div class="panel-head">
+    <h2>
+      {% if q or mes or tipo %}Resultados{% else %}Atos recentes{% endif %}
+      {% if mes %}<small>· {{ mes }}</small>{% endif %}
+      {% if tipo %}<small>· {{ tipo }}</small>{% endif %}
+    </h2>
+    <span>{{ publicacoes|length }} itens</span>
+  </div>
+  <div class="pub-list">
+    {% for item in publicacoes %}
+    {% set cat_class = 'outro' %}
+    {% set item_tipo_norm = _sem_acentos(item.tipo or '').casefold() %}
+    {% set item_orgao_norm = _sem_acentos(item.orgao or '').casefold() %}
+    {% if 'rgf' in item_tipo_norm or 'rreo' in item_tipo_norm or 'fiscal' in item_tipo_norm or 'demonstrativo' in item_tipo_norm %}
+      {% set cat_class = 'fiscal' %}
+    {% elif 'conselho' in item_orgao_norm %}
+      {% set cat_class = 'conselho' %}
+    {% elif 'contrato' in item_tipo_norm or 'extrato' in item_tipo_norm %}
+      {% set cat_class = 'contrato' %}
+    {% elif 'licitacao' in item_tipo_norm or 'dispensa' in item_tipo_norm or 'homolog' in item_tipo_norm %}
+      {% set cat_class = 'licitacao' %}
+    {% elif 'decreto' in item_tipo_norm %}
+      {% set cat_class = 'decreto' %}
+    {% elif 'portaria' in item_tipo_norm %}
+      {% set cat_class = 'portaria' %}
+    {% elif 'publicacao' in (item.categoria_ia or item.categoria or '') %}
+      {% set cat_class = 'publicacao_oficial' %}
+    {% endif %}
+
+    <a class="pub-row cat-{{ cat_class }}" href="/edicoes/{{ item.edicao_id }}">
+      <div class="pub-row-accent"></div>
+      <div class="pub-row-body">
+        <div class="pub-row-top">
+          <span class="pub-tipo">{{ item.tipo or "Ato" }}{% if item.numero %} <strong>{{ item.numero }}</strong>{% endif %}</span>
+          {% if item.confianca_nivel %}<span class="badge badge-conf-{{ item.confianca_nivel }}" title="{{ item.confianca or '?' }}/100">{{ item.confianca_nivel }}</span>{% endif %}
+          <span class="pub-date">{{ item.data_publicacao or "sem data" }}</span>
+        </div>
+        <div class="pub-row-middle">
+          <span class="pub-orgao">{{ item.orgao or "Órgão não identificado" }}</span>
+        </div>
+        <div class="pub-row-bottom">
+          <span class="pub-assunto">{{ item.resumo_ia or item.assunto or "Sem descrição" }}</span>
+          <span class="pub-meta">
+            {% if item.valor %}<em class="pub-valor">{{ item.valor }}</em>{% endif %}
+            <em>Pág. {{ item.pagina }}</em>
+          </span>
+        </div>
+      </div>
+    </a>
+    {% else %}
+    <section class="empty-state empty-state-dashboard" role="status">
+      {% if q or mes or tipo %}
+      <h3>Nenhum ato encontrado</h3>
+      <p>{% if q %}Não encontramos resultados para “{{ q }}”{% endif %}{% if mes %}{% if q %} · {% endif %}mês {{ mes }}{% endif %}{% if tipo %}{% if q or mes %} · {% endif %}tipo {{ tipo }}{% endif %}.</p>
+      <a class="btn btn-secondary btn-small" href="/">Limpar filtros</a>
+      {% else %}
+      <h3>Nenhuma publicação estruturada ainda.</h3>
+      <p>Em <a href="/operacao">Operação</a>, acompanhe a automação do jornal.</p>
+      {% endif %}
+    </section>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

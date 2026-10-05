@@ -1,0 +1,17 @@
+[Unit]
+Description=Inaja Fornecimento Digital
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/repos/inaja-fornecimento-digital
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=NODE_ENV=production
+Environment=PORT=8001
+Environment=INAJA_BIND_HOST=0.0.0.0
+ExecStart=/usr/local/bin/node scripts/dev-integrado.mjs --production
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

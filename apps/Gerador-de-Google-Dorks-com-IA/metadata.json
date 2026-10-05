@@ -1,0 +1,5 @@
+{
+  "name": "Gerador de Google Dorks com IA",
+  "description": "Uma aplicação web que utiliza IA para criar termos de pesquisa avançados (Google Dorks) a partir de linguagem natural, otimizando a busca de informações específicas.",
+  "requestFramePermissions": []
+}

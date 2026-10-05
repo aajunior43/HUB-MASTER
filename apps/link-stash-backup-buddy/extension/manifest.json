@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Meus Links",
+  "version": "1.2.0",
+  "description": "Salve links, notas, senhas, lembretes, abas e capturas no seu cofre Meus Links.",
+  "permissions": ["activeTab", "tabs", "storage", "contextMenus", "notifications", "scripting", "sidePanel", "clipboardWrite"],
+  "host_permissions": ["https://qywjbutxdklmhihscahy.supabase.co/*", "<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": { "48": "icon.png", "128": "icon.png" }
+  },
+  "background": { "service_worker": "background.js", "type": "module" },
+  "side_panel": { "default_path": "popup.html" },
+  "omnibox": { "keyword": "ml" },
+  "icons": { "48": "icon.png", "128": "icon.png" },
+  "commands": {
+    "save-current-page": {
+      "suggested_key": { "default": "Alt+L", "mac": "Command+Alt+L" },
+      "description": "Salvar página atual em Meus Links"
+    },
+    "quick-note": {
+      "suggested_key": { "default": "Alt+N", "mac": "Command+Alt+N" },
+      "description": "Abrir popup para nota rápida"
+    },
+    "save-all-tabs": {
+      "suggested_key": { "default": "Ctrl+Shift+A", "mac": "Command+Shift+A" },
+      "description": "Salvar todas as abas da janela"
+    },
+    "_execute_action": {
+      "suggested_key": { "default": "Ctrl+Shift+L", "mac": "Command+Shift+L" },
+      "description": "Abrir popup Meus Links"
+    }
+  }
+}

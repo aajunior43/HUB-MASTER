@@ -1,0 +1,107 @@
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Reduce heavy backdrop filters */
+.header.scrolled,
+.nav-link,
+.hero-content,
+.card,
+.modal-content {
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+}
+
+/* Optimize animations - reduce complexity */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Disable heavy 3D animations */
+.card:hover,
+.timeline-content:hover,
+.portfolio-item:hover {
+    transform: translateY(-2px) !important;
+    animation: none !important;
+}
+
+/* Reduce particle effects */
+.stars-bg::before,
+.stars-bg::after {
+    animation-duration: 60s !important;
+}
+
+/* Optimize transforms for better performance */
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-auto {
+    will-change: auto;
+}
+
+/* Critical CSS for above-the-fold content */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    margin-bottom: 2rem;
+}
+
+/* Lazy load optimization */
+.lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
+}
+
+/* Remove cursor customizado pesado */
+* {
+    cursor: auto !important;
+}
+
+a, button, .btn, .social-link, input, textarea, select {
+    cursor: pointer !important;
+}
+
+/* Remove elementos de cursor customizado */
+.futuristic-cursor,
+.cursor-dot,
+.cursor-crosshair,
+.cursor-trail {
+    display: none !important;
+}

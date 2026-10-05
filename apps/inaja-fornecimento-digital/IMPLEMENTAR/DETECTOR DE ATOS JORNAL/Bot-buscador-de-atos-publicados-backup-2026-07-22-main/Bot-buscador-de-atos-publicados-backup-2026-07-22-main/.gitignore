@@ -1,0 +1,27 @@
+.env
+__pycache__/
+*.py[cod]
+.venv/
+edicoes/
+atos/
+alertas/
+exportacoes/
+logs/
+jornal_monitor.db
+jornal_monitor.db-shm
+jornal_monitor.db-wal
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+=
+ciclo
+polling
+terminals/
+agent-tools/
+.omo/
+*.ocr.json
+_tmp_*.py
+relatorios/
+# lixo acidental / sessão de ferramentas
+.DS_Store
+Thumbs.db

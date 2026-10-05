@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 258 90% 66%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 258 90% 66%;
+    --radius: 1rem;
+
+    /* Success color */
+    --success: 142 71% 45%;
+    --success-foreground: 355.7 100% 97.3%;
+
+    /* Warning color */
+    --warning: 32 95% 44%;
+    --warning-foreground: 355.7 100% 97.3%;
+
+    /* Info color */
+    --info: 199 89% 48%;
+    --info-foreground: 355.7 100% 97.3%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 258 90% 66%;
+
+    /* Purple-focused design system */
+    --primary-light: 258 85% 75%;
+    --primary-dark: 258 95% 55%;
+    --purple-gradient: linear-gradient(135deg, hsl(258 90% 66%), hsl(280 85% 70%));
+    --card-gradient: linear-gradient(135deg, hsl(0 0% 100%), hsl(258 20% 98%));
+    --accent-purple: 270 50% 85%;
+    
+    /* Enhanced shadows and effects */
+    --shadow-card: 0 4px 20px -4px hsl(258 50% 20% / 0.15);
+    --shadow-elevated: 0 8px 40px -8px hsl(258 50% 20% / 0.25);
+    --shadow-purple-glow: 0 0 30px hsl(258 90% 66% / 0.3);
+    
+    /* Background patterns */
+    --bg-pattern: radial-gradient(circle at 25% 25%, hsl(258 40% 95%) 0%, transparent 50%);
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 258 20% 98%;
+    --card: 240 8% 6%;
+    --card-foreground: 258 15% 95%;
+    --popover: 240 8% 6%;
+    --popover-foreground: 258 15% 95%;
+    --primary: 258 90% 66%;
+    --primary-foreground: 240 10% 3.9%;
+    --secondary: 240 6% 12%;
+    --secondary-foreground: 258 15% 95%;
+    --muted: 240 6% 12%;
+    --muted-foreground: 258 10% 70%;
+    --accent: 240 6% 15%;
+    --accent-foreground: 258 15% 95%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 258 15% 95%;
+    --border: 240 6% 15%;
+    --input: 240 6% 15%;
+    --ring: 258 90% 66%;
+
+    /* Success color */
+    --success: 142 71% 45%;
+    --success-foreground: 258 15% 95%;
+
+    /* Warning color */
+    --warning: 32 95% 60%;
+    --warning-foreground: 240 10% 3.9%;
+
+    /* Info color */
+    --info: 199 89% 60%;
+    --info-foreground: 240 10% 3.9%;
+
+    /* Sidebar */
+    --sidebar-background: 240 8% 5%;
+    --sidebar-foreground: 258 15% 95%;
+    --sidebar-primary: 258 90% 66%;
+    --sidebar-primary-foreground: 240 8% 5%;
+    --sidebar-accent: 240 6% 12%;
+    --sidebar-accent-foreground: 258 15% 95%;
+    --sidebar-border: 240 6% 12%;
+    --sidebar-ring: 258 90% 66%;
+
+    /* Purple-focused dark design system */
+    --primary-light: 258 85% 75%;
+    --primary-dark: 258 95% 55%;
+    --purple-gradient: linear-gradient(135deg, hsl(258 90% 66%), hsl(280 85% 70%));
+    --card-gradient: linear-gradient(135deg, hsl(240 8% 6%), hsl(258 15% 8%));
+    --accent-purple: 270 30% 25%;
+    
+    /* Enhanced shadows and effects */
+    --shadow-card: 0 4px 20px -4px hsl(240 50% 2% / 0.4);
+    --shadow-elevated: 0 8px 40px -8px hsl(240 50% 2% / 0.6);
+    --shadow-purple-glow: 0 0 30px hsl(258 90% 66% / 0.2);
+    
+    /* Background patterns */
+    --bg-pattern: radial-gradient(circle at 25% 25%, hsl(258 40% 8%) 0%, transparent 50%);
+  }
+
+  /* Enhanced typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  /* Global focus styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Improved button focus */
+  button:focus-visible {
+    ring: 2px;
+    ring-color: hsl(var(--ring));
+    ring-offset: 2px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .hover-scale {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-elevated;
+  }
+
+  .story-link {
+    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+  }
+
+  .gradient-button {
+    @apply bg-gradient-to-r from-primary to-primary-light text-primary-foreground hover:from-primary-dark hover:to-primary transition-all duration-300 hover:shadow-purple-glow;
+  }
+
+  .card-modern {
+    @apply bg-card-gradient border border-border/50 shadow-card hover:shadow-elevated transition-all duration-300 rounded-xl backdrop-blur-sm;
+  }
+
+  .stats-card {
+    @apply card-modern hover:scale-[1.02] hover:border-primary/20;
+  }
+
+  .icon-large {
+    @apply w-6 h-6 text-primary group-hover:text-primary-light transition-colors duration-300;
+  }
+
+  .empty-state {
+    @apply flex flex-col items-center justify-center text-center space-y-6 py-16 px-8;
+  }
+
+  .section-divider {
+    @apply border-t border-border/30 my-12 relative overflow-hidden;
+  }
+
+  .section-divider::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-transparent;
+  }
+}

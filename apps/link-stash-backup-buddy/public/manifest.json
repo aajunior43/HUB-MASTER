@@ -1,0 +1,41 @@
+{
+  "name": "JR Links",
+  "short_name": "JR Links",
+  "description": "Organize, monitore e encontre seus links em qualquer dispositivo",
+  "id": "/",
+  "start_url": "/links",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#171823",
+  "theme_color": "#171823",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Meus links",
+      "short_name": "Links",
+      "url": "/links",
+      "icons": [{ "src": "/app-icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Adicionar link",
+      "short_name": "Novo link",
+      "url": "/links?new=1",
+      "icons": [{ "src": "/app-icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}

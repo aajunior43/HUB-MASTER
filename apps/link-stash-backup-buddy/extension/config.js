@@ -1,0 +1,3 @@
+// Config compartilhada da extensão.
+export const SUPABASE_URL = "https://qywjbutxdklmhihscahy.supabase.co";
+export const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5d2pidXR4ZGtsbWhpaHNjYWh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NTI3MjAsImV4cCI6MjA2NTUyODcyMH0.8GZhRVy0HdTO9Wzrh2lg1DE-yPGRnIvna_6OXPjf8HA";

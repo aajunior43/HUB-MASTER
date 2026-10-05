@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Aleksandro Alves da Rocha Junior</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fundo de Estrelas -->
+    <div class="stars-background">
+        <div class="stars-layer stars-layer-1"></div>
+        <div class="stars-layer stars-layer-2"></div>
+        <div class="stars-layer stars-layer-3"></div>
+        <div class="comet-container"></div>
+    </div>
+
+    <!-- Header e Navegação -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h2>Aleksandro Alves</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html" class="nav-link">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="portfolio.html" class="nav-link">Portfólio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="certificates.html" class="nav-link">Certificados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link active">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="linktree.html" class="nav-link">Links</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sistema de Partículas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Page Header -->
+    <section class="page-header contact-header iron-man-header">
+        <div class="container">
+            <h1 class="page-title iron-man-title">Entre em Contato</h1>
+            <p class="page-subtitle iron-man-subtitle">Vamos conversar sobre seu próximo projeto</p>
+        </div>
+    </section>
+
+    <!-- Seção Contato -->
+    <section id="contact" class="contact iron-man-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3 class="iron-man-section-title">Vamos conversar!</h3>
+                    <p>Estou sempre aberto a novas oportunidades e projetos interessantes. 
+                       Entre em contato comigo através dos canais abaixo!</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>E-mail</h4>
+                                <a href="mailto:aajunior43@gmail.com" class="contact-link">aajunior43@gmail.com</a>
+                                <p>Resposta em até 24 horas</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Telefone</h4>
+                                <a href="tel:+5544991842415" class="contact-link">(44) 99184-2415</a>
+                                <p>Disponível das 8h às 18h</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>WhatsApp</h4>
+                                <a href="https://wa.me/5544991842415?text=Olá! Gostaria de conversar sobre oportunidades profissionais." target="_blank" class="contact-link whatsapp-link">
+                                    <i class="fab fa-whatsapp"></i>
+                                    Conversar no WhatsApp
+                                </a>
+                                <p>Resposta rápida e direta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-container">
+                    <h3 class="iron-man-section-title">Envie uma Mensagem</h3>
+                    <p>Ou use o formulário abaixo para entrar em contato diretamente:</p>
+                    
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
+                                <label for="name">Nome Completo</label>
+                                <div class="form-status-indicator"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                                <label for="email">E-mail</label>
+                                <div class="form-status-indicator"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="tel" id="phone" name="phone" placeholder="(00) 00000-0000">
+                                <label for="phone">Telefone (opcional)</label>
+                                <div class="form-status-indicator"></div>
+                            </div>
+                            <div class="form-group">
+                                <select id="subject" name="subject" required>
+                                    <option value="">Selecione um assunto</option>
+                                    <option value="trabalho">Oportunidade de Trabalho</option>
+                                    <option value="projeto">Projeto Freelance</option>
+                                    <option value="consultoria">Consultoria</option>
+                                    <option value="parceria">Parceria</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                                <label for="subject">Assunto</label>
+                                <div class="form-status-indicator"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Descreva sua necessidade ou projeto..." rows="6" required></textarea>
+                            <label for="message">Mensagem</label>
+                            <div class="form-status-indicator"></div>
+                            <div class="character-counter">
+                                <span class="current-chars">0</span>/<span class="max-chars">500</span> caracteres
+                            </div>
+                        </div>
+                        
+                        <div class="form-submit-area">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <span class="btn-content">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Enviar Mensagem
+                                </span>
+                                <div class="btn-loading">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    Enviando...
+                                </div>
+                            </button>
+                            <div class="form-progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Informações Adicionais -->
+    <section class="contact-additional iron-man-section">
+        <div class="container">
+            <div class="additional-info">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>Horário de Atendimento</h4>
+                    <p>Segunda a Sexta: 8h às 18h<br>
+                       Sábado: 9h às 14h<br>
+                       Domingo: Apenas emergências</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h4>Localização</h4>
+                    <p>Inajá, Paraná<br>
+                       Brasil<br>
+                       Atendimento remoto disponível</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h4>Tipos de Projeto</h4>
+                    <p>Criação Web<br>
+                       Aplicações Mobile<br>
+                       Consultoria Técnica<br>
+                       Freelance & Contratos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção do Mapa -->
+    <section class="map-section iron-man-section">
+        <div class="container">
+            <div class="map-header">
+                <h3 class="iron-man-section-title">Localização</h3>
+                <p>Encontre-me em Inajá, Paraná</p>
+            </div>
+            <div class="map-container">
+                <div class="map-wrapper">
+                    <div class="interactive-map" id="interactiveMap">
+                        <iframe
+                            id="locationMap"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115825.39024934487!2d-53.87739485!3d-23.931039150000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94f3c8a5a5a5a5a5%3A0x5a5a5a5a5a5a5a5a!2sInaj%C3%A1%2C%20PR%2C%20Brasil!5e0!3m2!1spt-BR!2sbr!4v1704000000000!5m2!1spt-BR!2sbr"
+                            width="100%"
+                            height="400"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                        <div class="map-overlay">
+                            <div class="map-controls">
+                                <button class="map-control-btn" onclick="toggleMapFullscreen()" title="Tela cheia">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button class="map-control-btn" onclick="centerMap()" title="Centralizar">
+                                    <i class="fas fa-crosshairs"></i>
+                                </button>
+                                <button class="map-control-btn" onclick="toggleMapType()" title="Tipo do mapa">
+                                    <i class="fas fa-layer-group"></i>
+                                </button>
+                            </div>
+                            <div class="map-info-card">
+                                <div class="location-pin">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="location-details">
+                                    <h5>Inajá, Paraná</h5>
+                                    <p>Atendimento presencial e remoto</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-info">
+                    <div class="location-details">
+                        <div class="location-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h5>Endereço</h5>
+                                <p>Inajá, Paraná<br>Brasil</p>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <i class="fas fa-route"></i>
+                            <div>
+                                <h5>Atendimento</h5>
+                                <p>Presencial e remoto<br>Conforme disponibilidade</p>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h5>Horários</h5>
+                                <p>Segunda a Sexta: 8h-18h<br>Sábado: 9h-14h</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/Inajá,+PR,+Brasil" target="_blank" class="btn btn-map">
+                            <i class="fas fa-external-link-alt"></i>
+                            Abrir no Google Maps
+                        </a>
+                        <a href="https://wa.me/5544991842415?text=Olá! Gostaria de conversar sobre uma visita presencial." target="_blank" class="btn btn-whatsapp-map">
+                            <i class="fab fa-whatsapp"></i>
+                            Agendar Visita
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Aleksandro Alves</h3>
+                    <p>Especialista em tecnologia apaixonado por criar soluções inovadoras.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="about.html">Sobre</a></li>
+                        <li><a href="portfolio.html">Portfólio</a></li>
+                        <li><a href="certificates.html">Certificados</a></li>
+                        <li><a href="contact.html">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> aajunior43@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +55 44 99184-2415</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Aleksandro Alves. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Simplified styles for clean modern look */
+
+
+
+
+
+
+
+
+
+::selection {
+  background-color: #3B82F6;
+  color: #FFFFFF;
+}
+
+.font-inter { font-family: 'Inter', system-ui, sans-serif; }
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-montserrat { font-family: 'Montserrat', sans-serif; }
+.font-poppins { font-family: 'Poppins', sans-serif; }
+.font-lato { font-family: 'Lato', sans-serif; }
+.font-opensans { font-family: 'Open Sans', sans-serif; }
+.font-crimson { font-family: 'Crimson Text', serif; }
+
+@media (max-width: 640px) {
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  textarea, 
+  select {
+    font-size: 16px !important;
+  }
+  
+  button, 
+  [role="button"], 
+  label {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+

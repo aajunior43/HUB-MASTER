@@ -1,0 +1,5 @@
+{
+  "name": "Analisador de Nota Fiscal com IA",
+  "description": "Faça upload de uma nota fiscal em PDF para que a IA analise problemas, inconsistências e decida se o documento deve ser aprovado ou rejeitado.",
+  "requestFramePermissions": []
+}

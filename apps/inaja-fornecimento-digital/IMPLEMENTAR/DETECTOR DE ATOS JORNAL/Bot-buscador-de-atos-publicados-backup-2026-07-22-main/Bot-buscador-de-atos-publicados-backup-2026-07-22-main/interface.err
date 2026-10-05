@@ -1,0 +1,8 @@
+INFO:     Started server process [4252]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WatchFiles detected changes in 'scripts\_menu_cli.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4252]

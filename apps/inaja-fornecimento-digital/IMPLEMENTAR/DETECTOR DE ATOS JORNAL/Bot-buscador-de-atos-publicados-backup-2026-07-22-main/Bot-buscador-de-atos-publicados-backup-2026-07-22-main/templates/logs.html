@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Logs - Monitor Inajá{% endblock %}
+{% block content %}
+<section class="detail-hero fade-in">
+  <a class="backlink" href="/operacao">← Painel operacional</a>
+  <h1>Logs operacionais</h1>
+  <p>Consulte o histórico, filtre ocorrências, copie o resultado ou baixe o arquivo completo.</p>
+</section>
+
+<section class="panel fade-in" style="margin-top:1rem;">
+  <div class="panel-head"><h2>Consulta</h2></div>
+  {% if arquivos %}
+  <form method="get" action="/logs" class="logs-controls">
+    <label>Arquivo
+      <select name="arquivo" id="log-file">
+        {% for item in arquivos %}
+        <option value="{{ item.nome }}" {% if item.nome == arquivo %}selected{% endif %}>
+          {{ item.nome }} · {{ item.atualizado_em }} · {{ '%.1f'|format(item.bytes / 1024) }} KB{% if item.superlog %} · principal{% endif %}
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Buscar
+      <input type="search" name="busca" value="{{ busca }}" placeholder="erro, edição, OCR, IA…">
+    </label>
+    <label>Nível
+      <select name="nivel">
+        <option value="">Todos</option>
+        {% for item in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'] %}
+        <option value="{{ item }}" {% if nivel == item %}selected{% endif %}>{{ item }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <div class="actions">
+      <button class="btn" type="submit">Filtrar</button>
+      <a class="btn btn-secondary" href="/logs/download/{{ arquivo }}">Baixar arquivo</a>
+      <button class="btn btn-secondary" type="button" id="copy-log">Copiar visualização</button>
+    </div>
+  </form>
+  <p class="logs-summary">Exibindo as últimas {{ linhas|length }} linha(s) que correspondem ao filtro. O download contém o arquivo integral.</p>
+  <pre id="log-content" class="log-viewer" tabindex="0">{% for linha in linhas %}{{ linha }}
+{% endfor %}</pre>
+  {% else %}
+  <p class="empty" style="padding:1.25rem 1.5rem;">Nenhum arquivo de log foi criado ainda.</p>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('copy-log')?.addEventListener('click', async function () {
+  const text = document.getElementById('log-content')?.textContent || '';
+  try {
+    await navigator.clipboard.writeText(text);
+    this.textContent = 'Copiado';
+    setTimeout(() => { this.textContent = 'Copiar visualização'; }, 1600);
+  } catch (_) {
+    window.prompt('Copie o conteúdo:', text);
+  }
+});
+</script>
+<style>
+.logs-controls { display:flex; flex-wrap:wrap; gap:.8rem; padding:1.15rem 1.5rem .5rem; align-items:end; }
+.logs-controls label { display:grid; gap:.35rem; color:var(--text-2); font-size:.82rem; min-width:150px; }
+.logs-controls label:first-child { flex:1 1 300px; }
+.logs-controls input, .logs-controls select { min-height:38px; }
+.logs-summary { margin:.5rem 1.5rem 1rem; color:var(--text-3); font-size:.8rem; }
+.log-viewer { margin:0 1.5rem 1.5rem; max-height:65vh; overflow:auto; padding:1rem; background:#090b10; border:1px solid var(--border); border-radius:var(--radius-sm); color:#d6dde8; font:12px/1.5 ui-monospace,Consolas,monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+@media (max-width:700px) { .logs-controls { padding:1rem; } .logs-controls label { width:100%; } .log-viewer { margin:0 1rem 1rem; max-height:58vh; } }
+</style>
+{% endblock %}

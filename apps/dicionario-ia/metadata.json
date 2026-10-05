@@ -1,0 +1,5 @@
+{
+  "name": "Super Dicionário Temático",
+  "description": "Um gerador de vocabulário inteligente que cria glossários de 50 palavras com definições baseadas em qualquer tema fornecido.",
+  "requestFramePermissions": []
+}

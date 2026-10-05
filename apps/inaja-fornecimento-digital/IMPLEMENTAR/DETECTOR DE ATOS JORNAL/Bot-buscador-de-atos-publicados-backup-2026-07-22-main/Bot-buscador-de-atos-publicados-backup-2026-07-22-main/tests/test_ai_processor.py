@@ -1,0 +1,209 @@
+"""
+Testes unitários para ai_processor.py
+Cobre pré-limpeza de OCR e pós-processamento (normalização de valor, data e órgão).
+"""
+
+from __future__ import annotations
+
+import requests
+
+from ai_processor import (
+    _heuristica_importancia,
+    _limpar_trecho_ocr,
+    _normalizar_data_ia,
+    _normalizar_orgao_ia,
+    _normalizar_valor_ia,
+    _resolver_numero_final,
+    _valor_digitos_no_texto,
+    _valor_do_resumo,
+    normalizar_tipo_ato,
+)
+
+
+def test_fallback_ia_preserva_numero_compacto_ancorado():
+    pub = {
+        "tipo": "Inexigibilidade",
+        "numero": "20/2026",
+        "trecho": "INEXIGIBILIDADE DE LICITAÇÃO Ne: 202026",
+    }
+
+    assert _resolver_numero_final(pub, {}) == "20/2026"
+
+
+def test_request_exception_log_does_not_leak_url_or_token(monkeypatch, caplog, db):
+    import ai_processor
+
+    secret = "https://api.example.test/v1?api_key=super-secret-token"
+    monkeypatch.setattr(ai_processor, "_auth_bloqueada", False)
+
+    def fail(*args, **kwargs):
+        raise requests.RequestException(secret)
+
+    monkeypatch.setattr(ai_processor.requests, "post", fail)
+    with caplog.at_level("WARNING"):
+        result = ai_processor._chamar_ia_json("system", "user", timeout=1)
+
+    assert result is None
+    assert secret not in caplog.text
+    assert "super-secret-token" not in caplog.text
+    assert "RequestException" in caplog.text
+
+# ── _limpar_trecho_ocr ──────────────────────────────────────
+
+
+class TestLimparTrechoOCR:
+    def test_remove_caracteres_controle(self):
+        texto = "DECRETO\x00Nº\x0b001"
+        limpo = _limpar_trecho_ocr(texto)
+        assert "\x00" not in limpo
+        assert "\x0b" not in limpo
+
+    def test_normaliza_espacos_excessivos(self):
+        texto = "DECRETO    Nº   001"
+        limpo = _limpar_trecho_ocr(texto)
+        assert "  " not in limpo
+
+    def test_limpa_linhas_vazias_consecutivas(self):
+        texto = "DECRETO\n\n\n\n\nPORTARIA"
+        limpo = _limpar_trecho_ocr(texto)
+        assert "\n\n\n" not in limpo
+
+    def test_corrigir_lei_sem_espaco(self):
+        texto = "LEINº 123/2026"
+        limpo = _limpar_trecho_ocr(texto)
+        assert "LEI Nº" in limpo
+
+    def test_limita_tamanho(self):
+        texto = "A" * 10000
+        limpo = _limpar_trecho_ocr(texto)
+        assert len(limpo) <= 4000
+
+    def test_vazio(self):
+        assert _limpar_trecho_ocr("") == ""
+        assert _limpar_trecho_ocr(None) == ""
+
+
+# ── _normalizar_valor_ia ────────────────────────────────────
+
+
+class TestNormalizarValor:
+    def test_valor_padrao(self):
+        assert _normalizar_valor_ia("R$ 15.000,00") == "R$ 15.000,00"
+
+    def test_valor_com_prefixo_texto(self):
+        assert _normalizar_valor_ia("no valor de R$ 10.000,00") == "R$ 10.000,00"
+
+    def test_valor_rs_colado(self):
+        assert _normalizar_valor_ia("RS15000,00") == "R$ 15000,00"
+
+    def test_vazio(self):
+        assert _normalizar_valor_ia(None) is None
+        assert _normalizar_valor_ia("") is None
+        assert _normalizar_valor_ia("   ") is None
+
+
+# ── _normalizar_data_ia ─────────────────────────────────────
+
+
+class TestNormalizarData:
+    def test_data_extenso(self):
+        assert _normalizar_data_ia("15 de março de 2026") == "15/03/2026"
+
+    def test_data_extenso_sem_acento(self):
+        assert _normalizar_data_ia("15 de marco de 2026") == "15/03/2026"
+
+    def test_data_numerica_barras(self):
+        assert _normalizar_data_ia("25/06/2026") == "25/06/2026"
+
+    def test_data_numerica_curta(self):
+        assert _normalizar_data_ia("25/06/26") == "25/06/2026"
+
+    def test_data_numerica_tracos(self):
+        assert _normalizar_data_ia("25-06-2026") == "25/06/2026"
+
+    def test_vazio(self):
+        assert _normalizar_data_ia(None) is None
+        assert _normalizar_data_ia("") is None
+
+
+# ── _normalizar_orgao_ia ───────────────────────────────────
+
+
+class TestNormalizarOrgao:
+    def test_prefeitura_variacoes(self):
+        assert (
+            _normalizar_orgao_ia("PREFEITURA MUNICIPAL DE INAJÁ-PR")
+            == "Prefeitura Municipal de Inajá"
+        )
+        assert _normalizar_orgao_ia("Prefeitura de Inajá") == "Prefeitura Municipal de Inajá"
+
+    def test_camara(self):
+        assert _normalizar_orgao_ia("Câmara Municipal de Inajá") == "Câmara Municipal de Inajá"
+
+    def test_municipio(self):
+        assert _normalizar_orgao_ia("Município de Inajá") == "Município de Inajá"
+
+    def test_outro_municipio_preservado(self):
+        # Órgão de outro município não é normalizado (filtro posterior decide)
+        assert (
+            _normalizar_orgao_ia("Prefeitura de Cruzeiro do Sul") == "Prefeitura de Cruzeiro do Sul"
+        )
+
+    def test_vazio(self):
+        assert _normalizar_orgao_ia(None) is None
+        assert _normalizar_orgao_ia("") is None
+
+
+class TestNormalizarTipo:
+    def test_extrato_contrato(self):
+        assert normalizar_tipo_ato("Extrato de Contrato") == "Extrato de Contrato"
+
+    def test_homologacao_longa(self):
+        assert (
+            normalizar_tipo_ato("Termo de Homologação e Adjudicação") == "Homologação/Adjudicação"
+        )
+
+    def test_dispensa(self):
+        assert normalizar_tipo_ato("Dispensa de Licitação") == "Dispensa"
+        assert normalizar_tipo_ato("Dispensa Eletrônica") == "Dispensa"
+
+    def test_portaria_decreto(self):
+        assert normalizar_tipo_ato("PORTARIA") == "Portaria"
+        assert normalizar_tipo_ato("Decreto") == "Decreto"
+
+    def test_vazio(self):
+        assert normalizar_tipo_ato(None) is None
+        assert normalizar_tipo_ato("") is None
+
+
+class TestValorDoResumo:
+    def test_extrai_reais(self):
+        assert (
+            _valor_do_resumo("Contrato no valor de R$ 255.800,00 para aquisição") == "R$ 255.800,00"
+        )
+
+    def test_vazio(self):
+        assert _valor_do_resumo(None) is None
+        assert _valor_do_resumo("sem valor monetario") is None
+
+    def test_digitos_no_texto(self):
+        pub = {"trecho": "valor total 255800 reais estimado"}
+        assert _valor_digitos_no_texto("R$ 255.800,00", pub, {}) is True
+        assert _valor_digitos_no_texto("R$ 999.999,00", pub, {}) is False
+
+
+class TestHeuristicaImportancia:
+    def test_licitacao_alta(self):
+        assert _heuristica_importancia({"tipo": "Dispensa de Licitação"}) >= 4
+
+    def test_valor_alto_critico(self):
+        assert _heuristica_importancia({"tipo": "Contrato", "valor": "R$ 150.000,00"}) >= 4
+
+    def test_rotina_baixa(self):
+        score = _heuristica_importancia({"tipo": "Aviso", "assunto": "horário de atendimento"})
+        assert 1 <= score <= 3
+
+    def test_lrf(self):
+        assert (
+            _heuristica_importancia({"tipo": "RGF", "assunto": "Relatório de Gestão Fiscal"}) >= 4
+        )

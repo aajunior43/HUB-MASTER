@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio - Aleksandro Alves da Rocha Junior</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fundo de Estrelas -->
+    <div class="stars-background">
+        <div class="stars-layer stars-layer-1"></div>
+        <div class="stars-layer stars-layer-2"></div>
+        <div class="stars-layer stars-layer-3"></div>
+        <div class="comet-container"></div>
+    </div>
+
+    <!-- Header e Navegação -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="index.html" class="logo-link" aria-label="Ir para a página inicial">
+                        <h2>Aleksandro Alves</h2>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html" class="nav-link">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="portfolio.html" class="nav-link active">Portfólio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="certificates.html" class="nav-link">Certificados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="linktree.html" class="nav-link">Links</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sistema de Partículas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Page Header -->
+    <section class="page-header iron-man-header">
+        <div class="container">
+            <h1 class="page-title iron-man-title">Meu Portfólio</h1>
+            <p class="page-subtitle iron-man-subtitle">Explore meus projetos e trabalhos realizados</p>
+        </div>
+    </section>
+
+    <!-- Seção Portfólio -->
+    <section id="portfolio" class="portfolio iron-man-section">
+        <div class="container">
+            <div class="portfolio-intro">
+                <h2 class="section-title iron-man-section-title">Projetos em Destaque</h2>
+                <p class="portfolio-description">
+                    Aqui você encontra uma seleção dos meus melhores trabalhos, desde aplicações web 
+                    completas até designs inovadores. Cada projeto representa um desafio superado e 
+                    uma solução criativa implementada.
+                </p>
+            </div>
+            
+            <div class="portfolio-filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="web">Web</button>
+                <button class="filter-btn" data-filter="mobile">Mobile</button>
+                <button class="filter-btn" data-filter="design">Design</button>
+            </div>
+            
+            <div class="portfolio-grid">
+                <div class="portfolio-item" data-category="web">
+                    <div class="portfolio-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="portfolio-overlay">
+                            <h3>E-commerce Platform</h3>
+                            <p>Plataforma completa de e-commerce com React e Node.js</p>
+                            <div class="portfolio-tech">
+                                <span class="tech-tag">React</span>
+                                <span class="tech-tag">Node.js</span>
+                                <span class="tech-tag">MongoDB</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link" title="Ver código">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item" data-category="mobile">
+                    <div class="portfolio-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="portfolio-overlay">
+                            <h3>App de Delivery</h3>
+                            <p>Aplicativo mobile para delivery de comida com React Native</p>
+                            <div class="portfolio-tech">
+                                <span class="tech-tag">React Native</span>
+                                <span class="tech-tag">Firebase</span>
+                                <span class="tech-tag">Redux</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link" title="Ver código">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item" data-category="design">
+                    <div class="portfolio-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <div class="portfolio-overlay">
+                            <h3>Dashboard Analytics</h3>
+                            <p>Interface de dashboard para análise de dados</p>
+                            <div class="portfolio-tech">
+                                <span class="tech-tag">Figma</span>
+                                <span class="tech-tag">Vue.js</span>
+                                <span class="tech-tag">Chart.js</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link" title="Ver código">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item" data-category="web">
+                    <div class="portfolio-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="portfolio-overlay">
+                            <h3>Sistema de Gestão</h3>
+                            <p>Sistema web para gestão empresarial</p>
+                            <div class="portfolio-tech">
+                                <span class="tech-tag">PHP</span>
+                                <span class="tech-tag">Laravel</span>
+                                <span class="tech-tag">MySQL</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link" title="Ver código">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item" data-category="web">
+                    <div class="portfolio-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <div class="portfolio-overlay">
+                            <h3>Blog Pessoal</h3>
+                            <p>Blog responsivo com sistema de comentários</p>
+                            <div class="portfolio-tech">
+                                <span class="tech-tag">Next.js</span>
+                                <span class="tech-tag">Tailwind</span>
+                                <span class="tech-tag">Strapi</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link" title="Ver código">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item" data-category="mobile">
+                    <div class="portfolio-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="portfolio-overlay">
+                            <h3>Game Mobile</h3>
+                            <p>Jogo casual para dispositivos móveis</p>
+                            <div class="portfolio-tech">
+                                <span class="tech-tag">Unity</span>
+                                <span class="tech-tag">C#</span>
+                                <span class="tech-tag">Firebase</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="#" class="portfolio-link" title="Ver código">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section iron-man-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="iron-man-section-title">Gostou do que viu?</h2>
+                <p>Vamos conversar sobre seu próximo projeto!</p>
+                <a href="contact.html" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Iniciar Projeto
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Aleksandro Alves</h3>
+                    <p>Especialista em tecnologia apaixonado por criar soluções inovadoras.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="about.html">Sobre</a></li>
+                        <li><a href="portfolio.html">Portfólio</a></li>
+                        <li><a href="certificates.html">Certificados</a></li>
+                        <li><a href="contact.html">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> aajunior43@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +55 44 99184-2415</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Aleksandro Alves. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

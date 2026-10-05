@@ -1,0 +1,5 @@
+{
+  "name": "AI Image Prompt Generator",
+  "description": "A sophisticated tool to help users craft detailed and effective English prompts for AI image generation, with a Gemini-powered 'Surprise Me' feature for creative inspiration.",
+  "requestFramePermissions": []
+}

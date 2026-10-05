@@ -1,0 +1,5 @@
+{
+  "name": "Corretor Ortográfico com IA",
+  "description": "Um aplicativo web que utiliza a API Gemini para corrigir ortografia e pontuação em textos. O usuário insere o texto, a IA o corrige e o resultado pode ser copiado facilmente.",
+  "requestFramePermissions": []
+}

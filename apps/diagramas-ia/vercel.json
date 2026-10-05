@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "app/api/gemini/route.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "GEMINI_API_KEY": "@gemini_api_key"
+  }
+}

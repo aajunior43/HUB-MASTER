@@ -1,0 +1,1 @@
+ALTER TABLE public.links ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;

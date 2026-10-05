@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Visualizador e editor de HTML em tempo real com syntax highlighting e preview responsivo">
+    <meta name="theme-color" content="#16213e">
+    <title>Visualizador e Download de HTML Split Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/toast.css">
+</head>
+<body>
+    <header role="banner">
+        <h1>Visualizador e Download de HTML</h1>
+    </header>
+    <nav class="toolbar" role="toolbar" aria-label="Ferramentas do editor">
+        <div class="toolbar-group">
+            <button id="formatBtn" class="toolbar-btn toolbar-btn-secondary" title="Formatar código (Ctrl+Shift+F)" aria-label="Formatar código HTML">
+                <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <span>Formatar Código</span>
+            </button>
+            <button id="clearBtn" class="toolbar-btn toolbar-btn-secondary" title="Limpar editor" aria-label="Limpar todo o código">
+                <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span class="btn-text-desktop">Limpar</span>
+            </button>
+        </div>
+        <div class="responsive-buttons" role="group" aria-label="Tamanho do preview">
+            <button class="toolbar-btn toolbar-btn-secondary responsive-btn active" data-size="desktop" title="Preview Desktop" aria-pressed="true">
+                <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span class="btn-text-desktop">Desktop</span>
+            </button>
+            <button class="toolbar-btn toolbar-btn-secondary responsive-btn" data-size="tablet" title="Preview Tablet" aria-pressed="false">
+                <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                </svg>
+                <span class="btn-text-desktop">Tablet</span>
+            </button>
+            <button class="toolbar-btn toolbar-btn-secondary responsive-btn" data-size="mobile" title="Preview Mobile" aria-pressed="false">
+                <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="7" y="2" width="10" height="20" rx="2" ry="2"></rect>
+                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                </svg>
+                <span class="btn-text-desktop">Mobile</span>
+            </button>
+        </div>
+        <button id="downloadBtn" class="toolbar-btn toolbar-btn-primary" title="Baixar arquivo HTML" aria-label="Baixar HTML editado">
+            <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Baixar HTML</span>
+        </button>
+    </nav>
+    <main class="container" role="main">
+        <section class="editor-wrapper" aria-label="Editor de código">
+            <div class="empty-state" id="emptyState">
+                <svg class="empty-state-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <h2 class="empty-state-title">Comece a editar HTML</h2>
+                <p class="empty-state-text">Cole seu código HTML no editor ou clique no botão abaixo para carregar um exemplo</p>
+                <button id="loadExampleBtn" class="btn-example">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    Carregar Exemplo
+                </button>
+            </div>
+            <textarea id="htmlInput" placeholder="Cole seu HTML aqui..." aria-label="Editor de código HTML"></textarea>
+        </section>
+        <section class="preview-wrapper" aria-label="Preview do HTML">
+            <iframe id="htmlOutput" title="Preview do código HTML" sandbox="allow-scripts allow-same-origin"></iframe>
+        </section>
+    </main>
+    <footer role="contentinfo">
+        <span>Dev Aleksandro Alves</span>
+    </footer>
+    
+    <!-- Screen reader only announcements -->
+    <div class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
