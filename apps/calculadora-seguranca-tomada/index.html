@@ -489,10 +489,11 @@ function renderDevices(){
     return;
   }
 
+  const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   list.innerHTML=devices.map((d,i)=>`
     <div class="device-item">
       <div class="device-info">
-        <div class="device-name">${d.name}</div>
+        <div class="device-name">${esc(d.name)}</div>
         <div class="device-watts">${d.watts}W</div>
       </div>
       <button class="device-remove" onclick="removeDevice(${i})">✕</button>
