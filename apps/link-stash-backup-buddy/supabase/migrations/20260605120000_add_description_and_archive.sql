@@ -1,0 +1,2 @@
+ALTER TABLE public.links ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE public.links ADD COLUMN IF NOT EXISTS is_archived BOOLEAN NOT NULL DEFAULT false;

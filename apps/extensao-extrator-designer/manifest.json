@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Extractor de Estilo com Gemini",
+  "description": "Extrai o estilo do site atual e gera um prompt detalhado usando a API do Gemini.",
+  "version": "1.0.0",
+  "action": {
+    "default_title": "Gerar prompt de estilo",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*",
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

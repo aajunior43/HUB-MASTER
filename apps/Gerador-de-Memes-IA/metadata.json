@@ -1,0 +1,5 @@
+{
+  "name": "Gerador de Memes IA",
+  "description": "Crie memes hilários enviando uma imagem e adicionando seu próprio texto, ou deixe a IA da Gemini criar uma legenda espirituosa para você. Baixe e compartilhe suas criações facilmente.",
+  "requestFramePermissions": []
+}

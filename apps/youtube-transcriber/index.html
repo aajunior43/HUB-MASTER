@@ -1562,12 +1562,12 @@ function doSearch() {
   }
 
   const matches = state.segments.filter(s => s.text.toLowerCase().includes(q));
-  count.textContent = `${matches.length} resultado${matches.length !== 1 ? 's' : ''} para "${esc(q)}"`;
+  count.textContent = `${matches.length} resultado${matches.length !== 1 ? 's' : ''} para "${q}"`;
 
   list.innerHTML = matches.length === 0
     ? '<div class="empty-state"><div class="icon">🔍</div><p>Nenhum resultado encontrado</p></div>'
     : matches.map(s => {
-        const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        const re = new RegExp(`(${esc(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
         return `<div class="line" onclick="copyTimestamp(${s.start})">
           <span class="time">${fmtTime(s.start)}</span>
           <span class="text">${esc(s.text).replace(re, '<mark>$1</mark>')}</span>
@@ -1592,7 +1592,7 @@ function buildInfo() {
   ];
 
   $('infoGrid').innerHTML = items.map(i =>
-    `<div class="info-item"><span class="label">${i.l}</span><span class="value">${i.v}</span></div>`
+    `<div class="info-item"><span class="label">${i.l}</span><span class="value">${esc(i.v)}</span></div>`
   ).join('');
 }
 

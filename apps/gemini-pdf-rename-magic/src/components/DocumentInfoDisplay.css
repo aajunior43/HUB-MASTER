@@ -1,0 +1,182 @@
+/* Animações para o DocumentInfoDisplay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -5px, 0);
+  }
+  70% {
+    transform: translate3d(0, -3px, 0);
+  }
+  90% {
+    transform: translate3d(0, -1px, 0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse-custom {
+  animation: pulse 2s infinite;
+}
+
+.animate-bounce-custom {
+  animation: bounce 1s;
+}
+
+/* Container principal com contraste extremo */
+.document-info-card {
+  transition: all 0.3s ease;
+  background-color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.3), 0 2px 4px -1px rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.document-info-card:hover {
+  transform: translateY(-2px);
+  border-color: #ffffff !important;
+  background-color: #111111 !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* Items de informação com contraste máximo */
+.info-item {
+  transition: all 0.2s ease;
+  background-color: #111111 !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+.info-item:hover {
+  background-color: #222222 !important;
+  border-color: #ffffff !important;
+  border-radius: 8px;
+}
+
+/* Forçar cores de texto em todos os elementos */
+.document-info-card * {
+  color: #ffffff !important;
+}
+
+.info-item * {
+  color: #ffffff !important;
+}
+
+/* Títulos e textos principais */
+.document-info-card h1,
+.document-info-card h2,
+.document-info-card h3,
+.document-info-card h4,
+.document-info-card h5,
+.document-info-card h6 {
+  color: #ffffff !important;
+}
+
+.document-info-card p,
+.document-info-card span,
+.document-info-card div {
+  color: #ffffff !important;
+}
+
+/* Códigos e elementos especiais */
+.document-info-card code {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* Efeitos de loading */
+.loading-shimmer {
+  background: linear-gradient(90deg, rgba(51, 65, 85, 0.8) 25%, rgba(71, 85, 105, 0.8) 50%, rgba(51, 65, 85, 0.8) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Indicadores de confiança */
+.confidence-high {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.confidence-medium {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.confidence-low {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+/* Efeitos de hover para ícones */
+.icon-hover {
+  transition: all 0.2s ease;
+}
+
+.icon-hover:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Animação de entrada para informações adicionais */
+.additional-info-enter {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .document-info-card {
+    padding: 1rem;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}

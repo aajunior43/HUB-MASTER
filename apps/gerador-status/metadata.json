@@ -1,0 +1,6 @@
+{
+  "name": "JRStatus",
+  "description": "A brutalist aesthetic WhatsApp status generator powered by Gemini AI. Generate punchy text and export high-res 9:16 PNGs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

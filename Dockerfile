@@ -27,6 +27,7 @@ COPY apps/inaja-fornecimento-digital-dist/ /usr/share/nginx/html/inaja-fornecime
 COPY apps/calculadoradediferenca-dist/ /usr/share/nginx/html/calculadoradediferenca/
 COPY apps/organizador-web/ /usr/share/nginx/html/organizador/
 COPY apps/youtube-transcriber/index.html /usr/share/nginx/html/youtube-transcriber/index.html
+COPY apps/Audio-Transcriber/index.html /usr/share/nginx/html/audio-transcriber/index.html
 COPY apps/color-gemini-canvas-dist/ /usr/share/nginx/html/color-gemini-canvas/
 COPY apps/bloco-de-notas-markdown/index.html /usr/share/nginx/html/bloco-de-notas-markdown/index.html
 COPY apps/meus-repositorios-github/ /usr/share/nginx/html/meus-repositorios-github/
@@ -69,6 +70,9 @@ COPY apps/promptfoto-dist/ /usr/share/nginx/html/promptfoto/
 COPY apps/link-stash-dist/ /usr/share/nginx/html/link-stash/
 COPY apps/buscador-grupos-web/index.html /usr/share/nginx/html/buscador-grupos/index.html
 COPY apps/buscador-processos-web/index.html /usr/share/nginx/html/buscador-processos/index.html
+COPY apps/calculadora-conciliacao/index.html /usr/share/nginx/html/calculadora-conciliacao/index.html
+COPY apps/calculadora-regra-de-3/index.html /usr/share/nginx/html/calculadora-regra-de-3/index.html
+COPY apps/salvar-prompt/index.html /usr/share/nginx/html/salvar-prompt/index.html
 
 EXPOSE 8080
 

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Prompt Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': '#1e1f22',
+              'brand-secondary': '#2b2d31',
+              'brand-accent': '#5865f2',
+              'brand-light': '#f2f3f5',
+              'brand-text': '#dbdee1',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      /* Add a subtle background gradient and texture */
+      body {
+        background-color: #1e1f22;
+        background-image: radial-gradient(ellipse at top, #2b2d31, #1e1f22);
+      }
+
+      /* Glassmorphism effect for panels */
+      .glass-panel {
+        background: rgba(43, 45, 49, 0.6);
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      /* Title gradient */
+      .title-gradient {
+        background-image: linear-gradient(to right, #a78bfa, #7c3aed);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+      }
+
+      /* Custom focus ring */
+      .focus-ring-brand {
+        @apply focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 focus:ring-offset-brand-primary;
+      }
+
+      /* Button hover animations */
+      .btn-glow-accent {
+        @apply hover:shadow-[0_0_15px_rgba(88,101,242,0.5)];
+      }
+      .btn-glow-danger {
+          @apply hover:shadow-[0_0_15px_rgba(220,38,38,0.5)];
+      }
+      .btn-glow-primary {
+          @apply hover:shadow-[0_0_20px_rgba(167,139,250,0.6)];
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4f545c;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #5865f2;
+      }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.27.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-brand-primary font-sans">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

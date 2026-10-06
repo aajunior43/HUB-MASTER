@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Quick Notes",
+  "version": "1.0.0",
+  "description": "Bloco de notas rápido e minimalista no navegador",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": []
+}

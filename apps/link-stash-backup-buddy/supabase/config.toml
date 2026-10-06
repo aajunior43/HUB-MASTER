@@ -1,0 +1,7 @@
+project_id = "qywjbutxdklmhihscahy"
+
+[functions.database-ping]
+verify_jwt = false
+
+[functions.vault]
+verify_jwt = false

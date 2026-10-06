@@ -1,0 +1,599 @@
+{% extends "base.html" %}
+{% block title %}Admin - Monitor Inajá{% endblock %}
+{% block content %}
+
+{% if admin_locked %}
+<section class="detail-hero fade-in">
+  <a class="backlink" href="/operacao">← Operação</a>
+  <h1>Administração</h1>
+  <p class="hero-copy">Área restrita — informe a senha de administrador.</p>
+</section>
+
+<div class="panel fade-in admin-gate state-locked" style="max-width:420px;margin:2rem auto;" role="region" aria-labelledby="admin-gate-title">
+  <div class="panel-head"><h2 id="admin-gate-title">🔒 Senha do Admin</h2></div>
+  <form method="post" action="/admin/login" class="admin-form">
+    {% if login_erro %}
+    <div class="alert alert-error" style="margin-bottom:1rem;">{{ login_erro }}</div>
+    {% elif msg %}
+    <div class="alert alert-error" style="margin-bottom:1rem;">{{ msg }}</div>
+    {% endif %}
+    <div class="field">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" placeholder="••••" autocomplete="current-password" autofocus required>
+      <small>Senha da porta Admin (variável <code>ADMIN_GATE_PASSWORD</code>).</small>
+    </div>
+    <button type="submit" class="btn" style="width:100%;margin-top:.75rem;">Entrar no Admin</button>
+  </form>
+</div>
+
+{% else %}
+
+<section class="detail-hero fade-in">
+  <a class="backlink" href="/operacao">← Operação</a>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+    <div>
+      <h1>Administração</h1>
+      <p class="hero-copy">IA, agente, alertas em arquivo, webhooks e manutenção.</p>
+    </div>
+    <form method="post" action="/admin/logout" style="margin:0;">
+      <button type="submit" class="btn btn-secondary" style="font-size:.8rem;">Sair do Admin</button>
+    </form>
+  </div>
+</section>
+
+{% if msg %}
+<div class="alert alert-success fade-in">✅ {{ msg }}</div>
+{% endif %}
+
+{% if teste_resultado %}
+<div class="alert {% if 'OK' in teste_resultado %}alert-success{% else %}alert-error{% endif %} fade-in">
+  {{ teste_resultado }}
+</div>
+{% endif %}
+
+<form method="post" action="/admin/salvar" id="admin-form">
+  <nav class="tabs-nav" id="admin-tabs" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="agente" role="tab">🤖 Agente</button>
+    <button type="button" class="tab-btn" data-tab="ia-busca" role="tab">IA e busca</button>
+    <button type="button" class="tab-btn" data-tab="alertas" role="tab">Alertas</button>
+    <button type="button" class="tab-btn" data-tab="webhooks" role="tab">Webhooks</button>
+    <button type="button" class="tab-btn" data-tab="manutencao" role="tab">Manutenção</button>
+  </nav>
+
+  <!-- ========== AGENTE ========== -->
+  <div class="tab-panel active" data-panel="agente">
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head">
+        <h2>Agente de vigilância</h2>
+        <span id="ag-badge" class="pill">{{ 'ON' if agente.ativo else 'OFF' }} · {{ agente.modo_efetivo or agente.modo_config or '—' }}</span>
+      </div>
+      <div class="admin-form">
+        <p style="font-size:.85rem;color:var(--text-2);margin-bottom:1rem;">
+          Pulse (~{{ agente_env.pulse_s }}s): saúde, jobs, lock.
+          Cérebro (~{{ agente_env.cerebro_min }} min): OCR seletivo + re-IA.
+          Também roda no idle do BOT se <code>AGENTE_NO_BOT=true</code>.
+        </p>
+
+        <div class="admin-stats-grid" id="ag-stats">
+          <div class="admin-stat"><span>Ativo</span><strong id="ag-ativo">{{ 'Sim' if agente.ativo else 'Não' }}</strong></div>
+          <div class="admin-stat"><span>Modo config</span><strong id="ag-modo">{{ agente.modo_config or 'auto' }}</strong></div>
+          <div class="admin-stat"><span>Modo efetivo</span><strong id="ag-modo-ef">{{ agente.modo_efetivo or '—' }}</strong></div>
+          <div class="admin-stat"><span>Últ. pulse</span><strong id="ag-pulse">{{ agente.ultimo_pulse or '—' }}</strong></div>
+          <div class="admin-stat"><span>Últ. cérebro</span><strong id="ag-cerebro">{{ agente.ultimo_cerebro or '—' }}</strong></div>
+          <div class="admin-stat"><span>IA / hora</span><strong id="ag-ia">{{ agente.ia_hora or '0' }}</strong></div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin:1.25rem 0;">
+          <button type="button" class="btn" id="btn-ag-on">Ligar</button>
+          <button type="button" class="btn btn-secondary" id="btn-ag-off">Desligar</button>
+          <button type="button" class="btn btn-secondary" id="btn-ag-pulse">Rodar pulse</button>
+          <button type="button" class="btn btn-secondary" id="btn-ag-cerebro">Rodar cérebro</button>
+          <button type="button" class="btn" id="btn-ag-once">Pulse + cérebro</button>
+          <button type="button" class="btn" id="btn-fila-5" title="OCR real nas 5 pendentes prioritárias">Processar 5 pendentes</button>
+          <button type="button" class="btn btn-secondary" id="btn-ag-refresh">Atualizar status</button>
+        </div>
+
+        <div class="field" style="max-width:320px;margin-top:.5rem;">
+          <label for="auto-desde">Piso de data da fila (AUTO_PROCESS_DESDE)</label>
+          <input type="text" id="auto-desde" value="{{ agente.auto_process_desde or '' }}" placeholder="2024-01-01 (vazio = sem piso)">
+          <small>Edições anteriores a esta data saem da prioridade do agente/BOT.</small>
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-salvar-desde" style="margin-top:.4rem;">Salvar piso de data</button>
+
+        <p style="font-size:.8rem;color:var(--text-3);margin-top:1rem;" id="ag-orcamento">
+          OCR hoje: {{ agente.ocr_hoje or 0 }}/{{ agente.max_ocr_dia or '∞' }}
+          · noite={{ 'sim' if agente.noite else 'não' }}
+        </p>
+
+        <div class="field" style="max-width:280px;">
+          <label for="ag-modo-sel">Modo do agente</label>
+          <select id="ag-modo-sel">
+            {% for m in ['auto','escudo','formiga','cirurgiao','sentinela'] %}
+            <option value="{{ m }}" {% if (agente.modo_config or 'auto') == m %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+          </select>
+          <small>auto escolhe sozinho · escudo=só saúde · formiga=fila · cirurgiao=qualidade · sentinela=observa</small>
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-ag-modo" style="margin-top:.5rem;">Aplicar modo</button>
+
+        <div class="info-box" style="margin-top:1.25rem;">
+          <strong>Defaults (.env)</strong>
+          <table class="status-table">
+            <tr><td>Pulse</td><td>{{ agente_env.pulse_s }}s</td></tr>
+            <tr><td>Cérebro</td><td>{{ agente_env.cerebro_min }} min</td></tr>
+            <tr><td>Max OCR / ciclo</td><td>{{ agente_env.max_ocr }}</td></tr>
+            <tr><td>Max IA / hora</td><td>{{ agente_env.max_ia_hora }}</td></tr>
+            <tr><td>Auto limpar lock</td><td>{{ 'sim' if agente_env.auto_lock else 'não' }} ({{ agente_env.lock_max_min }} min)</td></tr>
+            <tr><td>Auto limpar jobs</td><td>{{ 'sim' if agente_env.auto_jobs else 'não' }} ({{ agente_env.job_max_min }} min)</td></tr>
+            <tr><td>No BOT idle</td><td>{{ 'sim' if agente_env.no_bot else 'não' }}</td></tr>
+            <tr><td>Notificar</td><td>{{ 'sim' if agente_env.notificar else 'não' }}</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>Saída da última ação</h2></div>
+<pre id="ag-output" class="admin-pre" role="status" aria-live="polite">Nenhuma ação ainda. Use os botões acima.</pre>
+    </div>
+
+    <div class="panel fade-in">
+      <div class="panel-head"><h2>Log do agente</h2></div>
+      <div class="admin-form" style="overflow-x:auto;">
+        <table class="status-table" id="ag-log-table">
+          <thead>
+            <tr><th>Quando</th><th>Ciclo</th><th>Modo</th><th>Ação</th><th>Detalhe</th></tr>
+          </thead>
+          <tbody id="ag-log-body">
+            {% for r in (agente.recentes or []) %}
+            <tr>
+              <td>{{ r.criado_em }}</td>
+              <td>{{ r.ciclo }}</td>
+              <td>{{ r.modo }}</td>
+              <td>{{ r.acao }}</td>
+              <td>{{ (r.detalhe or '')[:80] }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">Sem registros ainda.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== IA & BUSCA ========== -->
+  <div class="tab-panel" data-panel="ia-busca">
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>Inteligência artificial</h2></div>
+      <div class="admin-form">
+        <div class="admin-section">
+          <div class="field">
+            <label for="opencode_api_key">API Key</label>
+            <input type="password" id="opencode_api_key" name="opencode_api_key" placeholder="oc_...">
+            {% if api_key_configured %}
+            <small>Configurada: <code>{{ api_key_masked }}</code></small>
+            {% else %}
+            <small>Não configurada. Obtenha em <a href="https://opencode.ai/auth" target="_blank">opencode.ai/auth</a></small>
+            {% endif %}
+          </div>
+          <div class="field">
+            <label for="opencode_model">Modelo</label>
+            <input type="text" id="opencode_model" name="opencode_model" value="{{ model }}" placeholder="deepseek-v4-flash">
+            <small>Sugestões: <code>deepseek-v4-flash</code> · <code>deepseek-v4-pro</code></small>
+          </div>
+          <div class="field">
+            <input type="hidden" name="ai_refine_publications" value="false">
+            <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;">
+              <input type="checkbox" name="ai_refine_publications" value="true" {% if ai_refine %}checked{% endif %}>
+              Refinar publicações com IA (AI_REFINE)
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>Termos de busca</h2></div>
+      <div class="admin-form">
+        <div class="field">
+          <label for="extra_terms">Termos extras (separados por vírgula)</label>
+          <input type="text" id="extra_terms" name="extra_terms" value="{{ extra_terms }}" placeholder="João Eder,Luana Aiara">
+        </div>
+        <div class="field">
+          <label for="ignore_terms">Termos a ignorar no contexto</label>
+          <input type="text" id="ignore_terms" name="ignore_terms" value="{{ ignore_terms }}" placeholder="farmácia,loterias">
+        </div>
+        <div class="field">
+          <label for="absence_alert_days">Dias sem publicação para alerta</label>
+          <input type="number" id="absence_alert_days" name="absence_alert_days" value="{{ absence_alert_days }}" min="1" max="365" style="max-width:120px;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Alertas (arquivo) ========== -->
+  <div class="tab-panel" data-panel="alertas">
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>📁 Alertas em arquivo</h2></div>
+      <div class="admin-form">
+        <p style="font-size:.85rem;color:var(--text-2);margin-bottom:1rem;">
+          Cada detecção relevante grava em <code>alertas/AAAA-MM-DD.log</code>.
+          Webhooks opcionais na aba Webhooks. Não há e-mail nem Telegram.
+        </p>
+        <button type="button" class="btn btn-secondary" id="btn-notify-test">Gravar alerta de teste</button>
+        <pre id="notify-out" class="admin-pre" style="margin-top:.75rem;">—</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="save-bar" id="save-bar" style="display:none;">
+    <button type="submit" class="btn">💾 Salvar configurações (IA e busca)</button>
+  </div>
+
+  <!-- ========== WEBHOOKS ========== -->
+  <div class="tab-panel" data-panel="webhooks">
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head">
+        <h2>🔗 Webhooks</h2>
+        <span>{{ webhooks|length }} configurado(s)</span>
+      </div>
+      <div style="padding:1rem 1.5rem;">
+        {% if webhooks %}
+        <div class="webhook-list" style="margin-bottom:1.25rem;">
+          {% for wh in webhooks %}
+          <div class="webhook-item">
+            <div class="webhook-info">
+              <strong>{{ wh.url }}</strong>
+              <small>{{ wh.descricao or "Sem descrição" }} · desde {{ wh.criado_em }}</small>
+            </div>
+            <button type="submit" formaction="/admin/webhook/{{ wh.id }}/remover" class="btn btn-danger" style="font-size:.75rem; padding:.3rem .7rem;">Remover</button>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap; align-items:flex-end;">
+          <div class="field" style="flex:2; margin:0;">
+            <label for="webhook_url">URL do webhook</label>
+            <input type="url" id="webhook_url" name="webhook_url" placeholder="https://hooks.zapier.com/...">
+          </div>
+          <div class="field" style="flex:1; margin:0;">
+            <label for="webhook_descricao">Descrição</label>
+            <input type="text" id="webhook_descricao" name="webhook_descricao" placeholder="Zapier, n8n…">
+          </div>
+          <button type="submit" formaction="/admin/webhook/adicionar" class="btn">Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MANUTENÇÃO ========== -->
+  <div class="tab-panel" data-panel="manutencao">
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>🧪 Diagnóstico completo</h2></div>
+      <div class="admin-form">
+        <button type="button" class="btn btn-secondary" id="btn-diagnostico">Rodar diagnóstico</button>
+        <button type="submit" formaction="/admin/testar" class="btn btn-secondary">Testar OpenCode / IA</button>
+        <pre id="diag-out" class="admin-pre" style="margin-top:1rem;">Clique para executar…</pre>
+      </div>
+    </div>
+
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>📊 Qualidade / revisão</h2></div>
+      <div class="admin-form">
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;">
+          <button type="button" class="btn btn-secondary btn-qual" data-modo="tudo">Tudo</button>
+          <button type="button" class="btn btn-secondary btn-qual" data-modo="fn">FN</button>
+          <button type="button" class="btn btn-secondary btn-qual" data-modo="so-mencao">Só-menção</button>
+          <button type="button" class="btn btn-secondary btn-qual" data-modo="quarentena">Quarentena</button>
+          <button type="button" class="btn btn-secondary btn-qual" data-modo="relatorio">Relatório pubs</button>
+          <button type="button" class="btn btn-secondary" id="btn-fn-lista">Listar FN (clicável)</button>
+        </div>
+        <div class="field" style="max-width:220px;">
+          <label for="fn-edicao-id">Reprocessar cache da edição (id)</label>
+          <input type="number" id="fn-edicao-id" placeholder="ex.: 67935" style="max-width:140px;">
+          <button type="button" class="btn btn-secondary" id="btn-fn-reproc" style="margin-top:.4rem;">Reprocessar + diff</button>
+        </div>
+        <pre id="qual-out" class="admin-pre">Escolha um relatório…</pre>
+        <div id="fn-lista" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>Ferramentas rápidas</h2></div>
+      <div class="admin-form" style="display:flex;flex-wrap:wrap;gap:.6rem;">
+        <button type="button" class="btn btn-secondary" data-tool="lock">Remover lock</button>
+        <button type="button" class="btn btn-secondary" data-tool="jobs">Limpar jobs travados</button>
+        <button type="button" class="btn btn-secondary" data-tool="backup">Backup agora</button>
+        <button type="button" class="btn btn-secondary" data-tool="limpar-dry">Dry-run limpar processados</button>
+        <button type="button" class="btn btn-secondary" data-tool="disco-dry">Disco dry-run (PDFs antigos)</button>
+        <button type="button" class="btn btn-danger" data-tool="disco-aplicar"
+          onclick="return confirm('Apagar PDFs sem Inajá (&gt;18 meses) e backups excedentes?');">Disco aplicar</button>
+        <button type="submit" formaction="/admin/backup" class="btn btn-secondary">Backup (form)</button>
+      </div>
+      <pre id="tool-out" class="admin-pre" style="margin:1rem 1.5rem 1.25rem;">—</pre>
+    </div>
+
+    <div class="panel fade-in" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><h2>Utilitários de limpeza</h2></div>
+      <div class="admin-form">
+        <p style="font-size:.85rem; color:var(--text-2); margin-bottom:.75rem;">
+          Remove edições do domínio antigo (<code>hnetsistemas.com.br</code>).
+        </p>
+        <button type="submit" formaction="/admin/limpar-edicoes-antigas" class="btn btn-danger"
+          onclick="return confirm('Apagar edições do sistema antigo?');">Apagar edições antigas</button>
+      </div>
+    </div>
+
+    <div class="panel fade-in">
+      <div class="panel-head"><h2>Status do sistema</h2></div>
+      <div class="admin-form">
+        <div class="info-box" style="margin:0;">
+          <table class="status-table">
+            <tr><td>IA OpenCode</td><td>{{ "✅ Ativo" if ai_ativo else "❌ Desativado" }}</td></tr>
+            <tr><td>Modelo</td><td><code>{{ model }}</code></td></tr>
+            <tr><td>API Key</td><td>{{ "Sim" if api_key_configured else "Não" }}</td></tr>
+            <tr><td>Refine IA</td><td>{{ "Ligado" if ai_refine else "Desligado" }}</td></tr>
+            <tr><td>Agente</td><td>{{ 'ON / ' + (agente.modo_efetivo or '—') if agente.ativo else 'OFF' }}</td></tr>
+            <tr><td>Alertas</td><td>Arquivo (<code>alertas/</code>)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if not admin_locked %}
+<script>
+(function () {
+  const tabBtns = document.querySelectorAll('#admin-tabs .tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  const saveBar = document.getElementById('save-bar');
+  const STORAGE_KEY = 'admin-active-tab';
+
+  function activateTab(name) {
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    panels.forEach(p => p.classList.toggle('active', p.dataset.panel === name));
+    if (saveBar) saveBar.style.display = (name === 'ia-busca') ? '' : 'none';
+    try { localStorage.setItem(STORAGE_KEY, name); } catch (e) {}
+  }
+
+  tabBtns.forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
+  let saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  if (saved && document.querySelector('.tab-panel[data-panel="' + saved + '"]')) {
+    activateTab(saved);
+  } else {
+    activateTab('agente');
+  }
+
+  const out = document.getElementById('ag-output');
+  function setOut(t) {
+    if (!out) return;
+    const text = t || '';
+    out.textContent = text;
+    out.classList.toggle('state-error', /erro|falha|expirou|inv[aá]lida/i.test(text));
+    out.setAttribute('aria-live', 'polite');
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function fillStatus(st) {
+    if (!st) return;
+    const $ = id => document.getElementById(id);
+    if ($('ag-ativo')) $('ag-ativo').textContent = st.ativo ? 'Sim' : 'Não';
+    if ($('ag-modo')) $('ag-modo').textContent = st.modo_config || '—';
+    if ($('ag-modo-ef')) $('ag-modo-ef').textContent = st.modo_efetivo || '—';
+    if ($('ag-pulse')) $('ag-pulse').textContent = st.ultimo_pulse || '—';
+    if ($('ag-cerebro')) $('ag-cerebro').textContent = st.ultimo_cerebro || '—';
+    if ($('ag-ia')) $('ag-ia').textContent = st.ia_hora || '0';
+    if ($('ag-badge')) {
+      $('ag-badge').textContent = (st.ativo ? 'ON' : 'OFF') + ' · ' + (st.modo_efetivo || st.modo_config || '—');
+    }
+    const orc = document.getElementById('ag-orcamento');
+    if (orc) {
+      orc.textContent = 'OCR hoje: ' + (st.ocr_hoje || 0) + '/' + (st.max_ocr_dia || '∞') +
+        ' · noite=' + (st.noite ? 'sim' : 'não') +
+        (st.auto_process_desde ? ' · desde=' + st.auto_process_desde : '');
+    }
+    const tbody = document.getElementById('ag-log-body');
+    const rows = st.log || st.recentes || [];
+    if (tbody) {
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="5">Sem registros.</td></tr>';
+      } else {
+        tbody.innerHTML = rows.map(r =>
+          '<tr><td>' + esc(r.criado_em) + '</td><td>' + esc(r.ciclo) +
+          '</td><td>' + esc(r.modo) + '</td><td>' + esc(r.acao) +
+          '</td><td>' + esc(String(r.detalhe || '').slice(0, 80)) + '</td></tr>'
+        ).join('');
+      }
+    }
+  }
+
+  function detailMsg(j, fallback) {
+    const d = j && j.detail;
+    if (typeof d === 'string') return d;
+    if (Array.isArray(d)) {
+      return d.map(x => (x && (x.msg || x.message)) || JSON.stringify(x)).join('; ');
+    }
+    return fallback || 'Erro';
+  }
+
+  async function api(url, opts) {
+    const r = await fetch(url, Object.assign({ credentials: 'same-origin' }, opts || {}));
+    if (r.status === 401) {
+      alert('Sessão admin expirou. Recarregue a página e entre novamente.');
+      location.reload();
+      throw new Error('401');
+    }
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(detailMsg(j, r.statusText));
+    return j;
+  }
+
+  async function refresh() {
+    try {
+      const st = await api('/admin/api/agente/status');
+      fillStatus(st);
+      setOut('Status atualizado.');
+    } catch (e) { setOut('Erro: ' + e.message); }
+  }
+
+  document.getElementById('btn-ag-refresh')?.addEventListener('click', refresh);
+  document.getElementById('btn-ag-on')?.addEventListener('click', async () => {
+    try { fillStatus((await api('/admin/api/agente/on', { method: 'POST' })).status); setOut('Agente LIGADO'); }
+    catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-ag-off')?.addEventListener('click', async () => {
+    try { fillStatus((await api('/admin/api/agente/off', { method: 'POST' })).status); setOut('Agente DESLIGADO'); }
+    catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-ag-modo')?.addEventListener('click', async () => {
+    const modo = document.getElementById('ag-modo-sel').value;
+    try {
+      const j = await api('/admin/api/agente/modo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ modo })
+      });
+      fillStatus(j.status);
+      setOut('Modo: ' + modo);
+    } catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-ag-pulse')?.addEventListener('click', async () => {
+    setOut('Rodando pulse…');
+    try {
+      const j = await api('/admin/api/agente/pulse', { method: 'POST' });
+      fillStatus(j.status);
+      setOut(j.texto || JSON.stringify(j.acoes, null, 2));
+    } catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-ag-cerebro')?.addEventListener('click', async () => {
+    setOut('Rodando cérebro (pode demorar se houver OCR)…');
+    try {
+      const j = await api('/admin/api/agente/cerebro', { method: 'POST' });
+      fillStatus(j.status);
+      setOut(j.texto || JSON.stringify(j.acoes, null, 2));
+    } catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-ag-once')?.addEventListener('click', async () => {
+    setOut('Pulse + cérebro…');
+    try {
+      const j = await api('/admin/api/agente/once', { method: 'POST' });
+      fillStatus(j.status);
+      setOut((j.pulse || '') + '\n\n' + (j.cerebro || ''));
+    } catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-fila-5')?.addEventListener('click', async () => {
+    setOut('Processando 5 pendentes prioritárias (OCR real, pode demorar)…');
+    try {
+      const j = await api('/admin/api/fila/processar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ limite: 5 })
+      });
+      setOut(JSON.stringify(j, null, 2));
+      refresh();
+    } catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-salvar-desde')?.addEventListener('click', async () => {
+    const desde = (document.getElementById('auto-desde') || {}).value || '';
+    try {
+      const j = await api('/admin/api/settings/desde', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ desde: desde.trim() })
+      });
+      setOut('Piso de data salvo: ' + (j.desde || '(sem piso)'));
+    } catch (e) { setOut(e.message); }
+  });
+  document.getElementById('btn-fn-lista')?.addEventListener('click', async () => {
+    const box = document.getElementById('fn-lista');
+    const out = document.getElementById('qual-out');
+    try {
+      const j = await api('/admin/api/fn?limit=25');
+      const itens = j.itens || [];
+      out.textContent = itens.length + ' edição(ões) só-menção / FN';
+      box.innerHTML = itens.map(function (it) {
+        return '<button type="button" class="btn btn-secondary btn-fn-item" data-id="' + it.id + '" style="margin:.25rem;">' +
+          it.id + ' · ' + (it.data_publicacao || '?') + ' · men=' + (it.mencoes_count || 0) + '</button>';
+      }).join('') || '<p>Nenhuma.</p>';
+      box.querySelectorAll('.btn-fn-item').forEach(function (b) {
+        b.addEventListener('click', function () {
+          const inp = document.getElementById('fn-edicao-id');
+          if (inp) inp.value = b.dataset.id;
+        });
+      });
+    } catch (e) { out.textContent = e.message; }
+  });
+  document.getElementById('btn-fn-reproc')?.addEventListener('click', async () => {
+    const id = (document.getElementById('fn-edicao-id') || {}).value;
+    const out = document.getElementById('qual-out');
+    if (!id) { out.textContent = 'Informe o id da edição.'; return; }
+    out.textContent = 'Reprocessando cache id=' + id + '…';
+    try {
+      const j = await api('/admin/api/edicao/' + id + '/reprocessar-cache', { method: 'POST' });
+      out.textContent = JSON.stringify(j, null, 2);
+    } catch (e) { out.textContent = e.message; }
+  });
+
+  document.getElementById('btn-diagnostico')?.addEventListener('click', async () => {
+    const el = document.getElementById('diag-out');
+    el.textContent = 'Executando…';
+    try {
+      const j = await api('/admin/api/diagnostico');
+      el.textContent = j.texto || 'OK';
+    } catch (e) { el.textContent = e.message; }
+  });
+
+  document.querySelectorAll('.btn-qual').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const el = document.getElementById('qual-out');
+      el.textContent = 'Carregando…';
+      try {
+        const j = await api('/admin/api/qualidade?modo=' + encodeURIComponent(btn.dataset.modo));
+        el.textContent = j.texto || 'OK';
+      } catch (e) { el.textContent = e.message; }
+    });
+  });
+
+  document.querySelectorAll('[data-tool]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const el = document.getElementById('tool-out');
+      el.textContent = '…';
+      try {
+        const j = await api('/admin/api/ferramenta/' + btn.dataset.tool, { method: 'POST' });
+        el.textContent = j.msg || JSON.stringify(j, null, 2);
+      } catch (e) { el.textContent = e.message; }
+    });
+  });
+
+  document.getElementById('btn-notify-test')?.addEventListener('click', async () => {
+    const el = document.getElementById('notify-out');
+    el.textContent = 'Enviando teste…';
+    try {
+      const j = await api('/admin/api/notificar/testar', { method: 'POST' });
+      el.textContent =
+        (j.ok ? 'OK' : 'FALHA') +
+        ' · canal=' + (j.canal || '?') +
+        '\n' + (j.detalhe || '');
+    } catch (e) { el.textContent = e.message; }
+  });
+
+  // refresh leve ao abrir
+  refresh().catch(() => {});
+})();
+</script>
+{% endif %}
+{% endblock %}

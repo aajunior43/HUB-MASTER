@@ -1,0 +1,5 @@
+{
+  "name": "Sherlock",
+  "description": "An AI-powered application where you upload photos, and 'Sherlock' uses its keen observational skills to analyze and deduce everything it can about the image.",
+  "requestFramePermissions": []
+}

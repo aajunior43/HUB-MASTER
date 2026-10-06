@@ -1,0 +1,5 @@
+{
+  "name": "Social Media Design Assistant",
+  "description": "An AI-powered assistant to generate and optimize visual designs for various social media platforms. Describe your desired design, and the AI will generate an appropriate image, automatically resize it for different formats, and provide design suggestions like color palettes and call-to-action texts.",
+  "requestFramePermissions": []
+}

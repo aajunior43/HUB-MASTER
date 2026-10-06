@@ -1,0 +1,600 @@
+/* Neomorphism · Carbono Neon */
+
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  min-height: 100vh;
+  background: hsl(var(--background));
+}
+
+/* Interface polish */
+.app-shell {
+  background:
+    radial-gradient(circle at 12% -8%, hsl(var(--primary) / 0.09), transparent 30rem),
+    radial-gradient(circle at 88% 108%, hsl(var(--primary) / 0.05), transparent 34rem),
+    hsl(var(--background));
+}
+
+.app-header {
+  backdrop-filter: blur(18px);
+  background: hsl(var(--card) / 0.94);
+  border-color: hsl(var(--neo-light) / 0.22);
+  box-shadow: 0 8px 18px hsl(var(--neo-dark) / 0.5), inset 0 -1px 0 hsl(var(--neo-light) / 0.25);
+}
+
+.content-column { max-width: 1560px; margin-inline: auto; width: 100%; }
+
+.search-toolbar {
+  border: 1px solid hsl(var(--neo-light) / 0.18);
+  border-radius: calc(var(--radius) + 0.25rem);
+  background: hsl(var(--card) / 0.96);
+  box-shadow: var(--shadow-neo);
+}
+
+.search-toolbar input:focus-visible {
+  box-shadow: var(--shadow-neo-inset), 0 0 0 2px hsl(var(--primary) / 0.24);
+}
+
+.mobile-filter-row {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.15rem;
+  scrollbar-width: none;
+}
+.mobile-filter-row::-webkit-scrollbar { display: none; }
+
+@media (max-width: 479px) {
+  .mobile-sort-row { width: 100%; }
+  .mobile-sort-row > button { flex: 1; }
+}
+
+@media (max-width: 640px) {
+  .content-column { padding-inline: 0.75rem; }
+  .search-toolbar { border-radius: var(--radius); }
+}
+
+/* Legacy neo-shadow classes remapped to soft neomorphism */
+.neo-shadow      { box-shadow: var(--shadow-neo); border-radius: var(--radius); }
+.neo-shadow-sm   { box-shadow: var(--shadow-neo-sm); border-radius: calc(var(--radius) - 0.25rem); }
+.neo-shadow-lg   { box-shadow: var(--shadow-neo-lg); border-radius: calc(var(--radius) + 0.25rem); }
+
+.neo-hover {
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.neo-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-neo-lg);
+}
+.neo-hover:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-neo-inset);
+}
+
+/* Animations */
+@keyframes neo-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes neo-pop-in {
+  0%   { opacity: 0; transform: scale(0.96) translateY(6px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes neo-pulse-glow {
+  0%, 100% { box-shadow: var(--shadow-neo), 0 0 0 0 hsl(var(--primary) / 0.5); }
+  50%      { box-shadow: var(--shadow-neo), 0 0 0 8px hsl(var(--primary) / 0); }
+}
+@keyframes neo-wiggle {
+  0%, 100% { transform: rotate(0); }
+  25%      { transform: rotate(-1deg); }
+  75%      { transform: rotate(1deg); }
+}
+
+.fade-in     { animation: neo-fade-in 0.22s ease-out; }
+.pop-in      { animation: neo-pop-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.pulse-ring  { animation: neo-pulse-glow 1.8s ease-in-out infinite; }
+.wiggle-on-hover:hover { animation: neo-wiggle 0.3s ease-in-out; }
+
+/* Stagger only on devices with a real pointer (desktop) — very heavy on mobile with many cards */
+@media (pointer: fine) {
+  .stagger > * { animation: neo-pop-in 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger > *:nth-child(2) { animation-delay: 40ms; }
+  .stagger > *:nth-child(3) { animation-delay: 80ms; }
+  .stagger > *:nth-child(4) { animation-delay: 120ms; }
+  .stagger > *:nth-child(5) { animation-delay: 160ms; }
+  .stagger > *:nth-child(6) { animation-delay: 200ms; }
+  .stagger > *:nth-child(7) { animation-delay: 240ms; }
+  .stagger > *:nth-child(8) { animation-delay: 280ms; }
+  .stagger > *:nth-child(n+9) { animation-delay: 320ms; }
+}
+
+* { box-sizing: border-box; }
+
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Theme personalities */
+.brutalism body,
+.brutalism button,
+.brutalism input {
+  font-family: 'Figtree', system-ui, sans-serif;
+}
+.brutalism .app-shell {
+  background-color: hsl(var(--background));
+  background-image:
+    linear-gradient(hsl(var(--foreground) / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--foreground) / 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.brutalism .app-header,
+.brutalism .search-toolbar,
+.brutalism .glow-card {
+  border: 2px solid hsl(var(--foreground));
+}
+.brutalism .app-header {
+  box-shadow: 0 5px 0 hsl(var(--foreground));
+}
+.brutalism button,
+.brutalism input,
+.brutalism .glow-card {
+  border-radius: var(--radius);
+}
+
+.dark-ui .app-shell {
+  background:
+    radial-gradient(circle at 85% 0%, hsl(var(--primary) / 0.06), transparent 28rem),
+    hsl(var(--background));
+}
+.dark-ui .app-header,
+.dark-ui .search-toolbar {
+  background: hsl(var(--card) / 0.97);
+  border-color: hsl(var(--border) / 0.8);
+}
+.dark-ui .glow-card {
+  background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--surface) / 0.72));
+}
+
+.claymorphism body,
+.claymorphism button,
+.claymorphism input {
+  font-family: 'Figtree', system-ui, sans-serif;
+}
+.claymorphism .app-shell {
+  background:
+    radial-gradient(circle at 8% 5%, hsl(var(--accent) / 0.34), transparent 24rem),
+    radial-gradient(circle at 94% 90%, hsl(var(--secondary) / 0.60), transparent 28rem),
+    hsl(var(--background));
+}
+.claymorphism .glow-card,
+.claymorphism .search-toolbar {
+  background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--surface) / 0.72));
+  border-color: hsl(var(--neo-light) / 0.65);
+}
+.claymorphism button {
+  border-radius: 999px;
+}
+
+.immersive-3d .app-shell {
+  background:
+    radial-gradient(circle at 18% 0%, hsl(var(--primary) / 0.17), transparent 32rem),
+    radial-gradient(circle at 88% 95%, hsl(var(--accent) / 0.18), transparent 34rem),
+    linear-gradient(155deg, hsl(var(--card)), hsl(var(--background)) 62%);
+}
+.immersive-3d .app-header {
+  background: linear-gradient(90deg, hsl(var(--card) / 0.94), hsl(var(--surface) / 0.88));
+}
+.immersive-3d .glow-card {
+  background:
+    linear-gradient(145deg, hsl(var(--primary) / 0.07), transparent 42%),
+    linear-gradient(160deg, hsl(var(--card)), hsl(var(--background)));
+}
+@media (pointer: fine) {
+  .immersive-3d .glow-card:hover {
+    transform: perspective(900px) translateY(-4px) rotateX(1deg);
+  }
+}
+
+.retro body,
+.retro button,
+.retro input {
+  font-family: 'Courier New', monospace;
+}
+.retro h1,
+.retro h2,
+.retro h3,
+.retro .font-display {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+.retro .app-shell {
+  background:
+    repeating-linear-gradient(0deg, hsl(var(--foreground) / 0.035) 0 1px, transparent 1px 4px),
+    hsl(var(--background));
+}
+.retro .app-header,
+.retro .search-toolbar,
+.retro .glow-card {
+  border: 2px solid hsl(var(--border));
+}
+
+.y2k body,
+.y2k button,
+.y2k input {
+  font-family: 'Outfit', 'Figtree', system-ui, sans-serif;
+}
+.y2k .app-shell {
+  background:
+    radial-gradient(circle at 16% 3%, hsl(var(--accent) / 0.35), transparent 24rem),
+    radial-gradient(circle at 86% 94%, hsl(var(--primary) / 0.28), transparent 28rem),
+    linear-gradient(145deg, hsl(var(--card)), hsl(var(--background)));
+}
+.y2k .app-header,
+.y2k .search-toolbar {
+  background:
+    linear-gradient(115deg, hsl(0 0% 100% / 0.72), hsl(var(--secondary) / 0.50), hsl(var(--accent) / 0.22));
+  border-color: hsl(var(--neo-light) / 0.85);
+}
+.y2k .glow-card {
+  background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--accent) / 0.10));
+}
+
+/* Shared semantic surfaces used by the theme engines */
+.link-surface,
+.brand-mark,
+.search-toolbar,
+.theme-menu,
+.mobile-bottom-nav {
+  transition:
+    color 0.2s ease,
+    background 0.25s ease,
+    border-color 0.2s ease,
+    border-radius 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+}
+
+/* Neomorphism: carved controls and softly elevated surfaces */
+.neomorphism .link-surface {
+  border-color: hsl(var(--neo-light) / 0.22);
+  background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--surface) / 0.72));
+  box-shadow: var(--shadow-neo-sm);
+}
+.neomorphism .link-surface:hover {
+  box-shadow: var(--shadow-neo);
+}
+.neomorphism .brand-mark,
+.neomorphism .mobile-add-button {
+  box-shadow: var(--shadow-neo), inset 1px 1px 0 hsl(0 0% 100% / 0.25);
+}
+
+/* Brutalism: hard geometry, ink borders, loud blocks and offset motion */
+.brutalism h1,
+.brutalism h2,
+.brutalism h3,
+.brutalism .font-display {
+  font-family: 'Arial Black', Impact, sans-serif;
+  letter-spacing: -0.02em;
+}
+.brutalism .link-surface {
+  border: 2px solid hsl(var(--foreground)) !important;
+  border-radius: 2px !important;
+  background: hsl(var(--card)) !important;
+  box-shadow: 5px 5px 0 hsl(var(--foreground)) !important;
+}
+.brutalism .link-surface:hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 8px 8px 0 hsl(var(--foreground)) !important;
+}
+.brutalism .link-surface--compact {
+  padding-block: 0.7rem;
+}
+.brutalism button,
+.brutalism .theme-menu-item {
+  border: 2px solid hsl(var(--foreground)) !important;
+  border-radius: 2px !important;
+  box-shadow: 3px 3px 0 hsl(var(--foreground)) !important;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.brutalism button:active,
+.brutalism .theme-menu-item:active {
+  transform: translate(3px, 3px) !important;
+  box-shadow: none !important;
+}
+.brutalism .search-toolbar,
+.brutalism .theme-menu {
+  border-radius: 2px !important;
+  background: hsl(var(--surface));
+  box-shadow: 7px 7px 0 hsl(var(--foreground));
+}
+.brutalism .search-toolbar input {
+  border: 2px solid hsl(var(--foreground)) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.brutalism .brand-mark {
+  border: 2px solid hsl(var(--foreground));
+  border-radius: 2px !important;
+  box-shadow: 4px 4px 0 hsl(var(--foreground));
+}
+.brutalism .mobile-bottom-nav {
+  border-top: 3px solid hsl(var(--foreground));
+  background: hsl(var(--card));
+  backdrop-filter: none;
+  box-shadow: 0 -5px 0 hsl(var(--foreground));
+}
+.brutalism .mobile-add-button {
+  border-radius: 2px !important;
+}
+
+/* Dark UI: compact, flat, technical and cyan-led */
+.dark-ui body,
+.dark-ui button,
+.dark-ui input {
+  font-family: 'Figtree', system-ui, sans-serif;
+}
+.dark-ui h1,
+.dark-ui h2,
+.dark-ui h3 {
+  font-family: 'Outfit', system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+.dark-ui .link-surface {
+  border: 1px solid hsl(var(--border) / 0.88) !important;
+  border-radius: 0.65rem !important;
+  background: hsl(var(--card)) !important;
+  box-shadow: 0 7px 18px hsl(var(--neo-dark) / 0.6) !important;
+}
+.dark-ui .link-surface:hover {
+  transform: none !important;
+  border-left: 3px solid hsl(var(--primary)) !important;
+  background: hsl(var(--surface)) !important;
+  box-shadow: 0 9px 22px hsl(var(--neo-dark) / 0.72) !important;
+}
+.dark-ui .link-surface--compact {
+  padding-block: 0.48rem;
+}
+.dark-ui button {
+  border-color: hsl(var(--border) / 0.72);
+  border-radius: 0.5rem;
+  box-shadow: none;
+}
+.dark-ui button:hover {
+  border-color: hsl(var(--primary) / 0.55);
+  box-shadow: 0 0 0 1px hsl(var(--primary) / 0.12);
+  transform: none;
+}
+.dark-ui .search-toolbar,
+.dark-ui .theme-menu {
+  border-radius: 0.7rem;
+  box-shadow: 0 16px 34px hsl(var(--neo-dark) / 0.66);
+}
+.dark-ui .mobile-bottom-nav {
+  background: hsl(var(--background) / 0.96);
+  border-color: hsl(var(--primary) / 0.16);
+  box-shadow: 0 -10px 28px hsl(var(--neo-dark) / 0.82);
+}
+.dark-ui .mobile-add-button {
+  border: 1px solid hsl(var(--primary) / 0.7);
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.28);
+}
+
+/* Claymorphism: soft inflated shapes, pastel layers and tactile scale */
+.claymorphism .link-surface {
+  border: 1px solid hsl(0 0% 100% / 0.72) !important;
+  border-radius: 1.7rem !important;
+  background:
+    linear-gradient(145deg, hsl(var(--card)), hsl(var(--secondary) / 0.30)) !important;
+  box-shadow:
+    9px 11px 22px hsl(var(--neo-dark) / 0.25),
+    -7px -7px 16px hsl(0 0% 100% / 0.78),
+    inset 1px 1px 0 hsl(0 0% 100% / 0.70) !important;
+}
+.claymorphism .link-surface:hover {
+  transform: translateY(-2px) scale(1.008) !important;
+  box-shadow:
+    12px 15px 28px hsl(var(--neo-dark) / 0.29),
+    -9px -9px 20px hsl(0 0% 100% / 0.82) !important;
+}
+.claymorphism .link-surface--compact {
+  padding-block: 0.82rem;
+  padding-inline: 1rem;
+}
+.claymorphism .brand-mark {
+  border: 2px solid hsl(0 0% 100% / 0.65);
+  border-radius: 45% 55% 48% 52% !important;
+  transform: rotate(-5deg);
+}
+.claymorphism .search-toolbar,
+.claymorphism .theme-menu {
+  border-radius: 1.8rem;
+  box-shadow: var(--shadow-neo-lg);
+}
+.claymorphism .theme-menu-item {
+  border-radius: 999px;
+  margin-block: 0.2rem;
+}
+.claymorphism .mobile-bottom-nav {
+  border-radius: 2rem 2rem 0 0;
+  border: 1px solid hsl(0 0% 100% / 0.62);
+  background: hsl(var(--card) / 0.88);
+}
+.claymorphism .mobile-add-button {
+  width: 3.25rem;
+  height: 3.25rem;
+  box-shadow: var(--shadow-neo-lg);
+}
+
+/* 3D Immersive: perspective, luminous edges and layered depth */
+.immersive-3d .app-shell {
+  position: relative;
+  isolation: isolate;
+}
+.immersive-3d .app-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(hsl(var(--primary) / 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--accent) / 0.10) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, transparent 3%, black 45%, transparent 100%);
+}
+.immersive-3d .app-shell > * {
+  position: relative;
+  z-index: 1;
+}
+.immersive-3d .link-surface {
+  transform-style: preserve-3d;
+  border: 1px solid hsl(var(--primary) / 0.23) !important;
+  border-radius: 0.85rem !important;
+  background:
+    linear-gradient(125deg, hsl(var(--primary) / 0.10), transparent 38%),
+    linear-gradient(155deg, hsl(var(--surface) / 0.92), hsl(var(--card))) !important;
+  box-shadow:
+    0 16px 28px hsl(var(--neo-dark) / 0.86),
+    inset 0 1px 0 hsl(var(--primary) / 0.18) !important;
+}
+.immersive-3d .link-surface:hover {
+  transform: perspective(900px) translateY(-5px) rotateX(2deg) rotateY(-1deg) !important;
+  border-color: hsl(var(--primary) / 0.55) !important;
+  box-shadow:
+    0 24px 44px hsl(var(--neo-dark) / 0.92),
+    0 0 28px hsl(var(--primary) / 0.22),
+    0 0 44px hsl(var(--accent) / 0.10) !important;
+}
+.immersive-3d button {
+  border-color: hsl(var(--primary) / 0.28);
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+}
+.immersive-3d .brand-mark {
+  border-radius: 30% !important;
+  transform: rotate(6deg) perspective(300px) rotateY(-12deg);
+  box-shadow: 0 0 24px hsl(var(--primary) / 0.30), var(--shadow-neo);
+}
+.immersive-3d .search-toolbar,
+.immersive-3d .theme-menu {
+  border: 1px solid hsl(var(--primary) / 0.24);
+  background: hsl(var(--card) / 0.78);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-neo-lg);
+}
+.immersive-3d .mobile-add-button {
+  clip-path: none;
+  border: 2px solid hsl(var(--primary) / 0.60);
+  box-shadow: 0 0 28px hsl(var(--primary) / 0.44), 0 0 48px hsl(var(--accent) / 0.20);
+}
+
+/* Retro: print texture, terminal type, rigid blocks and mechanical feedback */
+.retro .link-surface {
+  border: 2px solid hsl(var(--border)) !important;
+  border-radius: 0 !important;
+  background:
+    repeating-linear-gradient(0deg, hsl(var(--foreground) / 0.025) 0 1px, transparent 1px 4px),
+    hsl(var(--card)) !important;
+  box-shadow: 4px 4px 0 hsl(var(--neo-dark) / 0.78) !important;
+}
+.retro .link-surface:hover {
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 6px 6px 0 hsl(var(--neo-dark) / 0.82) !important;
+}
+.retro .link-surface--compact {
+  padding-block: 0.68rem;
+}
+.retro button,
+.retro input,
+.retro .theme-menu-item {
+  border: 2px solid hsl(var(--border)) !important;
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.retro .brand-mark {
+  border: 2px double hsl(var(--border));
+  border-radius: 0 !important;
+  filter: sepia(0.3);
+}
+.retro .search-toolbar,
+.retro .theme-menu {
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 hsl(var(--neo-dark) / 0.78);
+}
+.retro .mobile-bottom-nav {
+  border-top: 4px double hsl(var(--border));
+  background: hsl(var(--card));
+  backdrop-filter: none;
+}
+.retro .mobile-add-button {
+  border-radius: 0 !important;
+}
+
+/* Y2K: chrome, iridescence, glossy pills and playful highlights */
+.y2k h1,
+.y2k h2,
+.y2k h3 {
+  font-family: 'Outfit', system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 0 hsl(0 0% 100% / 0.9);
+}
+.y2k .link-surface {
+  border: 1px solid hsl(0 0% 100% / 0.90) !important;
+  border-radius: 1.25rem !important;
+  background:
+    linear-gradient(115deg, hsl(0 0% 100% / 0.62), hsl(var(--card)) 35%, hsl(var(--secondary) / 0.42) 100%) !important;
+  box-shadow:
+    6px 8px 18px hsl(var(--neo-dark) / 0.25),
+    -4px -4px 12px hsl(0 0% 100% / 0.82),
+    inset 0 1px 0 hsl(0 0% 100% / 0.95) !important;
+}
+.y2k .link-surface:hover {
+  transform: translateY(-2px) scale(1.005) !important;
+  border-color: hsl(var(--primary) / 0.45) !important;
+  box-shadow:
+    8px 12px 24px hsl(var(--neo-dark) / 0.28),
+    0 0 22px hsl(var(--accent) / 0.20),
+    0 0 32px hsl(var(--primary) / 0.14) !important;
+}
+.y2k .link-surface--compact {
+  padding-block: 0.72rem;
+}
+.y2k button,
+.y2k .theme-menu-item {
+  border-radius: 999px !important;
+  border-color: hsl(0 0% 100% / 0.78);
+  box-shadow:
+    3px 4px 9px hsl(var(--neo-dark) / 0.22),
+    inset 0 1px 0 hsl(0 0% 100% / 0.82);
+}
+.y2k .brand-mark {
+  border-radius: 999px !important;
+  border: 1px solid hsl(0 0% 100% / 0.88);
+  background:
+    linear-gradient(145deg, hsl(var(--accent)), hsl(var(--primary-glow)), hsl(var(--primary)));
+}
+.y2k .search-toolbar,
+.y2k .theme-menu {
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-neo-lg), 0 0 24px hsl(var(--accent) / 0.16);
+}
+.y2k .mobile-bottom-nav {
+  border-radius: 1.5rem 1.5rem 0 0;
+  background:
+    linear-gradient(110deg, hsl(var(--card) / 0.92), hsl(var(--secondary) / 0.62), hsl(var(--card) / 0.92));
+  border-color: hsl(0 0% 100% / 0.78);
+}
+.y2k .mobile-add-button {
+  background: linear-gradient(145deg, hsl(var(--accent)), hsl(var(--primary-glow)), hsl(var(--primary)));
+  box-shadow: 0 0 24px hsl(var(--accent) / 0.38), var(--shadow-neo);
+}

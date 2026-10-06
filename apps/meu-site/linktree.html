@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links - Meus Links e Redes</title>
+    <meta name="description" content="Todos os meus links importantes em um só lugar - conteúdo, redes sociais e contatos.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="accessibility.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Links - Meus Links e Redes">
+    <meta property="og:description" content="Todos os meus links importantes em um só lugar - conteúdo, redes sociais e contatos.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seusite.com/linktree.html">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Links - Meus Links e Redes">
+    <meta name="twitter:description" content="Todos os meus links importantes em um só lugar - conteúdo, redes sociais e contatos.">
+</head>
+<body class="linktree-page">
+    <!-- Skip to main content -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+    
+    <!-- Header -->
+    <header class="header" role="banner">
+        <nav class="nav-container" role="navigation" aria-label="Navegação principal">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Voltar para página inicial">
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                    <span>Início</span>
+                </a>
+            </div>
+            
+        </nav>
+    </header>
+
+    <!-- Stars Background -->
+    <div class="stars-background" aria-hidden="true">
+        <div class="stars-layer stars-layer-1"></div>
+        <div class="stars-layer stars-layer-2"></div>
+        <div class="stars-layer stars-layer-3"></div>
+    </div>
+    
+    <!-- Comet Container -->
+    <div class="comet-container" aria-hidden="true"></div>
+
+    <!-- Sistema de Partículas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="linktree-main iron-man-section" role="main">
+        <div class="linktree-container">
+            <!-- Profile Section -->
+            <section class="linktree-profile" aria-labelledby="profile-heading">
+                <div class="profile-avatar">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar-img" style="background: linear-gradient(135deg, #4fc3f7, #29b6f6); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">AA</div>
+                </div>
+                
+                <h1 id="profile-heading" class="profile-name iron-man-title">Aleksandro Alves</h1>
+            </section>
+
+            <!-- Links Section -->
+            <section class="linktree-links" aria-labelledby="links-heading">
+                <h2 id="links-heading" class="sr-only">Meus Links</h2>
+                
+                <!-- Featured Links -->
+                <div class="links-category">
+                    <h3 class="category-title iron-man-section-title">
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                        Principais
+                    </h3>
+                    
+                    <div class="links-grid">
+                        <a href="portfolio.html" class="link-card featured" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fas fa-briefcase" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">Meu Portfólio</h4>
+                                <p class="link-description">Conheça minha trajetória e realizações</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+
+                        <a href="contact.html" class="link-card featured" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">Entre em Contato</h4>
+                                <p class="link-description">Vamos conversar e nos conectar</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Social Media Links -->
+                <div class="links-category">
+                    <h3 class="category-title iron-man-section-title">
+                        <i class="fas fa-share-alt" aria-hidden="true"></i>
+                        Redes Sociais
+                    </h3>
+                    
+                    <div class="links-grid">
+                        <a href="https://github.com/seuusuario" class="link-card social github" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fab fa-github" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">GitHub</h4>
+                                <p class="link-description">Meus repositórios e criações</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+
+                        <a href="https://linkedin.com/in/seuusuario" class="link-card social linkedin" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fab fa-linkedin" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">LinkedIn</h4>
+                                <p class="link-description">Conecte-se comigo</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+
+                        <a href="https://twitter.com/seuusuario" class="link-card social twitter" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fab fa-twitter" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">Twitter</h4>
+                                <p class="link-description">Acompanhe minhas atualizações</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+
+                        <a href="https://instagram.com/seuusuario" class="link-card social instagram" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fab fa-instagram" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">Instagram</h4>
+                                <p class="link-description">Meu dia a dia e inspirações</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Professional Links -->
+                <div class="links-category">
+                    <h3 class="category-title iron-man-section-title">
+                        <i class="fas fa-user-tie" aria-hidden="true"></i>
+                        Profissional
+                    </h3>
+                    
+                    <div class="links-grid">
+                        <a href="certificates.html" class="link-card professional" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fas fa-certificate" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">Certificações</h4>
+                                <p class="link-description">Minhas qualificações e cursos</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+
+                        <a href="blog.html" class="link-card professional" target="_blank" rel="noopener noreferrer">
+                            <div class="link-icon">
+                                <i class="fas fa-blog" aria-hidden="true"></i>
+                            </div>
+                            <div class="link-content">
+                                <h4 class="link-title">Blog</h4>
+                                <p class="link-description">Meus artigos e reflexões</p>
+                            </div>
+                            <div class="link-arrow">
+                                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn share-btn" onclick="shareProfile()" aria-label="Compartilhar perfil">
+                        <i class="fas fa-share" aria-hidden="true"></i>
+                        <span>Compartilhar</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="linktree-footer" role="contentinfo">
+        <p>&copy; 2024 Aleksandro Alves. Feito com <i class="fas fa-heart" aria-hidden="true"></i> e dedicação.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <!-- QR Code será gerado via JavaScript nativo -->
+</body>
+</html>

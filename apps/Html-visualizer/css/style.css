@@ -1,0 +1,670 @@
+/* ============================================
+   RESET & BASE (Mobile-First)
+   ============================================ */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colors */
+    --color-primary: #7cffcb;
+    --color-primary-dark: #58c7b8;
+    --color-bg-dark: #0a0a0a;
+    --color-bg-medium: #1a1a2e;
+    --color-bg-light: #16213e;
+    --color-bg-lighter: #0f3460;
+    --color-text: #ffffff;
+    --color-text-secondary: #7cffcb;
+    
+    /* Spacing (Mobile base) */
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    
+    /* Typography (Fluid) */
+    --font-size-xs: clamp(0.625rem, 0.5rem + 0.5vw, 0.75rem);
+    --font-size-sm: clamp(0.75rem, 0.65rem + 0.5vw, 0.875rem);
+    --font-size-base: clamp(0.875rem, 0.8rem + 0.5vw, 1rem);
+    --font-size-md: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+    --font-size-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+    --font-size-xl: clamp(1.25rem, 1.1rem + 1vw, 1.75rem);
+    
+    /* Touch targets */
+    --touch-target-min: 44px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Borders */
+    --border-radius-sm: 0.5rem;
+    --border-radius-md: 0.75rem;
+    --border-radius-lg: 1rem;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Roboto Mono', monospace;
+    background: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-medium) 100%);
+    color: var(--color-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* ============================================
+   HEADER (Mobile-First)
+   ============================================ */
+header {
+    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-lighter) 100%);
+    color: var(--color-text);
+    padding: var(--space-md) var(--space-md);
+    text-align: center;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(124, 255, 203, 0.1), transparent);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* ============================================
+   TOOLBAR (Mobile-First)
+   ============================================ */
+.toolbar {
+    background: linear-gradient(135deg, var(--color-bg-medium) 0%, var(--color-bg-light) 100%);
+    padding: var(--space-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid rgba(124, 255, 203, 0.1);
+}
+
+.toolbar-group {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.toolbar-btn {
+    /* Touch-friendly sizing */
+    min-height: var(--touch-target-min);
+    padding: var(--space-sm) var(--space-md);
+    
+    /* Visual */
+    background: linear-gradient(135deg, var(--color-bg-lighter) 0%, var(--color-bg-light) 100%);
+    color: var(--color-primary);
+    border: 2px solid rgba(124, 255, 203, 0.2);
+    border-radius: var(--border-radius-sm);
+    
+    /* Typography */
+    font-size: var(--font-size-sm);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 600;
+    
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    
+    /* Interaction */
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    
+    /* Accessibility */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Primary button (Download) */
+.toolbar-btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-bg-dark);
+    border-color: var(--color-primary);
+    font-weight: 700;
+}
+
+.toolbar-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.5rem rgba(124, 255, 203, 0.4);
+}
+
+/* Secondary buttons */
+.toolbar-btn-secondary {
+    background: linear-gradient(135deg, var(--color-bg-lighter) 0%, var(--color-bg-light) 100%);
+    color: var(--color-primary);
+}
+
+/* Button icons */
+.btn-icon {
+    flex-shrink: 0;
+}
+
+/* Hide text on mobile for some buttons */
+.btn-text-desktop {
+    display: none;
+}
+
+/* Active state (touch & mouse) */
+.toolbar-btn:active,
+.toolbar-btn.active {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-bg-dark);
+    border-color: var(--color-primary);
+    box-shadow: 0 0.25rem 1rem rgba(124, 255, 203, 0.4);
+    transform: scale(0.98);
+}
+
+/* Focus for accessibility */
+.toolbar-btn:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.responsive-buttons {
+    display: flex;
+    gap: var(--space-xs);
+    background: rgba(0, 0, 0, 0.2);
+    padding: var(--space-xs);
+    border-radius: var(--border-radius-md);
+    width: 100%;
+}
+
+.responsive-buttons .toolbar-btn {
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-sm);
+}
+
+/* ============================================
+   CONTAINER (Mobile-First)
+   ============================================ */
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    min-height: calc(100vh - 10rem);
+}
+
+/* ============================================
+   EDITOR & PREVIEW WRAPPERS (Mobile-First)
+   ============================================ */
+.editor-wrapper,
+.preview-wrapper {
+    flex: 1;
+    min-height: 20rem;
+    border-radius: var(--border-radius-md);
+    border: 2px solid rgba(124, 255, 203, 0.2);
+    overflow: hidden;
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.4);
+    background: rgba(26, 26, 46, 0.6);
+    backdrop-filter: blur(10px);
+    position: relative;
+    transition: all var(--transition-base);
+}
+
+/* Touch feedback */
+.editor-wrapper:active,
+.preview-wrapper:active {
+    border-color: rgba(124, 255, 203, 0.4);
+}
+
+.editor-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+.editor-wrapper::before,
+.preview-wrapper::before {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    z-index: 10;
+    background: rgba(15, 52, 96, 0.9);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--border-radius-sm);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+}
+
+.editor-wrapper::before {
+    content: '📝 Editor';
+}
+
+.preview-wrapper::before {
+    content: '👁️ Preview';
+}
+
+.preview-wrapper::before {
+    content: '👁️ Preview';
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    z-index: 10;
+    background: rgba(15, 52, 96, 0.9);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--border-radius-sm);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+}
+
+/* Empty State */
+.empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 5;
+    max-width: 90%;
+    padding: var(--space-lg);
+    pointer-events: none;
+}
+
+.empty-state.hidden {
+    display: none;
+}
+
+.empty-state-icon {
+    color: rgba(124, 255, 203, 0.3);
+    margin-bottom: var(--space-md);
+}
+
+.empty-state-title {
+    color: var(--color-primary);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+
+.empty-state-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-lg);
+    line-height: 1.5;
+}
+
+.btn-example {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-bg-dark);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    transition: all var(--transition-base);
+    pointer-events: auto;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.btn-example:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.5rem rgba(124, 255, 203, 0.4);
+}
+
+.btn-example:active {
+    transform: scale(0.98);
+}
+
+/* ============================================
+   CODEMIRROR (Mobile-First)
+   ============================================ */
+textarea {
+    width: 100%;
+    height: 100%;
+    padding: var(--space-md);
+    background-color: #000;
+    color: var(--color-primary);
+    font-size: var(--font-size-sm);
+    border: none;
+    resize: none;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.CodeMirror {
+    height: 100% !important;
+    font-size: var(--font-size-sm) !important;
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* ============================================
+   PREVIEW IFRAME (Mobile-First)
+   ============================================ */
+.preview-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-medium) 100%);
+    padding: 3rem var(--space-md) var(--space-md);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 20rem;
+    background-color: #fff;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-slow);
+    box-shadow: 0 0.625rem 2.5rem rgba(0, 0, 0, 0.5);
+}
+
+/* Preview modes - only apply on larger screens */
+iframe.tablet,
+iframe.mobile {
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================
+   FOOTER (Mobile-First)
+   ============================================ */
+footer {
+    position: relative;
+    text-align: center;
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    background: rgba(15, 52, 96, 0.8);
+    padding: var(--space-sm) var(--space-md);
+    margin: var(--space-md);
+    border-radius: var(--border-radius-sm);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(124, 255, 203, 0.2);
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.05em;
+}
+
+/* ============================================
+   TABLET (640px+)
+   ============================================ */
+@media screen and (min-width: 40rem) {
+    :root {
+        --space-xs: 0.625rem;
+        --space-sm: 1rem;
+        --space-md: 1.25rem;
+        --space-lg: 2rem;
+        --space-xl: 3rem;
+    }
+    
+    header {
+        padding: var(--space-lg) var(--space-xl);
+    }
+    
+    .toolbar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-md) var(--space-lg);
+    }
+    
+    .toolbar-group {
+        flex: 0 0 auto;
+    }
+    
+    .toolbar-btn {
+        width: auto;
+        min-width: auto;
+    }
+    
+    .btn-text-desktop {
+        display: inline;
+    }
+    
+    .responsive-buttons {
+        flex: 0 1 auto;
+        width: auto;
+    }
+    
+    .container {
+        padding: var(--space-lg);
+        gap: var(--space-lg);
+    }
+    
+    .editor-wrapper,
+    .preview-wrapper {
+        min-height: 25rem;
+    }
+    
+    /* Hover effects only on devices that support it */
+    @media (hover: hover) and (pointer: fine) {
+        .toolbar-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(124, 255, 203, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .toolbar-btn:hover::before {
+            width: 18.75rem;
+            height: 18.75rem;
+        }
+        
+        .toolbar-btn-secondary:hover {
+            background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-lighter) 100%);
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 0.375rem 1.25rem rgba(124, 255, 203, 0.3);
+        }
+        
+        .editor-wrapper:hover,
+        .preview-wrapper:hover {
+            border-color: rgba(124, 255, 203, 0.5);
+            box-shadow: 0 0.75rem 2.5rem rgba(124, 255, 203, 0.2);
+            transform: translateY(-2px);
+        }
+    }
+    
+    footer {
+        position: fixed;
+        left: var(--space-lg);
+        bottom: var(--space-lg);
+        margin: 0;
+    }
+}
+
+/* ============================================
+   DESKTOP (1024px+)
+   ============================================ */
+@media screen and (min-width: 64rem) {
+    :root {
+        --space-xs: 0.75rem;
+        --space-sm: 1rem;
+        --space-md: 1.5rem;
+        --space-lg: 2.5rem;
+        --space-xl: 4rem;
+    }
+    
+    .toolbar {
+        flex-wrap: nowrap;
+        padding: var(--space-md) var(--space-xl);
+    }
+    
+    .container {
+        flex-direction: row;
+        height: calc(100vh - 10rem);
+        padding: var(--space-lg);
+        gap: var(--space-lg);
+    }
+    
+    .editor-wrapper,
+    .preview-wrapper {
+        min-height: auto;
+        height: 100%;
+    }
+    
+    /* Enable preview size modes on desktop */
+    iframe.tablet {
+        width: 48rem;
+        height: 64rem;
+        box-shadow: 0 1rem 3rem rgba(124, 255, 203, 0.2);
+    }
+    
+    iframe.mobile {
+        width: 23.4375rem;
+        height: 41.6875rem;
+        box-shadow: 0 1rem 3rem rgba(124, 255, 203, 0.2);
+    }
+}
+
+/* ============================================
+   LARGE DESKTOP (1440px+)
+   ============================================ */
+@media screen and (min-width: 90rem) {
+    header {
+        font-size: var(--font-size-xl);
+    }
+    
+    .toolbar-btn {
+        font-size: var(--font-size-base);
+    }
+    
+    .CodeMirror {
+        font-size: var(--font-size-base) !important;
+    }
+}
+
+/* ============================================
+   LANDSCAPE MOBILE (Height < 600px)
+   ============================================ */
+@media screen and (max-height: 37.5rem) and (orientation: landscape) {
+    header {
+        padding: var(--space-sm) var(--space-md);
+    }
+    
+    .toolbar {
+        padding: var(--space-xs) var(--space-md);
+    }
+    
+    .container {
+        flex-direction: row;
+        height: calc(100vh - 7rem);
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+    }
+    
+    .editor-wrapper,
+    .preview-wrapper {
+        min-height: auto;
+        height: 100%;
+    }
+    
+    footer {
+        display: none;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --color-primary: #00ff00;
+    }
+    
+    .toolbar-btn,
+    .editor-wrapper,
+    .preview-wrapper {
+        border-width: 3px;
+    }
+}
+
+/* ============================================
+   PRINT
+   ============================================ */
+@media print {
+    header,
+    .toolbar,
+    footer {
+        display: none;
+    }
+    
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .editor-wrapper,
+    .preview-wrapper {
+        page-break-inside: avoid;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

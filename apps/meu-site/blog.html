@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Aleksandro Alves da Rocha Junior</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fundo de Estrelas -->
+    <div class="stars-background">
+        <div class="stars-layer stars-layer-1"></div>
+        <div class="stars-layer stars-layer-2"></div>
+        <div class="stars-layer stars-layer-3"></div>
+        <div class="comet-container"></div>
+    </div>
+
+    <!-- Header e Navegação -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h2>Aleksandro Alves</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html" class="nav-link">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="portfolio.html" class="nav-link">Portfólio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="certificates.html" class="nav-link">Certificados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link active">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="linktree.html" class="nav-link">Links</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb-list">
+                <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                <li class="current">Blog</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Sistema de Partículas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Page Header -->
+    <section class="page-header iron-man-header">
+        <div class="container">
+            <h1 class="page-title iron-man-title">Blog</h1>
+            <p class="page-subtitle iron-man-subtitle">Artigos sobre tecnologia, desenvolvimento e inovação</p>
+        </div>
+    </section>
+
+    <!-- Blog Posts -->
+    <section class="blog-section iron-man-section">
+        <div class="container">
+            <div class="blog-grid">
+                <!-- Featured Post -->
+                <article class="blog-post featured">
+                    <div class="post-image">
+                        <div class="post-placeholder">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="post-badge">Destaque</div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 15 Dez, 2024</span>
+                            <span class="post-category">Desenvolvimento</span>
+                            <span class="post-read-time"><i class="fas fa-clock"></i> 5 min</span>
+                        </div>
+                        <h2 class="post-title">
+                            <a href="#">O Futuro do Desenvolvimento Web: Tendências para 2025</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            Explore as principais tendências que moldarão o desenvolvimento web em 2025, desde novas frameworks JavaScript até inteligência artificial integrada...
+                        </p>
+                        <div class="post-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">React</span>
+                            <span class="tag">AI</span>
+                        </div>
+                        <a href="#" class="read-more-btn">
+                            Ler artigo completo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Regular Posts -->
+                <article class="blog-post">
+                    <div class="post-image">
+                        <div class="post-placeholder">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 12 Dez, 2024</span>
+                            <span class="post-category">Mobile</span>
+                            <span class="post-read-time"><i class="fas fa-clock"></i> 3 min</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">React Native vs Flutter: Qual Escolher em 2025?</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Comparação detalhada entre as duas principais tecnologias de desenvolvimento mobile multiplataforma...
+                        </p>
+                        <div class="post-tags">
+                            <span class="tag">Mobile</span>
+                            <span class="tag">React Native</span>
+                            <span class="tag">Flutter</span>
+                        </div>
+                        <a href="#" class="read-more-btn">
+                            Ler mais <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <div class="post-image">
+                        <div class="post-placeholder">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 10 Dez, 2024</span>
+                            <span class="post-category">Backend</span>
+                            <span class="post-read-time"><i class="fas fa-clock"></i> 7 min</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Microsserviços com Node.js: Guia Completo</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Aprenda a implementar uma arquitetura de microsserviços robusta usando Node.js, Docker e Kubernetes...
+                        </p>
+                        <div class="post-tags">
+                            <span class="tag">Node.js</span>
+                            <span class="tag">Docker</span>
+                            <span class="tag">Kubernetes</span>
+                        </div>
+                        <a href="#" class="read-more-btn">
+                            Ler mais <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <div class="post-image">
+                        <div class="post-placeholder">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 8 Dez, 2024</span>
+                            <span class="post-category">Segurança</span>
+                            <span class="post-read-time"><i class="fas fa-clock"></i> 4 min</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Segurança em Aplicações Web: Melhores Práticas</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Descubra as principais vulnerabilidades web e como proteger suas aplicações contra ataques...
+                        </p>
+                        <div class="post-tags">
+                            <span class="tag">Segurança</span>
+                            <span class="tag">HTTPS</span>
+                            <span class="tag">Authentication</span>
+                        </div>
+                        <a href="#" class="read-more-btn">
+                            Ler mais <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <div class="post-image">
+                        <div class="post-placeholder">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 5 Dez, 2024</span>
+                            <span class="post-category">Design</span>
+                            <span class="post-read-time"><i class="fas fa-clock"></i> 6 min</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">UI/UX Design: Criando Interfaces que Convertem</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Princípios fundamentais de design para criar interfaces intuitivas e que geram resultados...
+                        </p>
+                        <div class="post-tags">
+                            <span class="tag">UX</span>
+                            <span class="tag">UI</span>
+                            <span class="tag">Design</span>
+                        </div>
+                        <a href="#" class="read-more-btn">
+                            Ler mais <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <div class="post-image">
+                        <div class="post-placeholder">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 3 Dez, 2024</span>
+                            <span class="post-category">Performance</span>
+                            <span class="post-read-time"><i class="fas fa-clock"></i> 5 min</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Otimização de Performance: Site 3x Mais Rápido</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Técnicas avançadas para melhorar drasticamente a performance do seu site e experiência do usuário...
+                        </p>
+                        <div class="post-tags">
+                            <span class="tag">Performance</span>
+                            <span class="tag">Optimization</span>
+                            <span class="tag">Web Vitals</span>
+                        </div>
+                        <a href="#" class="read-more-btn">
+                            Ler mais <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="pagination-btn prev" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                    Anterior
+                </button>
+                <div class="pagination-numbers">
+                    <span class="page-number active">1</span>
+                    <span class="page-number">2</span>
+                    <span class="page-number">3</span>
+                    <span class="page-dots">...</span>
+                    <span class="page-number">8</span>
+                </div>
+                <button class="pagination-btn next">
+                    Próximo
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter iron-man-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <h3 class="iron-man-section-title">Receba Novos Artigos</h3>
+                <p>Fique por dentro das últimas tendências em tecnologia e desenvolvimento</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Seu melhor e-mail" required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Inscrever-se
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Aleksandro Alves</h3>
+                    <p>Especialista em tecnologia apaixonado por criar soluções inovadoras.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="about.html">Sobre</a></li>
+                        <li><a href="portfolio.html">Portfólio</a></li>
+                        <li><a href="certificates.html">Certificados</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> aajunior43@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +55 44 99184-2415</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Aleksandro Alves. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

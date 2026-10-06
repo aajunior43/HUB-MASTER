@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    image: bot-buscador-de-atos:dev
+    command: uvicorn webapp:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./:/workspace
+    environment:
+      APP_ENV: development
+      REQUIRE_WEBAPP_AUTH: "false"

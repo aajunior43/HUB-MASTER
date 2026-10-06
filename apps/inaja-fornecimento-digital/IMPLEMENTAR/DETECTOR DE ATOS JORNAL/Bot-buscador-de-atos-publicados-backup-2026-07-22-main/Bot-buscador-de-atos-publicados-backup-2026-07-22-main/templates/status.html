@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Status - Monitor Inajá{% endblock %}
+{% block content %}
+<section class="detail-hero status-hero fade-in">
+  <a class="backlink" href="/operacao">← Painel operacional</a>
+  <h1>Fila de jobs</h1>
+  <p>Download, OCR, detecção, notificação e erros — atualização automática. Parte do cockpit com o <a href="/operacao">Painel</a>.</p>
+  <div class="live-strip">
+    <span class="live-dot"></span>
+    <span>Atualização automática via SSE</span>
+    <span id="last-refresh">carregado agora</span>
+  </div>
+  <div class="pg-nav-row" style="margin-top:.75rem;">
+    <a class="btn btn-secondary" href="/operacao">← Painel</a>
+    <a class="btn btn-secondary" href="/edicoes-detectadas">Edições</a>
+    <a class="btn btn-secondary" href="/admin">Admin / Agente</a>
+  </div>
+</section>
+
+<section class="stats-grid fade-in">
+  <article id="stat-rodando"><strong>{{ resumo.rodando or 0 }}</strong><span>Rodando</span></article>
+  <article id="stat-avisos"><strong>{{ resumo.avisos or 0 }}</strong><span>Avisos</span></article>
+  <article id="stat-erros"><strong>{{ resumo.erros or 0 }}</strong><span>Erros</span></article>
+  <article id="stat-concluidos"><strong>{{ resumo.concluidos or 0 }}</strong><span>Concluídos</span></article>
+</section>
+
+<section class="panel fade-in">
+  <div class="panel-head">
+    <div>
+      <h2>Histórico Operacional</h2>
+      <span>agrupado por edição (últimos 200 eventos)</span>
+    </div>
+    <form action="/status/limpar" method="post" onsubmit="return confirm('Deseja realmente limpar todo o histórico de execuções finalizadas?');" style="margin: 0;">
+      <button type="submit" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+        Limpar Histórico
+      </button>
+    </form>
+  </div>
+  <div class="filter-bar status-filter-bar" style="margin:1rem 1.5rem 0;">
+    <button type="button" class="filter-btn active" data-status-filter="all">Todos</button>
+    <button type="button" class="filter-btn" data-status-filter="erro">Erros</button>
+    <button type="button" class="filter-btn" data-status-filter="aviso">Avisos</button>
+    <button type="button" class="filter-btn" data-status-filter="concluido">Concluídos</button>
+    <button type="button" class="filter-btn" data-status-filter="rodando">Rodando</button>
+  </div>
+  <div class="status-groups" id="status-groups">
+    {% for grupo in grupos %}
+    <article class="status-group status-{{ grupo.status }}">
+      <header class="status-group-head">
+        <div class="status-main">
+          <span class="status-dot"></span>
+          <div>
+            <strong>{{ grupo.titulo }}</strong>
+            <small>
+              {% if grupo.data_publicacao %}{{ grupo.data_publicacao }}{% else %}sem data{% endif %}
+              · {{ grupo.jobs|length }} etapa(s)
+              · atualizado em {{ grupo.atualizado_em }}
+            </small>
+          </div>
+        </div>
+        <div>
+          <span class="status-pill">
+            {% if grupo.status == "aviso" %}concluído com avisos{% else %}{{ grupo.status }}{% endif %}
+          </span>
+          {% if grupo.edicao_id %}
+          <a class="status-link" href="/edicoes/{{ grupo.edicao_id }}">
+            Abrir edição ↗
+          </a>
+          {% endif %}
+        </div>
+      </header>
+      <ol class="timeline">
+        {% for job in grupo.jobs|reverse %}
+        <li class="timeline-item status-{{ job.status }}">
+          <span class="timeline-marker"></span>
+          <div>
+            <strong>{{ job.etapa }}</strong>
+            <small>
+              {% if job.status == "aviso" %}concluído com avisos{% else %}{{ job.status }}{% endif %}
+              · {{ job.atualizado_em }}
+            </small>
+            {% if job.mensagem %}<p>{{ job.mensagem }}</p>{% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </article>
+    {% else %}
+    <p class="empty">Nenhum evento registrado ainda. Execute um processamento para popular esta tela.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const refreshEl = document.getElementById('last-refresh');
+let isRunning = {{ resumo.rodando or 0 }} > 0;
+
+function atualizarResumo() {
+  fetch('/api/status', {cache: 'no-store'}).then(r => r.json()).then(jobs => {
+    const contadores = {rodando:0, aviso:0, erro:0, concluido:0};
+    jobs.forEach(j => {
+      let st = j.status;
+      if (st === 'concluido') contadores.concluido++;
+      else if (st === 'aviso') contadores.aviso++;
+      else if (st === 'erro') contadores.erro++;
+      else if (st === 'rodando') contadores.rodando++;
+    });
+    document.querySelector('#stat-rodando strong').textContent = contadores.rodando;
+    document.querySelector('#stat-avisos strong').textContent = contadores.aviso;
+    document.querySelector('#stat-erros strong').textContent = contadores.erro;
+    document.querySelector('#stat-concluidos strong').textContent = contadores.concluido;
+    if (refreshEl) refreshEl.textContent = 'última atualização: ' + new Date().toLocaleTimeString('pt-BR');
+    
+    if (contadores.rodando > 0 && !isRunning) {
+      isRunning = true;
+      setTimeout(() => window.location.reload(), 3000);
+    }
+  }).catch(() => {});
+}
+
+// Escuta eventos SSE para auto-refresh inteligente
+if (window.EventSource) {
+  const source = new EventSource('/api/eventos');
+  source.onmessage = function(event) {
+    try {
+      const data = JSON.parse(event.data);
+      const rodandoCount = data.rodando ? data.rodando.length : 0;
+      
+      // Se algo está rodando ou acabou de rodar, atualiza contadores e agenda reload
+      if (rodandoCount > 0 || isRunning) {
+        atualizarResumo();
+        if (rodandoCount === 0 && isRunning) {
+          isRunning = false;
+          setTimeout(() => window.location.reload(), 2000);
+        } else if (rodandoCount > 0 && !isRunning) {
+          isRunning = true;
+          setTimeout(() => window.location.reload(), 2000);
+        }
+      }
+    } catch(e) {}
+  };
+} else {
+  setInterval(atualizarResumo, 10000);
+}
+atualizarResumo();
+
+// Filtro de eventos de log
+const statusFilterBtns = document.querySelectorAll('.status-filter-bar .filter-btn');
+const statusGroups = document.querySelectorAll('#status-groups .status-group');
+
+function applyStatusFilter(filter) {
+  statusGroups.forEach(group => {
+    if (filter === 'all') {
+      group.style.display = '';
+      group.querySelectorAll('.timeline-item').forEach(it => it.style.display = '');
+      return;
+    }
+    const groupMatches = group.classList.contains('status-' + filter);
+    let anyItemVisible = false;
+    group.querySelectorAll('.timeline-item').forEach(item => {
+      const itemMatches = item.classList.contains('status-' + filter);
+      item.style.display = itemMatches ? '' : 'none';
+      if (itemMatches) anyItemVisible = true;
+    });
+    group.style.display = (groupMatches || anyItemVisible) ? '' : 'none';
+  });
+}
+
+statusFilterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    statusFilterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyStatusFilter(btn.dataset.statusFilter);
+  });
+});
+</script>
+{% endblock %}

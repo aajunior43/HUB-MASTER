@@ -1,0 +1,57 @@
+node_modules/
+dist/
+.next/
+.cache/
+.worktrees/
+.superpowers/
+.playwright-mcp/
+*.log
+.env
+.env.local
+
+# Anexos locais
+# Scripts de probe/debug locais (podem conter tokens)
+_probe.mjs
+_probe.*
+.omo/
+# Script com senha em plaintext — não vai para o repositório
+scripts/set-aleksandro-password.mjs
+# Logs de servidor dev
+dev-server.err
+dev-server.log
+# Timestamps do Vite
+vite.config.ts.timestamp-*
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/backups/
+tmp/
+IMPLEMENTAR/*.zip
+
+# Artefatos locais gerados pelo detector de atos
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/.codex-remote-attachments/
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/edicoes/
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/downloads/
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/atos/
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/alertas/
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/logs/
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/jornal_monitor.db-shm
+IMPLEMENTAR/DETECTOR DE ATOS JORNAL/jornal_monitor.db-wal
+# Projeto legado (referência)
+implementação/
+
+# Uploads locais (binarios) — nao versionar; .gitkeep mantem a pasta
+data/uploads/**
+!data/uploads/.gitkeep
+
+# Backups locais / arquivos de backup de edicao
+*.bak
+*.bak-*
+*.bak.*
+**/*.bak-*
+
+# Segredos locais
+secrets/
+**/secrets/
+*.pem
+*.key
+!.env.example

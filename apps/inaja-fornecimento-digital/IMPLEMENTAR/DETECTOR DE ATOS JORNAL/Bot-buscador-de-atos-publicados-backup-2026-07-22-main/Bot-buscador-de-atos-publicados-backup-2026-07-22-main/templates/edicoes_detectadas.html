@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block title %}Edições Detectadas - Monitor Inajá{% endblock %}
+{% block breadcrumbs %}
+<nav class="breadcrumbs">
+  <a href="/operacao">Operacao</a>
+  <span>›</span>
+  <span>Edicoes</span>
+</nav>
+{% endblock %}
+{% block content %}
+<section class="detail-hero fade-in">
+  <p class="eyebrow">Operacao · Varredura</p>
+  <h1>Edições do jornal</h1>
+  <p class="hero-copy">
+    A <strong>WEB</strong> cadastra edições periodicamente; o <strong>BOT</strong> processa OCR e alertas sozinho.
+    Acompanhe a lista abaixo — ações manuais ficam em <em>Avançado</em>.
+  </p>
+  <div class="actions" style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+    <a href="/status" class="btn btn-secondary" style="font-size:.9rem;">Ver status / jobs</a>
+    <a href="/operacao" class="btn btn-secondary" style="font-size:.9rem;">Status da automação</a>
+  </div>
+  <details class="ops-advanced" style="margin-top:1rem;">
+    <summary>Avançado · forçar varredura ou OCR manual</summary>
+    <p class="ops-advanced-hint">
+      Opcional. Use se quiser detectar ou analisar agora, sem esperar o ciclo automático.
+    </p>
+    <div class="actions" style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+      <form method="post" action="/edicoes-detectadas/detectar" style="margin:0;">
+        <button type="submit">Detectar agora</button>
+      </form>
+      {% if stats.pendentes and stats.pendentes > 0 %}
+      <form method="post" action="/edicoes-detectadas/analisar-lote" class="lote-form" style="margin:0; display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;">
+        <label for="lote-limite" class="lote-label">Lote:</label>
+        <select id="lote-limite" name="limite" class="lote-select">
+          <option value="5">5 edições</option>
+          <option value="10">10 edições</option>
+          <option value="20">20 edições</option>
+          <option value="50">50 edições</option>
+        </select>
+        <button type="submit" id="lote-btn" class="btn btn-secondary">Analisar lote de 5 pendentes</button>
+      </form>
+      {% endif %}
+    </div>
+  </details>
+</section>
+
+<section class="stats-grid">
+  <article><strong>{{ stats.total or 0 }}</strong><span>Edições detectadas</span></article>
+  <article><strong>{{ stats.pendentes or 0 }}</strong><span>Pendentes</span></article>
+  <article><strong>{{ stats.analisadas or 0 }}</strong><span>Analisadas</span></article>
+  <article><strong>{{ stats.com_inaja or 0 }}</strong><span>Com Inajá</span></article>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Lista de edições</h2>
+    <span>
+      {% if ultimo_detector %}
+        Última varredura: {{ ultimo_detector.atualizado_em }}
+      {% else %}
+        Nenhuma varredura registrada
+      {% endif %}
+    </span>
+  </div>
+  <div style="padding:1rem 1.5rem; border-bottom:1px solid var(--border);">
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Todas</button>
+      <button class="filter-btn" data-filter="pending">Pendentes</button>
+      <button class="filter-btn" data-filter="analyzed">Analisadas</button>
+      <button class="filter-btn" data-filter="inaja">Com Inajá</button>
+      <input type="text" id="edition-search" class="search-input" placeholder="Buscar edição por título ou data..." style="margin-left:auto;">
+    </div>
+  </div>
+  <div class="list-pagination" aria-label="Paginação de edições">
+    <span>{{ total_lista }} edição(ões) · página {{ pagina }} de {{ total_paginas }}</span>
+    <div>
+      {% if pagina > 1 %}<a class="btn btn-secondary btn-small" href="/edicoes-detectadas?{% if mes_filtro %}mes={{ mes_filtro }}&{% endif %}pagina={{ pagina - 1 }}">← Anterior</a>{% endif %}
+      {% if pagina < total_paginas %}<a class="btn btn-small" href="/edicoes-detectadas?{% if mes_filtro %}mes={{ mes_filtro }}&{% endif %}pagina={{ pagina + 1 }}">Próxima →</a>{% endif %}
+    </div>
+  </div>
+  <div class="edition-list">
+    {% for grupo in grupos_mes %}
+    <div class="month-group" data-month="{{ grupo.chave }}">
+      <header class="month-head" tabindex="0" role="button" aria-label="Alternar mês {{ grupo.rotulo }}">
+        <span class="month-toggle">▾</span>
+        <h3>{{ grupo.rotulo }}</h3>
+        <span class="month-count">
+          {{ grupo.edicoes|length }} edição(ões)
+          {% set ns = namespace(pend=0, inaja=0) %}
+          {% for ed in grupo.edicoes %}
+            {% if not ed.ocr_processado %}{% set ns.pend = ns.pend + 1 %}{% endif %}
+            {% if ed.tem_inaja %}{% set ns.inaja = ns.inaja + 1 %}{% endif %}
+          {% endfor %}
+          {% if ns.pend %} · <span class="month-sub">{{ ns.pend }} pendente(s)</span>{% endif %}
+          {% if ns.inaja %} · <span class="month-sub month-sub-inaja">{{ ns.inaja }} com Inajá</span>{% endif %}
+        </span>
+      </header>
+      <div class="month-body">
+        {% for edicao in grupo.edicoes %}
+        <article class="edition-row detected-edition"
+                 data-status="{% if edicao.ocr_processado %}analyzed{% else %}pending{% endif %}"
+                 data-inaja="{% if edicao.tem_inaja %}true{% else %}false{% endif %}"
+                 data-title="{{ (edicao.titulo or '')|lower }} {{ (edicao.data_publicacao or '')|lower }}">
+          <a href="{% if edicao.ocr_processado %}/edicoes/{{ edicao.id }}{% else %}{{ edicao.url }}{% endif %}" target="{% if not edicao.ocr_processado %}_blank{% endif %}">
+            <span>
+              <strong>{{ edicao.titulo or ("Edição " ~ edicao.id) }}</strong>
+              <small>{{ edicao.data_publicacao or "data não informada" }}</small>
+            </span>
+          </a>
+          <span class="chips">
+            {% if edicao.ocr_processado %}
+              {% if edicao.tem_inaja %}<span class="badge badge-inaja">Inajá</span>{% endif %}
+              <span class="badge badge-analyzed">analisada</span>
+              <em>{{ edicao.publicacoes_count }} pub.</em>
+              <em>{{ edicao.mencoes_count }} men.</em>
+            {% else %}
+              <span class="badge badge-pending">pendente</span>
+            {% endif %}
+            {% if edicao.ultimo_status %}
+              <em>{{ edicao.ultima_etapa }}: {{ edicao.ultimo_status }}</em>
+            {% endif %}
+          </span>
+          <form method="post" action="/edicoes/{{ edicao.id }}/analisar">
+            <button type="submit">
+              {% if edicao.ocr_processado %}Reanalisar{% else %}Analisar{% endif %}
+            </button>
+          </form>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <p class="empty">Nenhuma edição detectada ainda.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const searchInput = document.getElementById('edition-search');
+
+    function applyFilterAndSearch() {
+      const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+      const query = searchInput.value.toLowerCase().trim();
+
+      document.querySelectorAll('.month-group').forEach(group => {
+        let visibleCount = 0;
+        group.querySelectorAll('.detected-edition').forEach(edition => {
+          const status = edition.getAttribute('data-status');
+          const inaja = edition.getAttribute('data-inaja') === 'true';
+          const titleText = edition.getAttribute('data-title');
+
+          let matchesFilter = false;
+          if (activeFilter === 'all') {
+            matchesFilter = true;
+          } else if (activeFilter === 'pending') {
+            matchesFilter = (status === 'pending');
+          } else if (activeFilter === 'analyzed') {
+            matchesFilter = (status === 'analyzed');
+          } else if (activeFilter === 'inaja') {
+            matchesFilter = inaja;
+          }
+
+          const matchesQuery = query === '' || titleText.includes(query);
+
+          if (matchesFilter && matchesQuery) {
+            edition.style.display = 'flex';
+            visibleCount++;
+          } else {
+            edition.style.display = 'none';
+          }
+        });
+        group.style.display = visibleCount > 0 ? '' : 'none';
+      });
+    }
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilterAndSearch();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', applyFilterAndSearch);
+    }
+
+    // Colapsar/expandir meses
+    document.querySelectorAll('.month-head').forEach(head => {
+      const toggle = () => {
+        const body = head.nextElementSibling;
+        const toggleIcon = head.querySelector('.month-toggle');
+        const collapsed = head.classList.toggle('collapsed');
+        if (body) body.style.display = collapsed ? 'none' : '';
+        if (toggleIcon) toggleIcon.textContent = collapsed ? '▸' : '▾';
+      };
+      head.addEventListener('click', toggle);
+      head.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    const loteSelect = document.getElementById('lote-limite');
+    const loteBtn = document.getElementById('lote-btn');
+    if (loteSelect && loteBtn) {
+      const atualizarLoteBtn = () => {
+        loteBtn.textContent = 'Analisar lote de ' + loteSelect.value + ' pendentes';
+      };
+      loteSelect.addEventListener('change', atualizarLoteBtn);
+      atualizarLoteBtn();
+    }
+  });
+</script>
+{% endblock %}

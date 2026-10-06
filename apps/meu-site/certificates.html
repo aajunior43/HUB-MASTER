@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificados - Aleksandro Alves da Rocha Junior</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fundo de Estrelas -->
+    <div class="stars-background">
+        <div class="stars-layer stars-layer-1"></div>
+        <div class="stars-layer stars-layer-2"></div>
+        <div class="stars-layer stars-layer-3"></div>
+        <div class="comet-container"></div>
+    </div>
+
+    <!-- Header e Navegação -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h2>Aleksandro Alves</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html" class="nav-link">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="portfolio.html" class="nav-link">Portfólio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="certificates.html" class="nav-link active">Certificados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="linktree.html" class="nav-link">Links</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb-list">
+                <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                <li class="current">Certificados</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Sistema de Partículas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Page Header -->
+    <section class="page-header iron-man-header">
+        <div class="container">
+            <h1 class="page-title iron-man-title">Meus Certificados</h1>
+            <p class="page-subtitle iron-man-subtitle">Formações e especializações que comprovam minha expertise</p>
+        </div>
+    </section>
+
+    <!-- Certificados Section -->
+    <section class="certificates-section iron-man-section">
+        <div class="container">
+            <!-- Estatísticas -->
+            <div class="certificates-stats iron-man-stats">
+                <div class="stat-card iron-man-stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">25+</h3>
+                        <p class="stat-label">Certificados Obtidos</p>
+                    </div>
+                </div>
+                <div class="stat-card iron-man-stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">8</h3>
+                        <p class="stat-label">Áreas de Especialização</p>
+                    </div>
+                </div>
+                <div class="stat-card iron-man-stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">500+</h3>
+                        <p class="stat-label">Horas de Estudo</p>
+                    </div>
+                </div>
+                <div class="stat-card iron-man-stat">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">100%</h3>
+                        <p class="stat-label">Taxa de Conclusão</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="certificates-filters">
+                <h3 class="iron-man-section-title">Filtrar por Categoria</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-th"></i>
+                        Todos
+                    </button>
+                    <button class="filter-btn" data-filter="frontend">
+                        <i class="fas fa-palette"></i>
+                        Frontend
+                    </button>
+                    <button class="filter-btn" data-filter="backend">
+                        <i class="fas fa-server"></i>
+                        Backend
+                    </button>
+                    <button class="filter-btn" data-filter="mobile">
+                        <i class="fas fa-mobile-alt"></i>
+                        Mobile
+                    </button>
+                    <button class="filter-btn" data-filter="cloud">
+                        <i class="fas fa-cloud"></i>
+                        Cloud
+                    </button>
+                    <button class="filter-btn" data-filter="devops">
+                        <i class="fas fa-cogs"></i>
+                        DevOps
+                    </button>
+                    <button class="filter-btn" data-filter="design">
+                        <i class="fas fa-paint-brush"></i>
+                        Design
+                    </button>
+                    <button class="filter-btn" data-filter="data">
+                        <i class="fas fa-chart-bar"></i>
+                        Data Science
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid de Certificados -->
+            <div class="certificates-grid">
+                <!-- Frontend Certificates -->
+                <div class="certificate-card" data-category="frontend">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-react"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">React.js Avançado</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Rocketseat
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Dezembro 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">Hooks</span>
+                            <span class="skill-tag">Context API</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('react-advanced')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="certificate-card" data-category="frontend">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-js"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">JavaScript ES6+</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Alura
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Novembro 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">ES6+</span>
+                            <span class="skill-tag">Async/Await</span>
+                            <span class="skill-tag">Modules</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('javascript-es6')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend Certificates -->
+                <div class="certificate-card" data-category="backend">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-node-js"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">Node.js API REST</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Udemy
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Outubro 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Node.js</span>
+                            <span class="skill-tag">Express</span>
+                            <span class="skill-tag">MongoDB</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('nodejs-api')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="certificate-card" data-category="backend">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">Python Django</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Coursera
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Setembro 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Django</span>
+                            <span class="skill-tag">REST API</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('python-django')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Certificates -->
+                <div class="certificate-card" data-category="mobile">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-react"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">React Native</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Rocketseat
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Agosto 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">React Native</span>
+                            <span class="skill-tag">Expo</span>
+                            <span class="skill-tag">Navigation</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('react-native')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cloud Certificates -->
+                <div class="certificate-card" data-category="cloud">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-aws"></i>
+                        </div>
+                        <div class="certificate-badge verified">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">AWS Cloud Practitioner</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Amazon Web Services
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Julho 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">AWS</span>
+                            <span class="skill-tag">Cloud Computing</span>
+                            <span class="skill-tag">EC2</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('aws-practitioner')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DevOps Certificates -->
+                <div class="certificate-card" data-category="devops">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-docker"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">Docker & Kubernetes</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Digital Innovation One
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Junho 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Docker</span>
+                            <span class="skill-tag">Kubernetes</span>
+                            <span class="skill-tag">Containers</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('docker-k8s')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Certificates -->
+                <div class="certificate-card" data-category="design">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fab fa-figma"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">UI/UX Design</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Origamid
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Maio 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Figma</span>
+                            <span class="skill-tag">Prototyping</span>
+                            <span class="skill-tag">User Research</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('ui-ux-design')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Science Certificate -->
+                <div class="certificate-card" data-category="data">
+                    <div class="certificate-image">
+                        <div class="certificate-placeholder">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="certificate-badge">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">Data Science & Analytics</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-university"></i>
+                            Data Science Academy
+                        </p>
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar"></i>
+                            Abril 2024
+                        </p>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Pandas</span>
+                            <span class="skill-tag">Machine Learning</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <button class="btn-view" onclick="viewCertificate('data-science')">
+                                <i class="fas fa-eye"></i>
+                                Visualizar
+                            </button>
+                            <button class="btn-download">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão para adicionar mais -->
+            <div class="add-more-section">
+                <p>Esta seção está sempre sendo atualizada com novos certificados!</p>
+                <a href="contact.html" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i>
+                    Entre em Contato
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para visualização -->
+    <div class="certificate-modal" id="certificateModal">
+        <div class="modal-backdrop" onclick="closeCertificateModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Certificado</h3>
+                <button class="modal-close" onclick="closeCertificateModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="certificate-preview">
+                    <div class="certificate-image-large">
+                        <div class="certificate-placeholder-large">
+                            <i class="fas fa-certificate"></i>
+                            <p>Visualização do Certificado</p>
+                        </div>
+                    </div>
+                    <div class="certificate-details">
+                        <div class="detail-item">
+                            <strong>Instituição:</strong>
+                            <span id="modalIssuer">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Data de Conclusão:</strong>
+                            <span id="modalDate">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Carga Horária:</strong>
+                            <span id="modalHours">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <strong>ID do Certificado:</strong>
+                            <span id="modalId">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCertificateModal()">
+                    <i class="fas fa-times"></i>
+                    Fechar
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    Download PDF
+                </button>
+                <button class="btn btn-accent" onclick="verifyCertificate()">
+                    <i class="fas fa-check-circle"></i>
+                    Verificar Autenticidade
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Aleksandro Alves</h3>
+                    <p>Especialista em tecnologia apaixonado por criar soluções inovadoras.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="about.html">Sobre</a></li>
+                        <li><a href="portfolio.html">Portfólio</a></li>
+                        <li><a href="certificates.html">Certificados</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> aajunior43@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +55 44 99184-2415</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Aleksandro Alves. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

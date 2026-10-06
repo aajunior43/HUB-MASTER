@@ -1,0 +1,59 @@
+# Arquivos temporários
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Diretórios de trabalho
+logs/
+outputs/
+temp/
+
+# Configurações locais
+interface_config.json
+
+# Relatórios gerados
+relatorio_*.json
+relatorio_*.html
+relatorios/*/
+!relatorios/.gitkeep
+
+# Resultados de organização
+resultado_organizacao/
+
+# Arquivos de log
+*.log
+
+# Pastas de exemplo/teste
+extratos/
+EXTRATOS*/
+ORGANIZADO/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+nul
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backups
+*.bak
+*.backup
+*~
+
+# Build temporários
+build/
+venv/
+*.spec
+
+# Arquivos de progresso
+.renomer_progress.json
+
+# Claude
+.claude/

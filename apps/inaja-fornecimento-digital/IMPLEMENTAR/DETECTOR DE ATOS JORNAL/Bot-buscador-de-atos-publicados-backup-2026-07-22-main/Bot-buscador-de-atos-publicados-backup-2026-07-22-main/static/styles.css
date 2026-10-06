@@ -1,0 +1,9 @@
+/* Monitor Inaja — Design System Modular
+   Cada camada importa os estilos da sua responsabilidade.
+   Ordem: tokens → layout → componentes → utilitarios */
+
+@import url('base.css?v=20260726-mobile6');
+@import url('layout.css?v=20260726-mobile6');
+@import url('components.css?v=20260726-mobile6');
+@import url('utils.css?v=20260726-mobile6');
+@import url('product.css?v=20260727-editorial1');

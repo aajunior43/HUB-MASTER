@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Bloquear diretórios sensíveis (se existirem)
+Disallow: /.git/
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://aleksandro-alves-portfolio.vercel.app/sitemap.xml

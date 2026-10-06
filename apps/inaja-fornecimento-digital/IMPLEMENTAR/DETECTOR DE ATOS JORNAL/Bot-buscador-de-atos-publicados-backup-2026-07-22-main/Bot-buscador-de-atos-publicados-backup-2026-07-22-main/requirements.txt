@@ -1,0 +1,21 @@
+# Compatibility export for legacy installers. The authoritative dependency
+# declaration is pyproject.toml; install `.` for runtime or `.[dev]` for tools.
+beautifulsoup4==4.12.3
+numpy>=1.24.0
+fastapi==0.115.6
+jinja2==3.1.5
+pdf2image==1.17.0
+pdfplumber==0.11.4
+pypdf>=5.0.0
+pillow>=10.4.0
+playwright>=1.49.0
+python-dotenv==1.0.1
+python-multipart>=0.0.20
+pytesseract==0.3.13
+requests==2.32.3
+schedule==1.2.2
+uvicorn[standard]==0.34.0
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+httpx>=0.27.0
+ruff>=0.8.0

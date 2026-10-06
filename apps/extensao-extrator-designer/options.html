@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Configurações – Extractor de Estilo</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --primary-color: #6366f1;
+      --primary-hover: #5855eb;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #64748b;
+        --border-color: #334155;
+        --border-hover: #475569;
+      }
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    
+    .section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .section-description {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    input[type="password"], input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    
+    button {
+      appearance: none;
+      border: 2px solid transparent;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+    
+    button:hover:not(:disabled) {
+      background: var(--border-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+    
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+      border-color: var(--success-color);
+    }
+    
+    .btn-danger {
+      background: var(--error-color);
+      color: white;
+      border-color: var(--error-color);
+    }
+    
+    .status {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      margin-top: 16px;
+      font-size: 14px;
+      display: none;
+    }
+    
+    .status.success {
+      background: rgb(16 185 129 / 0.1);
+      color: var(--success-color);
+      border: 1px solid rgb(16 185 129 / 0.2);
+      display: block;
+    }
+    
+    .status.error {
+      background: rgb(239 68 68 / 0.1);
+      color: var(--error-color);
+      border: 1px solid rgb(239 68 68 / 0.2);
+      display: block;
+    }
+    
+    .help-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+    
+    .advanced-settings {
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 24px 16px;
+      }
+    }
+    
+    .icon {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎨 Configurações</h1>
+      <p class="subtitle">Personalize sua experiência com o Extractor de Estilo</p>
+    </header>
+    
+    <div class="section">
+      <h2 class="section-title">
+        <span class="icon">🔑</span>
+        API Key do Gemini
+      </h2>
+      <p class="section-description">
+        Sua chave da API do Google Gemini é necessária para gerar os prompts de estilo. 
+        Ela é armazenada localmente no seu navegador e nunca é compartilhada.
+      </p>
+      
+      <div class="form-group">
+        <label for="apiKey">Chave da API</label>
+        <div class="input-group">
+          <input id="apiKey" type="password" placeholder="AIzaSy..." autocomplete="off" />
+          <button id="showBtn" type="button" title="Mostrar/Ocultar chave">
+            <span class="icon">👁</span>
+          </button>
+          <button id="testBtn" type="button" title="Testar chave">
+            <span class="icon">🧪</span>
+            Testar
+          </button>
+        </div>
+        <div class="help-text">
+          Obtenha sua chave em <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <button id="saveBtn" class="btn-primary">
+          <span class="icon">💾</span>
+          Salvar Configurações
+        </button>
+        <button id="clearBtn" class="btn-danger">
+          <span class="icon">🗑</span>
+          Limpar Dados
+        </button>
+      </div>
+      
+      <div id="status" class="status"></div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">
+        <span class="icon">⚙️</span>
+        Configurações Avançadas
+      </h2>
+      <p class="section-description">
+        Personalize o comportamento da extração de estilos e geração de prompts.
+      </p>
+      
+      <div class="grid">
+        <div class="form-group">
+          <label for="maxElements">Máximo de Elementos</label>
+          <input id="maxElements" type="number" min="50" max="500" value="200" />
+          <div class="help-text">Número máximo de elementos a analisar (50-500)</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="cacheTimeout">Cache (segundos)</label>
+          <input id="cacheTimeout" type="number" min="0" max="300" value="30" />
+          <div class="help-text">Tempo de cache dos resultados (0-300s)</div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="promptLanguage">Idioma do Prompt</label>
+        <select id="promptLanguage">
+          <option value="pt">Português</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
+      
+      <div class="advanced-settings">
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeMotion" checked />
+          <label for="includeMotion">Incluir análise de animações e transições</label>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeFonts" checked />
+          <label for="includeFonts">Analisar famílias de fontes detalhadamente</label>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeVariables" checked />
+          <label for="includeVariables">Extrair variáveis CSS customizadas</label>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="debugMode" />
+          <label for="debugMode">Modo debug (logs detalhados no console)</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">
+        <span class="icon">📊</span>
+        Estatísticas
+      </h2>
+      <p class="section-description">
+        Informações sobre o uso da extensão.
+      </p>
+      
+      <div class="grid">
+        <div>
+          <strong>Prompts gerados:</strong>
+          <span id="promptCount">0</span>
+        </div>
+        <div>
+          <strong>Última utilização:</strong>
+          <span id="lastUsed">Nunca</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

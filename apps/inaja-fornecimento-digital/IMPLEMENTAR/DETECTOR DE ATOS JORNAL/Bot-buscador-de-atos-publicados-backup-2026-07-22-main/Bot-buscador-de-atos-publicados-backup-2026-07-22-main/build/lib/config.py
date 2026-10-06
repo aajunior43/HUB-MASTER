@@ -1,0 +1,330 @@
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass, field
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
+def _csv_env(name: str) -> list[str]:
+    valor = os.getenv(name, "")
+    return [item.strip() for item in valor.split(",") if item.strip()]
+
+
+def _int_env(name: str, padrao: int) -> int:
+    try:
+        return int(os.getenv(name, str(padrao)))
+    except ValueError:
+        return padrao
+
+
+def _bool_env(name: str, padrao: bool = False) -> bool:
+    valor = os.getenv(name)
+    if valor is None:
+        return padrao
+    return valor.strip().casefold() in {"1", "true", "sim", "yes", "on"}
+
+
+def _float_env(name: str, padrao: float) -> float:
+    try:
+        return float(os.getenv(name, str(padrao)))
+    except ValueError:
+        return padrao
+
+
+class RuntimeConfigError(RuntimeError):
+    pass
+@dataclass(frozen=True)
+class Settings:
+    site_url: str = os.getenv(
+        "SITE_URL", "https://www.oregionaljornal.com.br/edicoes/"
+    )
+    user_agent: str = os.getenv(
+        "USER_AGENT",
+        "Mozilla/5.0 (compatible; JornalMonitor/1.0; +https://www.oregionaljornal.com.br/)",
+    )
+    check_interval_hours: int = _int_env("CHECK_INTERVAL_HOURS", 6)
+    ocr_language: str = os.getenv("OCR_LANGUAGE", "por").strip() or "por"
+    extra_terms: list[str] = field(default_factory=list)
+    inaja_cep_prefixes: list[str] = field(default_factory=list)
+    ignore_context_terms: list[str] = field(default_factory=list)
+    download_dir: Path = Path(os.getenv("DOWNLOAD_DIR", "./edicoes"))
+    alert_dir: Path = Path(os.getenv("ALERT_DIR", "./alertas"))
+    log_dir: Path = Path(os.getenv("LOG_DIR", "./logs"))
+    # Pasta espelhada de atos oficiais (ano/mês/dia + atalhos tipo/órgão)
+    atos_dir: Path = Path(os.getenv("ATOS_DIR", "./atos"))
+    atos_espelhar: bool = _bool_env("ATOS_ESPELHAR", True)
+    atos_por_tipo: bool = _bool_env("ATOS_POR_TIPO", True)
+    atos_por_orgao: bool = _bool_env("ATOS_POR_ORGAO", True)
+    # Mídia da página do jornal (PNG qualidade + PDF só da página)
+    atos_exportar_midia: bool = _bool_env("ATOS_EXPORTAR_MIDIA", True)
+    atos_pagina_dpi: int = _int_env("ATOS_PAGINA_DPI", 200)
+    db_path: Path = Path(os.getenv("DB_PATH", "./jornal_monitor.db"))
+    request_timeout: int = _int_env("REQUEST_TIMEOUT_SECONDS", 45)
+    max_retries: int = _int_env("MAX_RETRIES", 3)
+    min_text_chars_per_page: int = _int_env("MIN_TEXT_CHARS_PER_PAGE", 100)
+    force_ocr: bool = _bool_env("FORCE_OCR", False)
+    ocr_dpi: int = _int_env("OCR_DPI", 200)
+    ocr_retry_dpi: int = _int_env("OCR_RETRY_DPI", 250)
+    ocr_max_dimension: int = _int_env("OCR_MAX_DIMENSION", 3200)
+    ocr_fast_dpi: int = _int_env("OCR_FAST_DPI", 120)
+    ocr_fast_min_chars: int = _int_env("OCR_FAST_MIN_CHARS", 300)
+    ocr_fast_max_dimension: int = _int_env("OCR_FAST_MAX_DIMENSION", 1800)
+    ocr_timeout_seconds: int = _int_env("OCR_TIMEOUT_SECONDS", 120)
+    ocr_fast_timeout_seconds: int = _int_env("OCR_FAST_TIMEOUT_SECONDS", 120)
+    ocr_layout_columns: int = _int_env("OCR_LAYOUT_COLUMNS", 3)
+    opencode_api_key: str = os.getenv("OPENCODE_API_KEY", "").strip()
+    opencode_api_url: str = os.getenv(
+        "OPENCODE_API_URL", "https://opencode.ai/zen/go/v1/chat/completions"
+    ).strip()
+    opencode_model: str = os.getenv("OPENCODE_MODEL", "deepseek-v4-flash").strip()
+    ai_refine_publications: bool = _bool_env("AI_REFINE_PUBLICATIONS", True)
+    ai_timeout_seconds: int = _int_env("AI_TIMEOUT_SECONDS", 30)
+    ai_max_tokens: int = _int_env("AI_MAX_TOKENS", 8000)
+    # Funções extras de IA (consumo ainda baixo)
+    ai_importancia: bool = _bool_env("AI_IMPORTANCIA", True)
+    ai_importancia_min_notificar: int = _int_env("AI_IMPORTANCIA_MIN_NOTIFICAR", 3)
+    ai_resumo_diario: bool = _bool_env("AI_RESUMO_DIARIO", True)
+    ai_explicacao: bool = _bool_env("AI_EXPLICACAO", True)
+    ai_explicacao_auto: bool = _bool_env("AI_EXPLICACAO_AUTO", False)
+    ai_auditoria_so_mencao: bool = _bool_env("AI_AUDITORIA_SO_MENCAO", True)
+    ai_chat: bool = _bool_env("AI_CHAT", True)
+    # Pack B — features extras (maioria 0 call ou sob demanda)
+    ai_anomalia: bool = _bool_env("AI_ANOMALIA", True)
+    ai_triagem_lote: bool = _bool_env("AI_TRIAGEM_LOTE", True)
+    ai_partes: bool = _bool_env("AI_PARTES", True)
+    ai_checklist: bool = _bool_env("AI_CHECKLIST", True)
+    ai_temas: bool = _bool_env("AI_TEMAS", True)
+    ai_ocr_contextual: bool = _bool_env("AI_OCR_CONTEXTUAL", True)
+    ai_anti_alucinacao: bool = _bool_env("AI_ANTI_ALUCINACAO", True)
+    ai_fn_recuperacao: bool = _bool_env("AI_FN_RECUPERACAO", True)
+    ai_similares: bool = _bool_env("AI_SIMILARES", True)
+    ai_timeline: bool = _bool_env("AI_TIMELINE", True)
+    ai_max_calls_por_ciclo: int = _int_env("AI_MAX_CALLS_POR_CICLO", 80)
+    # Alerta de ausência
+    absence_alert_days: int = _int_env("ABSENCE_ALERT_DAYS", 30)
+    # Webhook genérico
+    webhook_url: str = os.getenv("WEBHOOK_URL", "").strip()
+    # Limite de edições novas processadas por ciclo (evita sobrecarga no primeiro uso)
+    max_edicoes_por_ciclo: int = _int_env("MAX_EDICOES_POR_CICLO", 10)
+    # Automação total: processa OCR/notificação sem clique manual
+    auto_process: bool = _bool_env("AUTO_PROCESS", True)
+    # Quantas edições pendentes por *lote* (evita lock longo demais)
+    auto_process_limit: int = _int_env("AUTO_PROCESS_LIMIT", 5)
+    # Máximo de edições da fila no ciclo completo (0 = sem teto extra, só o lote)
+    # Com AUTO_PROCESS_CONTINUO o BOT esvazia a fila em vários lotes entre ciclos.
+    auto_process_max_por_ciclo: int = _int_env("AUTO_PROCESS_MAX_POR_CICLO", 40)
+    # Entre ciclos de 6h, continua processando a fila (um lote por vez)
+    auto_process_continuo: bool = _bool_env("AUTO_PROCESS_CONTINUO", True)
+    # Só auto-processa edições com data nos últimos N dias (0 = sem esse filtro)
+    auto_process_dias: int = _int_env("AUTO_PROCESS_DIAS", 120)
+    # Data mínima inclusiva (YYYY-MM-DD). Ex.: 2020-01-01 = não processa 2011–2019.
+    # Vazio = sem piso de data.
+    auto_process_desde: str = os.getenv("AUTO_PROCESS_DESDE", "").strip()
+    # Após N falhas de download/OCR a edição sai da fila (quarentena)
+    auto_process_max_falhas: int = _int_env("AUTO_PROCESS_MAX_FALHAS", 3)
+    # Intervalo do scheduler da web (horas entre varreduras; padrão 6 = 4x/dia)
+    web_scan_interval_hours: int = _int_env("WEB_SCAN_INTERVAL_HOURS", 6)
+    # Poppler (para pdf2image no Windows)
+    poppler_path: str = os.getenv("POPPLER_PATH", "").strip()
+    # Tesseract OCR (para pytesseract no Windows)
+    tesseract_path: str = os.getenv("TESSERACT_PATH", "").strip()
+    # Teto de workers do OCR. 0 = automático (cores-1, deixa 1 núcleo livre)
+    ocr_max_workers: int = _int_env("OCR_MAX_WORKERS", 0)
+    # Piso de workers (1 = pode reduzir se a CPU saturar)
+    ocr_min_workers: int = _int_env("OCR_MIN_WORKERS", 1)
+    # Ajusta workers medindo CPU (conservador)
+    ocr_adaptive_cpu: bool = _bool_env("OCR_ADAPTIVE_CPU", True)
+    # Alvo ~70% (cap interno 80% — não mira 100%)
+    ocr_cpu_target: float = _float_env("OCR_CPU_TARGET", 0.70)
+    # Autenticação da interface web (HTTP Basic). Se ambos vazios, o webapp
+    # fica aberto e um aviso é emitido no log de inicialização.
+    webapp_user: str = os.getenv("WEBAPP_USER", "").strip()
+    webapp_password: str = os.getenv("WEBAPP_PASSWORD", "").strip()
+    # Se true, o webapp recusa subir sem WEBAPP_USER e WEBAPP_PASSWORD.
+    # Ative em produção (Docker/Traefik/host público).
+    require_webapp_auth: bool = _bool_env("REQUIRE_WEBAPP_AUTH", False)
+    # production | development — production implica require_webapp_auth.
+    app_env: str = (os.getenv("APP_ENV", "development") or "development").strip().lower()
+    admin_gate_password: str = os.getenv("ADMIN_GATE_PASSWORD", "").strip()
+    trusted_proxy_cidrs: list[str] = field(default_factory=lambda: _csv_env("TRUSTED_PROXY_CIDRS"))
+    # --- Agente de vigilância (pulse + cérebro) ---
+    # escudo | formiga | cirurgiao | sentinela | auto
+    agente_ativo: bool = _bool_env("AGENTE_ATIVO", True)
+    agente_modo: str = (
+        os.getenv("AGENTE_MODO", "auto") or "auto"
+    ).strip().casefold()
+    # Pulse (saúde + correções baratas) em segundos
+    agente_pulse_segundos: int = _int_env("AGENTE_PULSE_SEGUNDOS", 120)
+    # Cérebro (OCR seletivo / re-IA / qualidade) em minutos
+    agente_cerebro_minutos: int = _int_env("AGENTE_CEREBRO_MINUTOS", 30)
+    # Teto de OCR real por ciclo cérebro
+    agente_max_ocr_por_ciclo: int = _int_env("AGENTE_MAX_OCR_POR_CICLO", 1)
+    # Orçamento diário de OCR do agente (0 = sem teto diário)
+    agente_max_ocr_por_dia: int = _int_env("AGENTE_MAX_OCR_POR_DIA", 40)
+    # Madrugada (hora local): multiplica OCR por ciclo (formiga noturna)
+    agente_ocr_noite_mult: int = _int_env("AGENTE_OCR_NOITE_MULT", 3)
+    agente_noite_inicio: int = _int_env("AGENTE_NOITE_INICIO", 22)
+    agente_noite_fim: int = _int_env("AGENTE_NOITE_FIM", 6)
+    # Teto de chamadas/re-IA por hora
+    agente_max_ia_por_hora: int = _int_env("AGENTE_MAX_IA_POR_HORA", 15)
+    # Auto-correções de infraestrutura
+    agente_auto_limpar_lock: bool = _bool_env("AGENTE_AUTO_LIMPAR_LOCK", True)
+    agente_auto_limpar_jobs: bool = _bool_env("AGENTE_AUTO_LIMPAR_JOBS", True)
+    # Lock sem atualização há N minutos = morto
+    agente_lock_max_minutos: int = _int_env("AGENTE_LOCK_MAX_MINUTOS", 45)
+    # Jobs rodando há mais de N minutos = travados
+    agente_job_max_minutos: int = _int_env("AGENTE_JOB_MAX_MINUTOS", 30)
+    # Notificar alertas do agente (arquivo)
+    agente_notificar: bool = _bool_env("AGENTE_NOTIFICAR", True)
+    # Integrar no idle do main.py (BOT)
+    agente_no_bot: bool = _bool_env("AGENTE_NO_BOT", True)
+    # Cooldown de alerta repetido (minutos)
+    agente_alerta_cooldown_min: int = _int_env("AGENTE_ALERTA_COOLDOWN_MIN", 60)
+    # --- Qualidade (PR1+) ---
+    quality_fix_numero_ano: bool = _bool_env("QUALITY_FIX_NUMERO_ANO", True)
+    quality_ano_max_futuro: int = _int_env("QUALITY_ANO_MAX_FUTURO", 1)
+    quality_confianca: bool = _bool_env("QUALITY_CONFIANCA", True)
+    # Thresholds rigorosos (decisão de design rev. 4)
+    quality_confianca_alta_min: int = _int_env("QUALITY_CONFIANCA_ALTA_MIN", 85)
+    quality_confianca_media_min: int = _int_env("QUALITY_CONFIANCA_MEDIA_MIN", 55)
+    # PR3 re-IA automática
+    quality_re_ia_auto: bool = _bool_env("QUALITY_RE_IA_AUTO", True)
+    quality_re_ia_max_tentativas: int = _int_env("QUALITY_RE_IA_MAX_TENTATIVAS", 3)
+    quality_re_ia_espelhar: bool = _bool_env("QUALITY_RE_IA_ESPELHAR", False)
+    agente_max_re_ia_por_ciclo: int = _int_env("AGENTE_MAX_RE_IA_POR_CICLO", 5)
+    agente_max_re_ia_por_dia: int = _int_env("AGENTE_MAX_RE_IA_POR_DIA", 40)
+    # PR4 gaps
+    quality_gap_detect: bool = _bool_env("QUALITY_GAP_DETECT", True)
+    quality_gap_autoreprocess: bool = _bool_env("QUALITY_GAP_AUTOREPROCESS", False)
+    quality_gap_mode: str = (
+        os.getenv("QUALITY_GAP_MODE", "reprocess") or "reprocess"
+    ).strip().casefold()
+    quality_gap_min_hits: int = _int_env("QUALITY_GAP_MIN_HITS", 3)
+    quality_gap_max_pubs: int = _int_env("QUALITY_GAP_MAX_PUBS", 1)
+    quality_reprocess_preserve_feedback: bool = _bool_env(
+        "QUALITY_REPROCESS_PRESERVE_FEEDBACK", True
+    )
+    agente_max_gap_por_ciclo: int = _int_env("AGENTE_MAX_GAP_POR_CICLO", 1)
+    # PR5b digest / webhook
+    quality_digest_diario: bool = _bool_env("QUALITY_DIGEST_DIARIO", True)
+    quality_webhook_digest: bool = _bool_env("QUALITY_WEBHOOK_DIGEST", False)
+    quality_webhook_enrich: bool = _bool_env("QUALITY_WEBHOOK_ENRICH", True)
+
+    def __post_init__(self) -> None:
+        # Campos de lista lidos do ambiente (default_factory já garante [] se não chamado)
+        if not self.extra_terms:
+            object.__setattr__(self, "extra_terms", _csv_env("INAJA_EXTRA_TERMS"))
+        if not self.inaja_cep_prefixes:
+            object.__setattr__(self, "inaja_cep_prefixes", _csv_env("INAJA_CEP_PREFIXES"))
+        if not self.ignore_context_terms:
+            object.__setattr__(
+                self,
+                "ignore_context_terms",
+                _csv_env("INAJA_IGNORE_CONTEXT_TERMS")
+                or [
+                    "distribuição avulsa",
+                    "distribuicao avulsa",
+                    "auto posto",
+                    "panificadora",
+                    "farmácia",
+                    "farmacia",
+                    "loterias",
+                    "patrocinadores",
+                    "anunciante",
+                    "anunciantes",
+                ],
+            )
+        for pasta in (self.download_dir, self.alert_dir, self.log_dir):
+            pasta.mkdir(parents=True, exist_ok=True)
+
+
+SETTINGS = Settings()
+
+
+def validate_runtime_config(settings: Settings) -> None:
+    if settings.app_env not in {"development", "production"}:
+        raise RuntimeConfigError("APP_ENV deve ser development ou production")
+
+    has_user = bool(settings.webapp_user)
+    has_password = bool(settings.webapp_password)
+    if has_user != has_password:
+        raise RuntimeConfigError("WEBAPP_USER e WEBAPP_PASSWORD seguros são obrigatórios")
+
+    if settings.app_env != "production":
+        return
+
+    insecure_credentials = {"admin", "troque-esta-senha"}
+    if (
+        not has_user
+        or not has_password
+        or settings.webapp_user.casefold() in insecure_credentials
+        or settings.webapp_password.casefold() in insecure_credentials
+    ):
+        raise RuntimeConfigError(
+            "WEBAPP_USER e WEBAPP_PASSWORD seguros são obrigatórios em produção"
+        )
+
+    admin_password = getattr(settings, "admin_gate_password", "")
+    if (
+        len(admin_password) < 12
+        or admin_password.casefold()
+        in {"1999", "admin", "troque-esta-senha"}
+    ):
+        raise RuntimeConfigError("ADMIN_GATE_PASSWORD seguro é obrigatório em produção")
+
+
+# Municípios vizinhos de Inajá-PR — publicações dessas cidades não devem ser
+# atribuídas a Inajá. Lista normalizada (sem acentos, minúscula) para comparação.
+MUNICIPIOS_VIZINHOS = [
+    "jardim olinda",
+    "cruzeiro do sul",
+    "santo inacio",
+    "florai",
+    "paranapoema",
+    "itaguaje",
+    "colorado",
+    "paranacity",
+    "loanda",
+    "querencia do norte",
+    "santa isabel do ivai",
+    "marilena",
+    "guaira",
+    "esperanca nova",
+    "altamira do parana",
+    "nova londrina",
+    "santa cruz de monte castelo",
+    "pioneiro jayme canet",
+    # Outros da região frequentemente no O Regional
+    "uniflor",
+    "ourizona",
+    "nova esperanca",
+    "paraiso do norte",
+    "tapejara",
+    "cianorte",
+    "mandaguacu",
+    "mandaguari",
+    "maringa",
+    "sarandi",
+    "paicandu",
+    "astorga",
+    "presidente castelo branco",
+]
+
+# Ensure fully normalized (no accents, lowercase) at import time
+def _normalize_municipio(m):
+    import unicodedata
+    n = unicodedata.normalize("NFKD", m)
+    return "".join(c for c in n if not unicodedata.combining(c)).lower().strip()
+
+MUNICIPIOS_VIZINHOS = [_normalize_municipio(m) for m in MUNICIPIOS_VIZINHOS]
+
+# CNPJs oficiais de Inajá-PR (prefixos sem formatação extra)
+CNPJ_INAJA_PREFIXES = (
+    "75771400",   # 75.771.400/0001-48 — Prefeitura
+    "76970318",   # 76.970.318/0001-67 — Município/Câmara
+)
