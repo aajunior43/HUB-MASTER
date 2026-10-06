@@ -17,6 +17,7 @@ h1{font-size:1.6rem;margin:0 0 4px}
 .drop.over,.drop:focus-visible{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent);outline:none}
 .drop strong{display:block;margin-bottom:4px}
 .drop span{color:var(--muted);font-size:.9rem}
+select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text)}
 button{font:inherit;border:0;border-radius:10px;padding:10px 16px;background:var(--accent);color:#fff;cursor:pointer}
 button.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
 button:disabled{opacity:.5;cursor:not-allowed}
@@ -41,6 +42,18 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div id="drop" class="drop" tabindex="0" role="button" aria-label="Selecionar arquivo de áudio ou vídeo">
       <strong>Arraste um arquivo aqui ou clique para escolher</strong>
       <span>mp3, wav, m4a, ogg, flac, mp4, webm, mov… (até 500 MB e 20 min)</span>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <label for="lang" class="status">Idioma do áudio:</label>
+      <select id="lang">
+        <option value="pt" selected>Português</option>
+        <option value="auto">Detectar automaticamente</option>
+        <option value="en">Inglês</option>
+        <option value="es">Espanhol</option>
+        <option value="fr">Francês</option>
+        <option value="it">Italiano</option>
+        <option value="de">Alemão</option>
+      </select>
     </div>
     <input id="file" type="file" hidden accept="audio/*,video/*,.m4a,.opus,.mkv">
     <div id="progress" hidden>
@@ -78,7 +91,7 @@ function upload(file){
   clearTimeout(timer);
   $('result').hidden=true;
   setBar(0);setStatus('Enviando '+file.name+'…');
-  const form=new FormData();form.append('file',file);
+  const form=new FormData();form.append('file',file);form.append('language',$('lang').value);
   const xhr=new XMLHttpRequest();
   xhr.open('POST',API+'/upload');
   xhr.upload.onprogress=e=>{if(e.lengthComputable){setBar(e.loaded/e.total*10);setStatus('Enviando… '+Math.round(e.loaded/e.total*100)+'%')}};

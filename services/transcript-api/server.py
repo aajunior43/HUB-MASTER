@@ -20,6 +20,7 @@ MODEL_SIZE = os.environ.get("WHISPER_MODEL", "small")
 BEAM_SIZE = int(os.environ.get("WHISPER_BEAM_SIZE", "5"))
 MAX_DURATION = int(os.environ.get("MAX_DURATION_MINUTES", "20")) * 60
 MAX_UPLOAD_MB = int(os.environ.get("MAX_UPLOAD_MB", "500"))
+DEFAULT_LANGUAGE = os.environ.get("WHISPER_LANGUAGE", "pt")
 DB_HOST = os.environ.get("DB_HOST", "hub-postgres")
 DB_PORT = os.environ.get("DB_PORT", "5432")
 DB_NAME = os.environ.get("DB_NAME", "hub_master")
@@ -337,6 +338,7 @@ def worker():
             segments_gen, info = wh_model.transcribe(
                 normalized_path,
                 beam_size=BEAM_SIZE,
+                language=job.get("languageHint"),
                 vad_filter=True,
                 vad_parameters={"min_silence_duration_ms": 500}
             )
@@ -380,7 +382,7 @@ def worker():
                     completed.insert(0, queue.pop(0))
                     del completed[MAX_COMPLETED:]
 
-def enqueue(media_id, title, source_path, filename):
+def enqueue(media_id, title, source_path, filename, language_hint=None):
     global worker_active
     job = {
         "id": uuid.uuid4().hex[:8],
@@ -394,6 +396,7 @@ def enqueue(media_id, title, source_path, filename):
         "error": "",
         "source": "upload",
         "sourcePath": source_path,
+        "languageHint": language_hint,
         "filename": filename,
         "createdAt": time.time()
     }
@@ -441,8 +444,11 @@ def upload_media():
         cleanup([source_path])
         raise
 
+    requested_language = (request.form.get("language") or DEFAULT_LANGUAGE).strip().lower()
+    language_hint = None if requested_language in ("", "auto") else requested_language[:8]
+
     media_id = "upload-" + uuid.uuid4().hex[:8]
-    job_id = enqueue(media_id, filename, source_path, filename)
+    job_id = enqueue(media_id, filename, source_path, filename, language_hint)
     return jsonify({"jobId": job_id, "position": len(queue), "filename": filename}), 202
 
 @app.route("/api/transcript/status")

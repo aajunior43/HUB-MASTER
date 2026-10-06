@@ -89,6 +89,7 @@ services:
       HF_HOME: /models
       MAX_UPLOAD_MB: "500"
       WHISPER_MODEL: medium
+      WHISPER_LANGUAGE: pt
       WHISPER_BEAM_SIZE: "5"
       DB_HOST: hub-postgres
       DB_PORT: "5432"
