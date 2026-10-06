@@ -27,6 +27,7 @@ COPY apps/inaja-fornecimento-digital-dist/ /usr/share/nginx/html/inaja-fornecime
 COPY apps/calculadoradediferenca-dist/ /usr/share/nginx/html/calculadoradediferenca/
 COPY apps/organizador-web/ /usr/share/nginx/html/organizador/
 COPY apps/youtube-transcriber/index.html /usr/share/nginx/html/youtube-transcriber/index.html
+COPY apps/Audio-Transcriber/index.html /usr/share/nginx/html/audio-transcriber/index.html
 COPY apps/color-gemini-canvas-dist/ /usr/share/nginx/html/color-gemini-canvas/
 COPY apps/bloco-de-notas-markdown/index.html /usr/share/nginx/html/bloco-de-notas-markdown/index.html
 COPY apps/meus-repositorios-github/ /usr/share/nginx/html/meus-repositorios-github/

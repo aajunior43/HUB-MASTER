@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audio Transcriber</title>
+<style>
+:root{--bg:#0f1115;--card:#181b22;--text:#e8eaf0;--muted:#8b93a7;--accent:#6366f1;--ok:#22c55e;--err:#ef4444;--border:#2a2f3a}
+@media (prefers-color-scheme:light){:root{--bg:#f5f6fa;--card:#fff;--text:#1a1d26;--muted:#6b7280;--border:#e2e5ec}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif}
+main{max-width:820px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.6rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.drop{border:2px dashed var(--border);border-radius:12px;padding:36px 16px;text-align:center;cursor:pointer;transition:.15s}
+.drop.over,.drop:focus-visible{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent);outline:none}
+.drop strong{display:block;margin-bottom:4px}
+.drop span{color:var(--muted);font-size:.9rem}
+button{font:inherit;border:0;border-radius:10px;padding:10px 16px;background:var(--accent);color:#fff;cursor:pointer}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bar{height:10px;border-radius:99px;background:var(--border);overflow:hidden;margin:12px 0 6px}
+.bar>i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.status{color:var(--muted);font-size:.9rem}
+.status.err{color:var(--err)}
+.seg{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.seg:last-child{border:0}
+.seg time{color:var(--accent);font-variant-numeric:tabular-nums;flex:none;font-weight:600}
+.meta{color:var(--muted);font-size:.85rem;margin:0 0 12px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <h1>🎙️ Audio Transcriber</h1>
+  <p class="sub">Envie um áudio ou vídeo e receba a transcrição com marcação de tempo.</p>
+
+  <section class="card">
+    <div id="drop" class="drop" tabindex="0" role="button" aria-label="Selecionar arquivo de áudio ou vídeo">
+      <strong>Arraste um arquivo aqui ou clique para escolher</strong>
+      <span>mp3, wav, m4a, ogg, flac, mp4, webm, mov… (até 500 MB e 20 min)</span>
+    </div>
+    <input id="file" type="file" hidden accept="audio/*,video/*,.m4a,.opus,.mkv">
+    <div id="progress" hidden>
+      <div class="bar"><i id="barFill"></i></div>
+      <div id="status" class="status"></div>
+    </div>
+  </section>
+
+  <section id="result" class="card" hidden>
+    <h2 id="title" style="margin:0 0 4px;font-size:1.15rem"></h2>
+    <p id="meta" class="meta"></p>
+    <div class="row" style="margin-bottom:12px">
+      <button id="copy">Copiar texto</button>
+      <button class="ghost" data-fmt="txt">Baixar .txt</button>
+      <button class="ghost" data-fmt="md">Baixar .md</button>
+      <button class="ghost" data-fmt="pdf">Baixar .pdf</button>
+    </div>
+    <div id="segments"></div>
+  </section>
+</main>
+
+<script>
+const API = '/api/transcript';
+const $ = id => document.getElementById(id);
+let current = null, timer = null;
+
+function esc(t){const d=document.createElement('div');d.textContent=t==null?'':String(t);return d.innerHTML}
+function fmtTime(s){s=Math.floor(s||0);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function setStatus(msg,err){const el=$('status');el.textContent=msg;el.className='status'+(err?' err':'');$('progress').hidden=false}
+function setBar(p){$('barFill').style.width=Math.max(0,Math.min(100,p||0))+'%'}
+
+const STATUS_TEXT={queued:'Na fila…',preparing:'Preparando áudio…',transcribing:'Transcrevendo…',saving:'Salvando…'};
+
+function upload(file){
+  clearTimeout(timer);
+  $('result').hidden=true;
+  setBar(0);setStatus('Enviando '+file.name+'…');
+  const form=new FormData();form.append('file',file);
+  const xhr=new XMLHttpRequest();
+  xhr.open('POST',API+'/upload');
+  xhr.upload.onprogress=e=>{if(e.lengthComputable){setBar(e.loaded/e.total*10);setStatus('Enviando… '+Math.round(e.loaded/e.total*100)+'%')}};
+  xhr.onerror=()=>setStatus('Falha de conexão com o servidor.',true);
+  xhr.onload=()=>{
+    let data={};try{data=JSON.parse(xhr.responseText)}catch(_){}
+    if(xhr.status!==202){setStatus(data.error||'Erro ao enviar o arquivo.',true);return}
+    current=data.jobId;poll();
+  };
+  xhr.send(form);
+}
+
+function poll(){
+  fetch(API+'/status?jobId='+encodeURIComponent(current)).then(r=>r.json()).then(job=>{
+    if(job.error&&!job.status){setStatus(job.error,true);return}
+    if(job.status==='done'){setBar(100);showResult(job);return}
+    if(job.status==='error'){setStatus(job.error||'Falha na transcrição.',true);return}
+    setBar(job.progress);
+    const eta=job.etaSeconds!=null?' · faltam ~'+fmtTime(job.etaSeconds):'';
+    setStatus((STATUS_TEXT[job.status]||'Processando…')+' '+(job.progress||0)+'%'+eta);
+    timer=setTimeout(poll,1500);
+  }).catch(()=>{setStatus('Conexão perdida, tentando de novo…',true);timer=setTimeout(poll,3000)});
+}
+
+function showResult(job){
+  $('progress').hidden=true;
+  $('result').hidden=false;
+  $('title').textContent=job.title||job.filename||'Transcrição';
+  const words=(job.segments||[]).reduce((n,s)=>n+s.text.split(/\s+/).filter(Boolean).length,0);
+  $('meta').textContent=[job.language&&job.language.toUpperCase(),fmtTime(job.duration)+' min',words+' palavras'].filter(Boolean).join(' · ');
+  $('segments').innerHTML=(job.segments||[]).map(s=>'<div class="seg"><time>'+fmtTime(s.start)+'</time><span>'+esc(s.text)+'</span></div>').join('')||'<p class="meta">Nenhuma fala detectada.</p>';
+  $('copy').onclick=()=>{
+    const text=(job.segments||[]).map(s=>s.text).join(' ');
+    navigator.clipboard.writeText(text).then(()=>{$('copy').textContent='Copiado!';setTimeout(()=>$('copy').textContent='Copiar texto',1500)});
+  };
+}
+
+document.querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{
+  if(current)window.location.href=API+'/'+encodeURIComponent(current)+'/download?format='+b.dataset.fmt;
+});
+
+const drop=$('drop'),input=$('file');
+drop.onclick=()=>input.click();
+drop.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click()}};
+input.onchange=()=>{if(input.files[0])upload(input.files[0]);input.value=''};
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)upload(f)});
+</script>
+</body>
+</html>
